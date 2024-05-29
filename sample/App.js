@@ -8,8 +8,6 @@ import AppNavigator from './navigation/AppNavigator';
 
 function App() {
   const[isLoading, setIsLoading]=useState(true);
-  const[isReady, setIsReady]=useState(""); /*로그인 대기설정*/
-  const [isLoggedIn, setIsLoggedIn] = useState(false); /*로그인 여부*/
   const [message, setMessage] = useState("");
   //axios.get('http://192.168.12.202:8081/api/test') expo 버전 : 본인 expo 주소로 바꿔서 실행
   //axios.get('http://10.0.2.2:8080/api/test')  안드로이드 버전
