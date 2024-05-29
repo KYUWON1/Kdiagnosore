@@ -13,7 +13,7 @@ function App() {
   //axios.get('http://10.0.2.2:8080/api/test')  안드로이드 버전
   useEffect(() => {
     setTimeout(() => {setIsLoading(false)}, 3000);
-    axios.get('http://192.168.12.202:8081/api/test')
+    axios.get('http://10.0.2.2:8080/api/test')
       .then((response) => {
         setMessage(response.data);
         console.log(message);
