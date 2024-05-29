@@ -27,7 +27,11 @@ const AppNavigator = () => {
         <Stack.Screen name="Login" component={LoginScreen}/>
         <Stack.Screen name="Register" component={RegisterScreen}/>
         <Stack.Screen name="RegisterAccept" component={RegisterAcceptScreen}/>
+<<<<<<< HEAD
         <Stack.Screen name="App" component={AppStack}/>
+=======
+        <Stack.Screen name="Appstart" component={AppStack}/>
+>>>>>>> 24bf90e5 (fix : frontend update)
     </Stack.Navigator>
     );
 };

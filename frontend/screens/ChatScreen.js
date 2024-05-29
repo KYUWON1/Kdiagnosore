@@ -141,8 +141,6 @@ const ChatScreen = () => {
     const createMessage = async(message)=>{
 
     };
-
-
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -181,7 +179,5 @@ const styles = StyleSheet.create({
         height: 50,
         overflow: "hidden",
     },
-
-   
 });
 export default ChatScreen;

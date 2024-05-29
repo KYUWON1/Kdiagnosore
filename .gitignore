@@ -36,8 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-# Ignore Python virtual environments
+### python ###
 python/venv/
-
-# Ignore model directories
 python/models/
