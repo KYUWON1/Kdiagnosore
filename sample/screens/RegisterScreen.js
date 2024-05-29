@@ -56,7 +56,7 @@ const RegisterScreen = ({navigation}) => {
                         value={GuardianPhoneNum} 
                         onChangeText={setGuardianPhoneNum}
                         keyboardType="number-pad"/>
-                    <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Login')}>
+                    <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('RegisterAccept')}>
                         <Text style={{fontSize:20, color:'#fff'}}>회원가입</Text>
                     </TouchableOpacity>
                 </View>

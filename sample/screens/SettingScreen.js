@@ -13,9 +13,9 @@ const SettingScreen = ({navigation}) => {
             <View style={styles.setting}>
                 <View style={styles.setting1}>
                     <MaterialCommunityIcons name="account" size={25} style={{marginLeft:15}}/>
-                    <Text style={styles.settingcontent}>내 정보</Text>
+                    <Text style={styles.settingcontent}>내 정보 수정</Text>
                 </View>
-                <AntDesign name='right' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('MyPage1')}/>
+                <AntDesign name='right' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('MyPageMod')}/>
             </View>
             <View style={styles.setting}>
                 <View style={styles.setting1}>

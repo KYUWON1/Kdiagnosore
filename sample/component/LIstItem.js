@@ -6,7 +6,7 @@ export default function ListItem({id, text, date}){
         <View style={styles.list}>
             <Text style={styles.text}>{id}</Text>
             <Text 
-            style={styles.titletext} numberOfLines={1}>{text}</Text>
+            style={styles.contenttext} numberOfLines={1}>{text}</Text>
             <Text style={styles.text}>{date}</Text>
         </View>
     )
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         color:'#000',
         paddingVertical:5,
     },
-    titletext:{
+    contenttext:{
         flex:4, 
         width:'50%',
         fontSize:18, 

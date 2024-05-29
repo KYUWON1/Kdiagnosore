@@ -4,6 +4,9 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 
+import LoginScreen from '../screens/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
+import RegisterAcceptScreen from "../screens/RegisterAcceptScreen";
 import ChatScreen from '../screens/ChatScreen';
 import ChatRecordingScreen from "../screens/ChatRecordingScreen";
 import MyPageScreen from "../screens/MyPageScreen";
@@ -13,11 +16,23 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import SetAlarmScreen from "../screens/SetAlarmScreen";
 import SetAccountScreen from "../screens/SetAccountScreen";
+import MyPageModScreen from "../screens/MyPageModScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
+    return(
+    <Stack.Navigator screenOptions={{headerShown:false}}>
+        <Stack.Screen name="Login" component={LoginScreen}/>
+        <Stack.Screen name="Register" component={RegisterScreen}/>
+        <Stack.Screen name="RegisterAccept" component={RegisterAcceptScreen}/>
+        <Stack.Screen name="Appstart" component={AppStack}/>
+    </Stack.Navigator>
+    );
+};
+
+const AppStack = () => {
     return(
     <Tab.Navigator screenOptions={{
         headerShown:false,
@@ -63,11 +78,11 @@ const AppNavigator = () => {
 
 const SettingStack = () => {
     return(
-        <Stack.Navigator>
-            <Stack.Screen name="Setting1" component={SettingScreen} options={{headerShown:false}}/>
-            <Stack.Screen name="MyPage1" component={MyPageScreen} />
-            <Stack.Screen name="SetAlarm" component={SetAlarmScreen} options={{headerShown:false}}/>
-            <Stack.Screen name="SetAccount" component={SetAccountScreen} options={{headerShown:false}}/>
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+            <Stack.Screen name="Setting1" component={SettingScreen}/>
+            <Stack.Screen name="MyPageMod" component={MyPageModScreen}/>
+            <Stack.Screen name="SetAlarm" component={SetAlarmScreen}/>
+            <Stack.Screen name="SetAccount" component={SetAccountScreen}/>
         </Stack.Navigator>
         );
 }

@@ -32,7 +32,7 @@ const LoginScreen = ({navigation}) => {
             />
             <Text style={{textAlign:'center', fontSize:17, color:'#828282'}}>로그인 상태 유지</Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={()=>{}}>
+            <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('Appstart')}}>
                 <Text style={{fontSize:20, color:'#fff'}}>로그인</Text>
             </TouchableOpacity>
             <View style={{flexDirection:'row', alignItems: 'center'}}>

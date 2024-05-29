@@ -22,9 +22,9 @@ const ChatRecordingScreen = ({navigation}) => {
                 <Ionicons name="calendar-sharp" size={35} color="#000" style={{marginLeft:15}}/>
             </View>
             <View style={styles.listtitle}>
-                <Text style={{flex:1, textAlign:'center', fontSize:18, fontWeight:600, color:'#B6B6B6'}}>번호</Text>
-                <Text style={{flex:4, textAlign:'center', fontSize:18, fontWeight:600, color:'#B6B6B6'}}>제목</Text>
-                <Text style={{flex:1, textAlign:'center', fontSize:18, fontWeight:600, color:'#B6B6B6'}}>날짜</Text>
+                <Text style={styles.text}>번호</Text>
+                <Text style={styles.contenttext}>내용</Text>
+                <Text style={styles.text}>날짜</Text>
             </View>
             <ScrollView>
                 {recordingdata.map(item => (
@@ -67,6 +67,20 @@ const styles = StyleSheet.create({
         borderRadius:10,
         paddingVertical:10,
         paddingHorizontal:10,
+    },
+    text:{
+        flex:1, 
+        textAlign:'center', 
+        fontSize:18, 
+        fontWeight:600, 
+        color:'#B6B6B6'
+    },
+    contenttext:{
+        flex:4, 
+        textAlign:'center', 
+        fontSize:18, 
+        fontWeight:600,
+        color:'#B6B6B6'
     },
     listtitle:{
         flexDirection:'row',
