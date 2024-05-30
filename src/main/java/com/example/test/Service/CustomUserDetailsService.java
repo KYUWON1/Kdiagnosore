@@ -29,5 +29,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 사용자 정보가 있으면 CustomUserDetails 객체를 반환
         return new CustomUserDetails(userDomain);
+
     }
 }
