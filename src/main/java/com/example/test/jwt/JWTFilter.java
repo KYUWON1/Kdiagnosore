@@ -2,6 +2,8 @@ package com.example.test.jwt;
 
 import com.example.test.domain.UserDomain;
 import com.example.test.dto.CustomUserDetails;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -24,49 +28,53 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        // request에서 인증 헤더 찾기
         String authorization = request.getHeader("Authorization");
-        //System.out.println("Authorization Header: " + authorization);
 
-        // 헤더 검증 부분
-        if(authorization == null || !authorization.startsWith("Bearer ")){
-            System.out.println("No valid Authorization header found or token does not start with 'Bearer '");
+        try {
+            if (authorization == null || !authorization.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            String token = authorization.split(" ")[1];
+
+            // 토큰만료시 예외 처리
+            if (jwtUtil.isExpired(token)) {
+                throw new ExpiredJwtException(null, null, "Token is expired");
+            }
+
+            String username = jwtUtil.getUsername(token);
+            String role = jwtUtil.getRole(token);
+
+            UserDomain userDomain = new UserDomain();
+            userDomain.setUserName(username);
+            userDomain.setPassword("temppassword");
+            userDomain.setRole(role);
+
+            CustomUserDetails customUserDetails = new CustomUserDetails(userDomain);
+            Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authToken);
             filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            // 토큰 만료 에러처리
+            sendJsonErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Expired JWT Token: " + e.getMessage());
+            return;
+        } catch (Exception e) {
+            // 잘못된 토큰 에러처리
+            sendJsonErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Server Error: " + e.getMessage());
             return;
         }
+    }
 
-        // 토큰 부분만 획득
-        String token = authorization.split(" ")[1];
-        //System.out.println("Token extracted: " + token);
+    private void sendJsonErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
+        Map<String, String> errorDetails = new HashMap<>();
+        errorDetails.put("success", "false");
+        errorDetails.put("message", message);
 
-        // 토큰 시간 검증
-        if(jwtUtil.isExpired(token)){
-            System.out.println("Token is expired");
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // 토큰에서 username과 role 획득
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
-        System.out.println("Username and role from token: " + username + " : " + role);
-
-        // 유저 도메인 객체 생성 및 값 설정
-        UserDomain userDomain = new UserDomain();
-        userDomain.setUserName(username);
-        userDomain.setPassword("temppassword");
-        userDomain.setRole(role);
-
-        // CustomUserDetails 객체 생성
-        CustomUserDetails customUserDetails = new CustomUserDetails(userDomain);
-
-        // 스프링 시큐리티 인증 토큰 생성 및 설정
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-        System.out.println("Authentication successful, security context updated");
-
-        // 토큰 검증 완료 후 요청 처리 계속
-        filterChain.doFilter(request, response);
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(errorDetails));
     }
 }

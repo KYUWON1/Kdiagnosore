@@ -6,6 +6,7 @@ import com.example.test.repository.UserRepository;
 import org.apache.catalina.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class JoinService {
@@ -19,31 +20,32 @@ public class JoinService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void joinProcess(JoinDTO joinDTO) {
-        String userName = joinDTO.getUserName();
-        String email = joinDTO.getEmail();
-        String password = joinDTO.getPassword();
-        String phoneNum = joinDTO.getPhoneNum();
-        String protectorName = joinDTO.getProtectorName();
-        String protectorNum = joinDTO.getProtectorNum();
+    public JoinDTO joinProcess(JoinDTO joinDTO) {
+        // 필수 입력 값 검증
+        if (!StringUtils.hasText(joinDTO.getUserName())) {
+            throw new IllegalArgumentException("아이디를 입력해야 합니다.");
+        }
+        if (!StringUtils.hasText(joinDTO.getPassword())) {
+            throw new IllegalArgumentException("비밀번호를 입력해야 합니다.");
+        }
 
-        //해당 아이디가 존재하는지 확인
-        Boolean isExist = userRepository.existsByUserName(userName);
-
-        if(isExist){
+        // 중복 아이디 확인
+        if (userRepository.existsByUserName(joinDTO.getUserName())) {
             throw new RuntimeException("해당 아이디는 이미 존재합니다.");
         }
 
+        // User 도메인 객체 생성
         UserDomain data = new UserDomain();
-
-        data.setUserName(userName);
-        data.setEmail(email);
+        data.setUserName(joinDTO.getUserName());
+        data.setEmail(joinDTO.getEmail());
         data.setRole("user");
-        data.setPassword(bCryptPasswordEncoder.encode(password));
-        data.setPhoneNum(phoneNum); // 선택적으로 처리
-        data.setProtectorName(protectorName); // 선택적으로 처리
-        data.setProtectorNum(protectorNum); // 선택적으로 처리
+        data.setPassword(bCryptPasswordEncoder.encode(joinDTO.getPassword()));
+        data.setPhoneNum(joinDTO.getPhoneNum()); // 선택적으로 처리
+        data.setProtectorName(joinDTO.getProtectorName()); // 선택적으로 처리
+        data.setProtectorNum(joinDTO.getProtectorNum()); // 선택적으로 처리
 
         userRepository.save(data);
+
+        return joinDTO;
     }
 }
