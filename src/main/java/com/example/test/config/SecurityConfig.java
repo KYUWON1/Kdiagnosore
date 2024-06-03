@@ -77,12 +77,12 @@ public class SecurityConfig {
                 .httpBasic((auth) -> auth.disable());
 
         //경로별 인가 작업
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login","/","/join").permitAll()
-                        .requestMatchers("/user/**").hasAnyAuthority("user", "admin")
-                        .requestMatchers("/admin").hasAuthority("admin")
-                        .anyRequest().authenticated());
+//        http
+//                .authorizeHttpRequests((auth) -> auth
+//                        .requestMatchers("/login","/","/join").permitAll()
+//                        .requestMatchers("/user/**").hasAnyAuthority("user", "admin")
+//                        .requestMatchers("/admin").hasAuthority("admin")
+//                        .anyRequest().authenticated());
 
         // filter 등록
         http
