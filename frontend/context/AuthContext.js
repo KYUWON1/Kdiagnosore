@@ -4,11 +4,14 @@ import {Alert } from 'react-native';
 import axios from 'axios';
 
 export const AuthContext = createContext();
-//로그인 인증 구현
+
 export const AuthProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [userToken, setUserToken] = useState(null);
-    const [userInfo, setUserInfo] = useState(null);   
+    const [userInfo, setUserInfo] = useState(null);  
+    const register = () => {
+        //회원가입 인증 구현
+    } 
     const login = async(username, password) => {
         setIsLoading(true);
         const formData = new FormData();

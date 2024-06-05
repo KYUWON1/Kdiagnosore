@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {TouchableOpacity, View, Text, TextInput,SafeAreaView, StyleSheet} from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { AuthContext } from "../context/AuthContext";
 
 const RegisterScreen = ({navigation}) => {
     const [userName, setUserName] = useState("");
@@ -20,8 +21,8 @@ const RegisterScreen = ({navigation}) => {
                     <Text style={styles.label}>이름</Text>
                     <TextInput 
                         style={styles.input}
-                        value={Nickname} 
-                        onChangeText={setNickName}/>
+                        value={userName} 
+                        onChangeText={setUserName}/>
                     <Text style={styles.label}>아이디</Text>
                     <TextInput 
                         style={styles.input}
@@ -31,7 +32,7 @@ const RegisterScreen = ({navigation}) => {
                     <Text style={styles.label}>비밀번호</Text>
                     <TextInput 
                         style={styles.input}
-                        value={Passsword} 
+                        value={passsword} 
                         placeholder='대소문자, 특수문자, 숫자~~'
                         onChangeText={setPassword}
                         secureTextEntry/> 
@@ -43,19 +44,19 @@ const RegisterScreen = ({navigation}) => {
                     <Text style={styles.label}>전화번호</Text>
                     <TextInput 
                         style={styles.input}
-                        value={PhoneNum} 
+                        value={phoneNum} 
                         onChangeText={setPhoneNum}
                         keyboardType="number-pad"/>
                     <Text style={styles.label}>보호자 이름</Text>
                     <TextInput 
                         style={styles.input}
-                        value={Guardian} 
-                        onChangeText={setGuardian}/>
+                        value={protectorName} 
+                        onChangeText={setProtectorName}/>
                     <Text style={styles.label}>보호자 전화번호</Text>
                     <TextInput 
                         style={styles.input}
-                        value={GuardianPhoneNum} 
-                        onChangeText={setGuardianPhoneNum}
+                        value={protectorNum} 
+                        onChangeText={setProtectorNum}
                         keyboardType="number-pad"/>
                     <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('RegisterAccept')}>
                         <Text style={{fontSize:20, color:'#fff'}}>회원가입</Text>
