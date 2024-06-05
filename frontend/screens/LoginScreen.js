@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
-import {TouchableOpacity, StyleSheet,SafeAreaView,Image, View, Text, TextInput} from 'react-native'
+import React, { useEffect, useState, useContext } from "react";
+import {TouchableOpacity, StyleSheet,SafeAreaView,Image, View, ActivityIndicator, Text, TextInput} from 'react-native'
 import Checkbox from "expo-checkbox";
+import { AuthContext } from "../context/AuthContext";
 
 const LoginScreen = ({navigation}) => {
     const [ID, setID] = useState("");
     const [Passsword, setPassword] = useState("");
     const [isLoginChecked, setIsLoginChecked] = useState(false);
+    const {login} = useContext(AuthContext);
     //로그인 인증 context 가져오기
     return(
         <SafeAreaView style={styles.container}>
@@ -32,7 +34,8 @@ const LoginScreen = ({navigation}) => {
             />
             <Text style={{textAlign:'center', fontSize:17, color:'#828282'}}>로그인 상태 유지</Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={()=>{navigation.navigate('Appstart')}}> 
+            <TouchableOpacity 
+            style={styles.button}  onPress={()=>{ login(ID, Passsword)}}> 
                 <Text style={{fontSize:20, color:'#fff'}}>로그인</Text>
             </TouchableOpacity>
             <View style={{flexDirection:'row', alignItems: 'center'}}>

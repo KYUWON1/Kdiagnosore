@@ -3,12 +3,13 @@ import {TouchableOpacity, View, Text, TextInput,SafeAreaView, StyleSheet} from '
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const RegisterScreen = ({navigation}) => {
-    const [Nickname, setNickName] = useState("");
+    const [userName, setUserName] = useState("");
     const [ID, setID] = useState("");
-    const [Passsword, setPassword] = useState("");
-    const [PhoneNum, setPhoneNum] = useState("");
-    const [Guardian, setGuardian] = useState("");
-    const [GuardianPhoneNum, setGuardianPhoneNum] = useState("");
+    const [passsword, setPassword] = useState("");
+    const [phoneNum, setPhoneNum] = useState("");
+    const [protectorName, setProtectorName] = useState("");
+    const [protectorNum, setProtectorNum] = useState("");
+    const {register} = useContext(AuthContext);
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>

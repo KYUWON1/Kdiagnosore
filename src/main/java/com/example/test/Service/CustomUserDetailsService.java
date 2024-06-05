@@ -17,14 +17,17 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetailsService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
+        // 데이터베이스에서 사용자 정보 조회
         UserDomain userDomain = userRepository.findByUserName(username);
-        if(userDomain != null){
-            return new CustomUserDetails(userDomain);
+
+        // 사용자 정보가 없으면 UsernameNotFoundException 예외 발생
+        if (userDomain == null) {
+            throw new UsernameNotFoundException("No user found with username: " + username);
         }
-        return null;
+
+        // 사용자 정보가 있으면 CustomUserDetails 객체를 반환
+        return new CustomUserDetails(userDomain);
     }
 }

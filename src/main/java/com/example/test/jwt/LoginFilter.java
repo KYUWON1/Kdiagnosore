@@ -33,6 +33,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
         // request로 받은 id와 password
         String username = obtainUsername(request);
         String password = obtainPassword(request);
+        System.out.println(username+" "+password);
 
         // 받은 유저 정보를 통해 인증 토큰 생성, 원래 마지막 값에 role 같은 것을 전달해주어야함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username,password,null);

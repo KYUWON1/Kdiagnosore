@@ -1,10 +1,12 @@
-import React from "react";
+import React,{useContext} from "react";
 import {View, Text,SafeAreaView, StyleSheet} from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import { AuthContext } from "../context/AuthContext";
 
 const SettingScreen = ({navigation}) => {
+    const {logout} = useContext(AuthContext);
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -36,7 +38,7 @@ const SettingScreen = ({navigation}) => {
                     <Ionicons name='exit-outline' size={25} style={{marginLeft:15}}/>
                     <Text style={styles.settingcontent}>로그아웃</Text>
                 </View>
-                <AntDesign name='right' size={25} style={{marginHorizontal:10,}} onPress={()=>{}}/>
+                <AntDesign name='right' size={25} style={{marginHorizontal:10,}} onPress={()=>{logout()}}/>
             </View>
             <View style={styles.settingout}>
                 <Text style={{color:'#B6B6B6', fontSize:15, textAlign:'right'}}>회원탈퇴</Text>

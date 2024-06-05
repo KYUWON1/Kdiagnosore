@@ -3,8 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import SplashScreen from './screens/SplashScreen';
 import axios from 'axios';
 
-import {NavigationContainer} from '@react-navigation/native';
 import AppNavigator from './navigation/AppNavigator';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   const[isLoading, setIsLoading]=useState(true);
@@ -13,20 +13,12 @@ function App() {
   //axios.get('http://10.0.2.2:8080/api/test')  안드로이드 버전
   useEffect(() => {
     setTimeout(() => {setIsLoading(false)}, 3000);
-    axios.get('http://10.0.2.2:8080/api/test')
-      .then((response) => {
-        setMessage(response.data);
-        console.log(message);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
   }, []);
   return (
-    <NavigationContainer>
-      {isLoading ? <SplashScreen/> : <AppNavigator/>
-      }     
-    </NavigationContainer>
+    <AuthProvider>
+        {isLoading ? <SplashScreen/> : <AppNavigator/>
+        }     
+    </AuthProvider>
   );
 }
 

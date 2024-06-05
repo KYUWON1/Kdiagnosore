@@ -49,7 +49,7 @@ public class SecurityConfig {
                                 CorsConfiguration configuration = new CorsConfiguration();
 
                                 // 포트번호
-                                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
                                 // 메소드 GET, POST 등
                                 configuration.setAllowedMethods(Collections.singletonList("*"));
                                 // Credential 설정시
