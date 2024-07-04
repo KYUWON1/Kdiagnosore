@@ -10,6 +10,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {setIsLoading(false)}, 3000);
   }, []);
+
   return (
       <NavigationContainer>
         {isLoading ? <SplashScreen/> : <AppNavigator/>
@@ -22,7 +23,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-
     justifyContent: 'center',
   },
 });
