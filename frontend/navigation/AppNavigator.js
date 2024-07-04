@@ -28,10 +28,14 @@ const AppNavigator = () => {
         <Stack.Screen name="Register" component={RegisterScreen}/>
         <Stack.Screen name="RegisterAccept" component={RegisterAcceptScreen}/>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <Stack.Screen name="App" component={AppStack}/>
 =======
         <Stack.Screen name="Appstart" component={AppStack}/>
 >>>>>>> 24bf90e5 (fix : frontend update)
+=======
+        <Stack.Screen name="App" component={AppStack}/>
+>>>>>>> 690ac63b (로그인 / 회원가입 구현)
     </Stack.Navigator>
     );
 };
