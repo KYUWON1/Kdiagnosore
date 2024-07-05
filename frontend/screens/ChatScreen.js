@@ -109,7 +109,6 @@ const SendButton = (props) => {
 
 const ChatScreen = () => {
     const [messages, setMessages] = useState([]);
-
     useEffect(() => {
         setMessages([
             {
