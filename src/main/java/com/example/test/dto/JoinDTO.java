@@ -1,0 +1,16 @@
+package com.example.test.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class JoinDTO {
+    private String userName;
+    private String email;
+    private String password;
+
+    private String phoneNum;
+    private String protectorName;
+    private String protectorNum;
+}
