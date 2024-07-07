@@ -4,23 +4,18 @@ package com.example.test.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
-<<<<<<< HEAD
 import org.springframework.context.annotation.Primary;
-=======
->>>>>>> 23f102c4 (24-06-03 GPT-API Controller)
 import org.springframework.web.client.RestTemplate;
+import io.github.cdimascio.dotenv.Dotenv;
 
 @Configuration
 public class GPTConfig {
+    private final Dotenv dotenv = Dotenv.load();
 
-    @Value("${gpt.api.key}")
-    private String apiKey;
+    private String apiKey = dotenv.get("API_KEY");
 
     @Bean
-<<<<<<< HEAD
     @Primary
-=======
->>>>>>> 23f102c4 (24-06-03 GPT-API Controller)
     public RestTemplate restTemplate(){
         RestTemplate template = new RestTemplate();
         template.getInterceptors().add((request, body, execution) -> {

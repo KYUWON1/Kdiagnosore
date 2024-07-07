@@ -29,6 +29,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.apache.commons:commons-text:1.9'
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly 'io.jsonwebtoken:jjwt-api:0.12.3'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
