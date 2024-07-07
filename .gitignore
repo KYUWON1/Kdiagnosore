@@ -39,3 +39,6 @@ out/
 ### python ###
 python/venv/
 python/models/
+
+### 환경변수 ###
+.env
