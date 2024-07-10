@@ -10,4 +10,14 @@ public class ChatDTO {
     private String message;
     private String chatFrom;
     private String chatType;
+
+    @Override
+    public String toString() {
+        return "ChatDTO{" +
+                "userId='" + userId + '\'' +
+                ", message='" + message + '\'' +
+                ", chatFrom='" + chatFrom + '\'' +
+                ", chatType='" + chatType + '\'' +
+                '}';
+    }
 }

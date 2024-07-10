@@ -1,5 +1,7 @@
 package com.example.test.domain;
 
+import com.example.test.type.ChatFrom;
+import com.example.test.type.ChatType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -9,35 +11,20 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.UUID;
 
 @Document(collection="chat")
 @Getter
 @Setter
 public class ChatDomain {
     @Id
+    private String chatId = UUID.randomUUID().toString(); // 각 채팅에 고유 ID 할당
+
     private String userId;
-
-    // user, chatbot
-    private String chatFrom;
-    // normal, test, answer
-    private String chatType;
-
+    private ChatFrom chatFrom;
+    private ChatType chatType;
     private String message;
 
-    @Field("chat_number")
-    private int chatNum;
     private Date date;
     private Time time;
-
-    @Transient
-    private static int sequence;
-
-    public ChatDomain(){
-        this.chatNum = getNextSequence();
-    }
-
-    public static synchronized int getNextSequence(){
-        return ++sequence;
-    }
-
 }
