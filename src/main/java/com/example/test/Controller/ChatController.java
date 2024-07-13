@@ -6,9 +6,9 @@ import com.example.test.dto.ChatDTO;
 import com.example.test.type.ChatSaveResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @ResponseBody
@@ -37,5 +37,10 @@ public class ChatController {
             chatService.saveBotChat(answer);
         }
         return answer;
+    }
+
+    @GetMapping("/chat/{userId}")
+    public List<ChatDTO> getChatsByUserId(@PathVariable String userId) {
+        return chatService.getChatsByUserId(userId);
     }
 }
