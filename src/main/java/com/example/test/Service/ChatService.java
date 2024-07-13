@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 @Service
 public class ChatService {
@@ -100,5 +101,9 @@ public class ChatService {
         if(!StringUtils.hasText(message)){
             throw new IllegalArgumentException("메세지를 입력해주세요");
         }
+    }
+
+    public List<ChatDTO> getChatsByUserId(String userId) {
+        return chatRepository.findByUserId(userId);
     }
 }

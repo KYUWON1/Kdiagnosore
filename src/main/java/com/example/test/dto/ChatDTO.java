@@ -2,14 +2,22 @@ package com.example.test.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
+@Document(collection = "chat")
 public class ChatDTO {
+    @Id
+    private String id;
     private String userId;
     private String message;
     private String chatFrom;
     private String chatType;
+    private String date;
+    private String time;
+    private String _class;
 
     @Override
     public String toString() {
