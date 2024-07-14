@@ -1,9 +1,14 @@
 package com.example.test.dto;
 
+import com.example.test.type.ChatFrom;
+import com.example.test.type.ChatType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.sql.Time;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -13,10 +18,10 @@ public class ChatDTO {
     private String id;
     private String userId;
     private String message;
-    private String chatFrom;
-    private String chatType;
-    private String date;
-    private String time;
+    private ChatFrom chatFrom;
+    private ChatType chatType;
+    private Date date;
+    private Time time;
     private String _class;
 
     @Override
