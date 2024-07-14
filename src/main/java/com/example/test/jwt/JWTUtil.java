@@ -37,8 +37,6 @@ public class JWTUtil {
 
     // JWT 토큰 생성 부분
     public String createJwt(String username,String role,Long expiredMs){
-//        System.out.println(username);
-//        System.out.println(role);
         return Jwts.builder()
                 .claim("userName",username)
                 .claim("role",role)

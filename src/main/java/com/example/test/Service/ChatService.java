@@ -46,10 +46,12 @@ public class ChatService {
     }
 
     public ChatDTO getPrediction(ChatDTO chatDTO) {
+        validateMessage(chatDTO.getMessage());
+
         String jsonBody = "{\"question\": \"" + chatDTO.getMessage() + "\"}";
         PredictResponse response = sendRequest(PREDICTION_URL,jsonBody); // JSON 응답에서 "answer" 필드 추출
         String decodedResponse = StringEscapeUtils.unescapeJava(response.getAnswer());
-        chatDTO.setMessage(decodedResponse);
+        chatDTO = setChatDtoContent(decodedResponse);
         return chatDTO;
     }
 
@@ -82,12 +84,24 @@ public class ChatService {
     public ChatDomain setChatContent(String userId,String message, ChatFrom chatFrom,ChatType chatType){
         ChatDomain chatDomain = new ChatDomain();
         chatDomain.setUserId(userId);
-        chatDomain.setChatFrom(ChatFrom.CHAT_BOT);
-        chatDomain.setChatType(ChatType.NORMAL);
+        chatDomain.setChatFrom(chatFrom);
+        chatDomain.setChatType(chatType);
         chatDomain.setMessage(message);
         chatDomain.setDate(new Date(System.currentTimeMillis()));
         chatDomain.setTime(new Time(System.currentTimeMillis()));
         return chatDomain;
+    }
+
+    public ChatDTO setChatDtoContent(String message){
+        ChatDTO chatDTO = new ChatDTO();
+        String userId = getUserId();
+        chatDTO.setUserId(userId);
+        chatDTO.setChatFrom(ChatFrom.CHAT_BOT);
+        chatDTO.setChatType(ChatType.NORMAL);
+        chatDTO.setMessage(message);
+        chatDTO.setDate(new Date(System.currentTimeMillis()));
+        chatDTO.setTime(new Time(System.currentTimeMillis()));
+        return chatDTO;
     }
 
     public String getUserId() {
