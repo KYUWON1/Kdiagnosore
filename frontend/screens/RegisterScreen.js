@@ -4,6 +4,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import axios from 'axios';
 
 const RegisterScreen = ({ navigation }) => {
+    const [UserId, setUserId] = useState("");
     const [UserName, setUserName] = useState("");
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
@@ -18,19 +19,21 @@ const RegisterScreen = ({ navigation }) => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('userName', UserName);
-        formData.append('email', Email);
-        formData.append('password', Password);
-        formData.append('phoneNum', PhoneNum);
-        formData.append('protectorName', ProtectorName);
-        formData.append('protectorNum', ProtectorNum);
+        const data = {
+                userId: UserId,
+                userName: UserName,
+                email: Email,
+                password: Password,
+                phoneNum: PhoneNum,
+                protectorName: ProtectorName,
+                protectorNum: ProtectorNum
+            };
 
         try {
-            const response = await axios.post('http://10.0.2.2:8080/join', formData, {
+            const response = await axios.post('http://10.0.2.2:8080/join', JSON.stringify(data), {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                    'Content-Type': 'application/json'
+                }
             });
 
             if (response.status === 200) {
@@ -41,6 +44,7 @@ const RegisterScreen = ({ navigation }) => {
             }
         } catch (error) {
             if (error.response) {
+                console.error('Error response:', error.response);
                 Alert.alert('회원가입 실패', error.response.data.message || '회원가입 중 오류가 발생했습니다.');
             } else if (error.request) {
                 Alert.alert('회원가입 실패', '서버에서 응답을 받지 못했습니다.');
@@ -57,6 +61,12 @@ const RegisterScreen = ({ navigation }) => {
             </View>
             <KeyboardAwareScrollView style={{ marginTop: 20 }}>
                 <View style={{ alignItems: 'center' }}>
+                   <Text style={styles.label}>아이디</Text>
+                   <TextInput
+                        style={styles.input}
+                        value={UserId}
+                        onChangeText={setUserId}
+                   />
                     <Text style={styles.label}>이름</Text>
                     <TextInput
                         style={styles.input}
