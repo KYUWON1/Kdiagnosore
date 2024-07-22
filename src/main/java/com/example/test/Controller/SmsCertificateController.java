@@ -7,10 +7,13 @@ import com.example.test.type.CertificateResponse;
 import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 import static com.example.test.type.CertificateResponse.FAIL;
@@ -34,6 +37,7 @@ public class SmsCertificateController {
         String certificateNum = getNumStr();
         httpSession.setAttribute("phoneNumber",request.getPhoneNumber());
         httpSession.setAttribute("certificateCode",certificateNum);
+        httpSession.setAttribute("verifyTime", LocalDateTime.now());
 
         System.out.println("receiver Num:"+request.getPhoneNumber());
         System.out.println("인증번호"+certificateNum);
@@ -53,7 +57,17 @@ public class SmsCertificateController {
         String sessionPhoneNumber = (String) httpSession.getAttribute("phoneNumber");
         String sessionCertNumber = (String) httpSession.getAttribute(
                 "certificateCode");
+        // 인증번호 다름
         if(!request.getCertNum().equals(sessionCertNumber)){
+            return SmsCertificate.Response.builder()
+                    .certificateResponse(FAIL)
+                    .build();
+        }
+        // 시간 초과
+        LocalDateTime verifyTime = (LocalDateTime) httpSession.getAttribute("verifyTime");
+        Duration duration = Duration.between(verifyTime, LocalDateTime.now());
+        if(duration.toMinutes() >= 5){
+            httpSession.invalidate();
             return SmsCertificate.Response.builder()
                     .certificateResponse(FAIL)
                     .build();
