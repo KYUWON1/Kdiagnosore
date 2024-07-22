@@ -39,7 +39,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userDomain.getUserName();
+        return userDomain.getUserId();
     }
 
     // 나머지는 계정 활성화 되도록 true로 설정

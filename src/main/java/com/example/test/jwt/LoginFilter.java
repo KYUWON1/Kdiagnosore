@@ -31,7 +31,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = null;
+        String userId = null;
         String password = null;
 
         // App의 JSON 값이랑, 포스트맨에서 날리는 JSON값이 다른것같음
@@ -40,21 +40,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
             if (request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
                 // JSON 요청 처리
                 Map<String, String> requestBody = new ObjectMapper().readValue(request.getInputStream(), Map.class);
-                username = requestBody.get("username");
+                userId = requestBody.get("userId");
                 password = requestBody.get("password");
             } else {
                 // URL 인코딩된 폼 데이터 요청 처리
-                username = obtainUsername(request);
+                userId = obtainUsername(request);
                 password = obtainPassword(request);
             }
 
-            System.out.println(username + " : " + password);
+            System.out.println(userId + " : " + password);
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password, null);
             System.out.println(authToken);
 
             return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
+            System.out.println(e);
             throw new RuntimeException(e);
         }
     }
@@ -65,7 +66,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String username = customUserDetails.getUsername();
+        // 사실상 UserID를 반환함 메소드 이름 변경이 불가
+        String userId = customUserDetails.getUsername();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends  GrantedAuthority> iter = authorities.iterator();
@@ -74,7 +76,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
         String role = auth.getAuthority();
 
         //JWT 토큰 생성 10시간
-        String token = jwtUtil.createJwt(username,role,10 * 60 * 60 * 1000L);
+        String token = jwtUtil.createJwt(userId,role,10 * 60 * 60 * 1000L);
 
         // 헤더에 토큰을 담아서 전달
         response.addHeader("Authorization","Bearer "+token);
