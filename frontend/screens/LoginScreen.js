@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TouchableOpacity, StyleSheet, SafeAreaView, Image, View, Text, TextInput, Alert } from 'react-native';
 import Checkbox from "expo-checkbox";
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
     const [ID, setID] = useState("");
@@ -9,14 +10,15 @@ const LoginScreen = ({ navigation }) => {
     const [isLoginChecked, setIsLoginChecked] = useState(false);
 
     const handleLogin = async () => {
-        const formData = new FormData();
-        formData.append('username', ID);
-        formData.append('password', Password);
+        const data = {
+            userId: ID,
+            password: Password
+        };
 
         try {
-            const response = await axios.post('http://10.0.2.2:8080/login', formData, {
+            const response = await axios.post('http://10.0.2.2:8080/login', JSON.stringify(data), {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -24,7 +26,8 @@ const LoginScreen = ({ navigation }) => {
                 const token = response.headers.authorization; // 서버로부터 토큰을 받아옵니다.
                 Alert.alert('로그인 성공', '로그인이 성공적으로 완료되었습니다.');
                 axios.defaults.headers.common['Authorization'] = token;
-                navigation.navigate('App', { token }); // 로그인 후 토큰을 다음 화면으로 전달합니다.
+                await AsyncStorage.setItem('userID', ID);
+                navigation.navigate('App'); // 로그인 후 토큰을 다음 화면으로 전달합니다.
             } else {
                 Alert.alert('로그인 실패', response.data.message || '로그인 중 오류가 발생했습니다.');
             }
