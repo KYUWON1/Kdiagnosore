@@ -23,7 +23,7 @@ public class JoinService {
     public JoinDTO joinProcess(JoinDTO joinDTO) {
         // 필수 입력 값 검증
         System.out.println(joinDTO);
-        if (!StringUtils.hasText(joinDTO.getUserName())) {
+        if (!StringUtils.hasText(joinDTO.getUserId())) {
             System.out.println(joinDTO.getUserName());
             throw new IllegalArgumentException("아이디를 입력해야 합니다.");
         }
@@ -32,12 +32,13 @@ public class JoinService {
         }
 
         // 중복 아이디 확인
-        if (userRepository.existsByUserName(joinDTO.getUserName())) {
+        if (userRepository.existsByUserId(joinDTO.getUserId())) {
             throw new RuntimeException("해당 아이디는 이미 존재합니다.");
         }
 
         // User 도메인 객체 생성
         UserDomain data = new UserDomain();
+        data.setUserId(joinDTO.getUserId());
         data.setUserName(joinDTO.getUserName());
         data.setEmail(joinDTO.getEmail());
         data.setRole("user");

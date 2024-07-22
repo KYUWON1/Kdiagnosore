@@ -7,6 +7,8 @@ import lombok.*;
 public class SmsSend {
     @Getter
     @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Request {
         private String phoneNumber;
     }

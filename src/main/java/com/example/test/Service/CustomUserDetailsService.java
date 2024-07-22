@@ -19,12 +19,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         // 데이터베이스에서 사용자 정보 조회
-        UserDomain userDomain = userRepository.findByUserName(username);
+        UserDomain userDomain = userRepository.findByUserId(userId);
         // 사용자 정보가 없으면 UsernameNotFoundException 예외 발생
         if (userDomain == null) {
-            throw new UsernameNotFoundException("No user found with username: " + username);
+            throw new UsernameNotFoundException("No user found with userId: " + userId);
         }
 
         // 사용자 정보가 있으면 CustomUserDetails 객체를 반환

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 public class SmsCertificationService {
@@ -42,4 +43,13 @@ public class SmsCertificationService {
         }
     }
 
+    private static String getNumStr() {
+        Random rand = new Random();
+        String numStr = "";
+        for (int i = 0; i < 4; i++) {
+            String ran = Integer.toString(rand.nextInt(10));
+            numStr += ran;
+        }
+        return numStr;
+    }
 }

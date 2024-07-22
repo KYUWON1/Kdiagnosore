@@ -22,8 +22,8 @@ public class JWTUtil {
     }
 
     // 토큰을 가지고와서 시크릿키를 통해 검증하고, username을 받아오는 함수
-    public String getUsername(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userName",String.class);
+    public String getUserId(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId",String.class);
     }
 
     public String getRole(String token){
@@ -36,9 +36,9 @@ public class JWTUtil {
     }
 
     // JWT 토큰 생성 부분
-    public String createJwt(String username,String role,Long expiredMs){
+    public String createJwt(String userId,String role,Long expiredMs){
         return Jwts.builder()
-                .claim("userName",username)
+                .claim("userId",userId)
                 .claim("role",role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+ expiredMs))

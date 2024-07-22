@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,6 +60,7 @@ public class SmsCertificateController {
                 "certificateCode");
         // 인증번호 다름
         if(!request.getCertNum().equals(sessionCertNumber)){
+            httpSession.invalidate();
             return SmsCertificate.Response.builder()
                     .certificateResponse(FAIL)
                     .build();

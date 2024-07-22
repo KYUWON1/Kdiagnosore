@@ -44,11 +44,11 @@ public class JWTFilter extends OncePerRequestFilter {
                 throw new ExpiredJwtException(null, null, "Token is expired");
             }
 
-            String username = jwtUtil.getUsername(token);
+            String userId = jwtUtil.getUserId(token);
             String role = jwtUtil.getRole(token);
 
             UserDomain userDomain = new UserDomain();
-            userDomain.setUserName(username);
+            userDomain.setUserId(userId);
             userDomain.setPassword("temppassword");
             userDomain.setRole(role);
 
