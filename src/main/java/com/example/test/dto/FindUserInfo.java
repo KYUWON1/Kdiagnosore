@@ -1,5 +1,6 @@
 package com.example.test.dto;
 
+import com.example.test.type.CertificateResponse;
 import lombok.*;
 
 public class FindUserInfo {
@@ -21,7 +22,7 @@ public class FindUserInfo {
     @Builder
     public static class Response {
         private String userId;
-        private String password;
+        private CertificateResponse certificateResponse;
 
         public static Response idFrom(UserProfileDTO user){
             return Response.builder()
@@ -29,11 +30,5 @@ public class FindUserInfo {
                     .build();
         }
 
-        public static Response passwordFrom(UserProfileDTO user){
-            return Response.builder()
-                    .userId(user.getUserId())
-                    .password(user.getPassword())
-                    .build();
-        }
     }
 }
