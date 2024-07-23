@@ -18,8 +18,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserProfileDTO getUserProfile(String username){
-        UserDomain data = userRepository.findByUserName(username);
+    public UserProfileDTO getUserProfile(String userId){
+        UserDomain data = userRepository.findByUserId(userId);
 
         UserProfileDTO userInfoDTO = new UserProfileDTO();
         userInfoDTO.setUserId(data.getUserId());
