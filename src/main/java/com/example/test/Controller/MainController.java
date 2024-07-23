@@ -1,27 +1,19 @@
 package com.example.test.Controller;
 
 import com.example.test.Service.UserService;
-import com.example.test.dto.FindUserInfo;
-import com.example.test.dto.SmsCertificate;
-import com.example.test.dto.SmsSend;
-import com.example.test.dto.UserProfileDTO;
+import com.example.test.dto.*;
 import com.example.test.exception.UserException;
+import com.example.test.type.BaseResponse;
 import com.example.test.type.CertificateResponse;
 import com.example.test.type.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Collection;
-import java.util.Iterator;
 
 @Controller
 @ResponseBody
@@ -49,24 +41,21 @@ public class MainController {
         return new FindUserInfo.Response().idFrom(user);
     }
 
-    // 사용자아아디, 휴대폰인증으로 비밀번호 찾기
-    // -> 비밀번호 제공 및 수정
+    // 비밀번호 찾기 -> 인증메세지 전송
     @PostMapping("/getPassword/request")
     public SmsSend.Response findPasswordRequest(
             HttpSession session,
             @RequestBody FindUserInfo.Request request
     ){
-        UserProfileDTO user
-                = userService.findPassword(request.getUserId());
+        userService.findUserbyUserId(request.getUserId());
+        session.setAttribute("userId",request.getUserId());
         // sms컨트롤러를 통해서 인증
         SmsSend.Response response = smsCertificateController.sendSMS(session,
                 new SmsSend.Request(request.getPhoneNumber()));
-
         return response;
     }
 
-    // 사용자아아디, 휴대폰인증으로 비밀번호 찾기
-    // -> 비밀번호 제공 및 수정
+    // 비밀번호 찾기 -> 인증번호 확인
     @PostMapping("/getPassword/verify")
     public FindUserInfo.Response findPasswordVerify(
             HttpSession session,
@@ -77,15 +66,19 @@ public class MainController {
         SmsCertificate.Response response =
                 smsCertificateController.verifySMS(
                         session,certReq);
-        if(response.getCertificateResponse() == CertificateResponse.FAIL){
-           throw new UserException(ErrorCode.VERIFY_CODE_NOT_MATCH);
-        }
-        UserProfileDTO user
-                = userService.findPassword(request.getUserId());
+
         return new FindUserInfo.Response().builder()
-                .userId(user.getUserId())
-                .password(user.getPassword())
+                .certificateResponse(response.getCertificateResponse())
                 .build();
+    }
+
+    // 비밀번호 찾기 -> 비밀번호 수정
+    @PostMapping("/getPassword/reset")
+    public ResetPassword.Response passwordReset(
+            HttpSession session,
+            @RequestBody ResetPassword.Request request
+    ){
+        return ResetPassword.Response.from(userService.updatePassword(request, session));
     }
 
     /* 메인페이지 로그아웃 */

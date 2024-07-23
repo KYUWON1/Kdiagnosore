@@ -2,20 +2,27 @@ package com.example.test.Service;
 
 import com.example.test.Controller.SmsCertificateController;
 import com.example.test.domain.UserDomain;
+import com.example.test.dto.DefaultDTO;
+import com.example.test.dto.ResetPassword;
 import com.example.test.dto.UserProfileDTO;
+import com.example.test.exception.CertificationException;
 import com.example.test.exception.UserException;
 import com.example.test.repository.UserRepository;
+import com.example.test.type.BaseResponse;
 import com.example.test.type.ErrorCode;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, SmsCertificateController smsCertificateController){
+    public UserService(UserRepository userRepository, SmsCertificateController smsCertificateController, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public UserProfileDTO getUserProfile(String userId){
@@ -41,11 +48,36 @@ public class UserService {
         return new UserProfileDTO().idFromEntity(user);
     }
 
-    public UserProfileDTO findPassword(String userId) {
+    public DefaultDTO findUserbyUserId(String userId){
         UserDomain user = userRepository.findByUserId(userId);
         if(user == null){
             throw new UserException(ErrorCode.USER_NOT_FOUND);
         }
-        return new UserProfileDTO().passwordFromEntity(user);
+        return DefaultDTO.builder()
+                .description("유저 확인완료.")
+                .baseResponse(BaseResponse.OK)
+                .build();
+    }
+
+    public DefaultDTO updatePassword(ResetPassword.Request request,
+                                     HttpSession session) {
+        String userId = (String)session.getAttribute("userId");
+        if(!request.getPassword().equals(request.getPasswordCheck())){
+            throw new CertificationException(ErrorCode.PASSWORD_CHECK_UN_MATCH);
+        }
+        if(userId == null){
+            throw new UserException(ErrorCode.USER_NOT_FOUND);
+        }
+        UserDomain user = userRepository.findByUserId(userId);
+        String encodePassword =
+                bCryptPasswordEncoder.encode(request.getPassword());
+        user.setPassword(encodePassword);
+        userRepository.save(user);
+
+        session.setAttribute("userId",null);
+        return DefaultDTO.builder()
+                .description("success update password.")
+                .baseResponse(BaseResponse.OK)
+                .build();
     }
 }
