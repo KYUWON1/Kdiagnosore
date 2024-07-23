@@ -93,4 +93,23 @@ public class UserService {
                 .baseResponse(BaseResponse.OK)
                 .build();
     }
+
+    public DefaultDTO updateUserPassword(ProfileUpdate.Request request) {
+        UserDomain user = userRepository.findByUserId(request.getUserId());
+        if(!bCryptPasswordEncoder.matches(request.getPasswordBefore(),
+                user.getPassword())){
+            throw new UserException(ErrorCode.PASSWORD_UN_MATCH);
+        }
+        if(!request.getPasswordAfter().equals(request.getPasswordCheck())){
+            throw new UserException(ErrorCode.PASSWORD_CHECK_UN_MATCH);
+        }
+        String encodedPassword =
+                bCryptPasswordEncoder.encode(request.getPasswordAfter());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+        return DefaultDTO.builder()
+                .description("success update password.")
+                .baseResponse(BaseResponse.OK)
+                .build();
+    }
 }

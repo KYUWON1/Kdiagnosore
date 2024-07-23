@@ -8,6 +8,10 @@ public class ProfileUpdate {
     @Setter
     public static class Request{
         private String userName;
+        private String phoneNumber;
+        private String passwordBefore;
+        private String passwordAfter;
+        private String passwordCheck;
         private String userId;
         private String protectorName;
         private String protectorNumber;
