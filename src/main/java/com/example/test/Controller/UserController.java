@@ -2,7 +2,10 @@ package com.example.test.Controller;
 
 import com.example.test.Service.UserService;
 import com.example.test.dto.CustomUserDetails;
+import com.example.test.dto.DefaultDTO;
+import com.example.test.dto.ProfileUpdate;
 import com.example.test.dto.UserProfileDTO;
+import com.example.test.type.BaseResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +46,23 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
         }
         return ResponseEntity.ok(uDto);
+    }
+
+    @PostMapping("/user/profile/update")
+    public ProfileUpdate.Response updatePassword(
+            @RequestBody ProfileUpdate.Request request
+            ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        // 토큰으로부터 유저 아이디 가져옴
+        String userId = userDetails.getUsername();
+        request.setUserId(userId);
+        userService.updateUserInfo(request);
+        return ProfileUpdate.Response.builder()
+                .userId(userId)
+                .status(BaseResponse.OK)
+                .description("update profile.")
+                .build();
     }
 
 

@@ -3,6 +3,7 @@ package com.example.test.Service;
 import com.example.test.Controller.SmsCertificateController;
 import com.example.test.domain.UserDomain;
 import com.example.test.dto.DefaultDTO;
+import com.example.test.dto.ProfileUpdate;
 import com.example.test.dto.ResetPassword;
 import com.example.test.dto.UserProfileDTO;
 import com.example.test.exception.CertificationException;
@@ -77,6 +78,18 @@ public class UserService {
         session.setAttribute("userId",null);
         return DefaultDTO.builder()
                 .description("success update password.")
+                .baseResponse(BaseResponse.OK)
+                .build();
+    }
+
+    public DefaultDTO updateUserInfo(ProfileUpdate.Request request) {
+        UserDomain user = userRepository.findByUserId(request.getUserId());
+        user.setUserName(request.getUserName());
+        user.setProtectorNum(request.getProtectorNumber());
+        user.setProtectorName(request.getProtectorName());
+        userRepository.save(user);
+        return DefaultDTO.builder()
+                .description("success update profile.")
                 .baseResponse(BaseResponse.OK)
                 .build();
     }
