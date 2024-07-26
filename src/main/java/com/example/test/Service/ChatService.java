@@ -22,6 +22,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -87,8 +90,8 @@ public class ChatService {
         chatDomain.setChatFrom(chatFrom);
         chatDomain.setChatType(chatType);
         chatDomain.setMessage(message);
-        chatDomain.setDate(new Date(System.currentTimeMillis()));
-        chatDomain.setTime(new Time(System.currentTimeMillis()));
+        chatDomain.setDate(LocalDate.now());
+        chatDomain.setTime(LocalTime.now());
         return chatDomain;
     }
 
