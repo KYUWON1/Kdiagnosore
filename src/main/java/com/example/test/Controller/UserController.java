@@ -5,7 +5,10 @@ import com.example.test.Service.UserService;
 import com.example.test.dto.CustomUserDetails;
 import com.example.test.dto.ProfileUpdate;
 import com.example.test.dto.UserProfileDTO;
+import com.example.test.exception.CertificationException;
 import com.example.test.type.BaseResponse;
+import com.example.test.type.ErrorCode;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -62,21 +65,47 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/user/profile/update/phoneNumber")
-    public ProfileUpdate.Response updatePhoneNumber(
+    @PostMapping("/user/profile/update/phoneNumber/request")
+    public ProfileUpdate.Response updatePhoneNumberRequest(
+            HttpSession session,
             @RequestBody ProfileUpdate.Request request
     ) {
-        String userId = getUserIdFromToken();
         String certNum = getNumStr();
+        session.setAttribute("CertNum",certNum);
+        if(request.getPhoneNumber() != null ){
+            smsCertificationService.sendMessage(request.getPhoneNumber(),certNum);
+        }else if(request.getProtectorNumber() != null){
+            smsCertificationService.sendMessage(request.getProtectorNumber(),
+                    certNum);
+        }
+
+        return ProfileUpdate.Response.builder()
+                .status(BaseResponse.OK)
+                .description("send SMS success.")
+                .build();
+    }
+    @PostMapping("/user/profile/update/phoneNumber/verify")
+    public ProfileUpdate.Response updatePhoneNumber(
+            HttpSession session,
+            @RequestBody ProfileUpdate.Request request
+    ) {
+        System.out.println(request.getCertNum()+session.getAttribute("CertNum"));
+        if(!request.getCertNum().equals(session.getAttribute("CertNum")) || session.getAttribute("CertNum").equals(null)){
+            session.setAttribute("CertNum",null);
+            throw new CertificationException(ErrorCode.VERIFY_CODE_NOT_MATCH);
+        }
+        String userId = getUserIdFromToken();
         request.setUserId(userId);
-        smsCertificationService.sendMessage(request.getPhoneNumber(),certNum);
-        userService.updateUserInfo(request);
+
+        userService.updatePhoneNumber(request);
+        session.setAttribute("CertNum",null);
         return ProfileUpdate.Response.builder()
                 .userId(userId)
                 .status(BaseResponse.OK)
-                .description("update profile.")
+                .description("update phoneNumber success.")
                 .build();
     }
+
 
     @PostMapping("/user/profile/update/password")
     public ProfileUpdate.Response updatePassword(
