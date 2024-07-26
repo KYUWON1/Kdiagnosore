@@ -43,7 +43,7 @@ public class ChatController {
 
     @GetMapping("/chat")
     public List<ChatDTO> getChatsByUserId(@RequestParam String userId,
-                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+                                          @RequestParam String date) {
         return chatService.getChatsByUserIdAndDate(userId, date);
     }
 }

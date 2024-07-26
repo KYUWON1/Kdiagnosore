@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ChatRepository extends MongoRepository<ChatDomain,String> {
     List<ChatDTO> findByUserId(String userId);
-    List<ChatDTO> findByUserIdAndDate(String userId, LocalDate date);
+    List<ChatDTO> findByUserIdAndDate(String userId, String date);
 }
