@@ -74,7 +74,6 @@ public class ChatService {
         try{
             validateMessage(chatDto.getMessage());
             String userId = getUserId();
-
             ChatDomain chatDomain = setChatContent(userId, chatDto.getMessage(), ChatFrom.CHAT_BOT, ChatType.NORMAL);
             chatRepository.save(chatDomain);
             return ChatSaveResponse.SAVE_SUCCESS;
@@ -102,15 +101,14 @@ public class ChatService {
         chatDTO.setChatFrom(ChatFrom.CHAT_BOT);
         chatDTO.setChatType(ChatType.NORMAL);
         chatDTO.setMessage(message);
-        chatDTO.setDate(new Date(System.currentTimeMillis()));
-        chatDTO.setTime(new Time(System.currentTimeMillis()));
+        chatDTO.setDate(LocalDate.now());
+        chatDTO.setTime(LocalTime.now());
         return chatDTO;
     }
 
     public String getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
         return userDetails.getUsername();
     }
 
@@ -122,5 +120,10 @@ public class ChatService {
 
     public List<ChatDTO> getChatsByUserId(String userId) {
         return chatRepository.findByUserId(userId);
+
+    }
+
+    public List<ChatDTO> getChatsByUserIdAndDate(String userId, LocalDate date) {
+        return chatRepository.findByUserIdAndDate(userId, date);
     }
 }
