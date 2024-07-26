@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
@@ -20,8 +22,8 @@ public class ChatDTO {
     private String message;
     private ChatFrom chatFrom;
     private ChatType chatType;
-    private Date date;
-    private Time time;
+    private LocalDate date;
+    private LocalTime time;
     private String _class;
 
     @Override

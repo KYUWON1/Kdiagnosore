@@ -4,10 +4,12 @@ import com.example.test.Service.ChatService;
 import com.example.test.Service.UserService;
 import com.example.test.dto.ChatDTO;
 import com.example.test.type.ChatSaveResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -39,8 +41,9 @@ public class ChatController {
         return answer;
     }
 
-    @GetMapping("/chat/{userId}")
-    public List<ChatDTO> getChatsByUserId(@PathVariable String userId) {
-        return chatService.getChatsByUserId(userId);
+    @GetMapping("/chat")
+    public List<ChatDTO> getChatsByUserId(@RequestParam String userId,
+                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return chatService.getChatsByUserIdAndDate(userId, date);
     }
 }
