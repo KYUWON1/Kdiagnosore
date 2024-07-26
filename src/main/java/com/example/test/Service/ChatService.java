@@ -123,7 +123,7 @@ public class ChatService {
 
     }
 
-    public List<ChatDTO> getChatsByUserIdAndDate(String userId, LocalDate date) {
+    public List<ChatDTO> getChatsByUserIdAndDate(String userId, String date) {
         return chatRepository.findByUserIdAndDate(userId, date);
     }
 }
