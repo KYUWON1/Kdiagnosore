@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Document(collection="chat")
@@ -25,6 +27,6 @@ public class ChatDomain {
     private ChatType chatType;
     private String message;
 
-    private Date date;
-    private Time time;
+    private LocalDate date;
+    private LocalTime time;
 }

@@ -21,6 +21,7 @@ public class UserProfileDTO {
         return UserProfileDTO.builder()
                 .userId(userDomain.getUserId())
                 .userName(userDomain.getUserName())
+                .phoneNum(userDomain.getPhoneNum())
                 .email(userDomain.getEmail())
                 .build();
     }
