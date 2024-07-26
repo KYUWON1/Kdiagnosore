@@ -7,11 +7,9 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Document(collection="chat")
@@ -26,6 +24,22 @@ public class ChatDomain {
     private ChatType chatType;
     private String message;
 
-    private LocalDate date;
-    private LocalTime time;
+    private String date;
+    private String time;
+
+    public void setDate(LocalDate date) {
+        this.date = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time.format(DateTimeFormatter.ISO_LOCAL_TIME);
+    }
+
+    public LocalDate getDate() {
+        return LocalDate.parse(this.date, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    public LocalTime getTime() {
+        return LocalTime.parse(this.time, DateTimeFormatter.ISO_LOCAL_TIME);
+    }
 }
