@@ -19,9 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -71,7 +70,6 @@ public class ChatService {
         try{
             validateMessage(chatDto.getMessage());
             String userId = getUserId();
-
             ChatDomain chatDomain = setChatContent(userId, chatDto.getMessage(), ChatFrom.CHAT_BOT, ChatType.NORMAL);
             chatRepository.save(chatDomain);
             return ChatSaveResponse.SAVE_SUCCESS;
@@ -87,8 +85,8 @@ public class ChatService {
         chatDomain.setChatFrom(chatFrom);
         chatDomain.setChatType(chatType);
         chatDomain.setMessage(message);
-        chatDomain.setDate(new Date(System.currentTimeMillis()));
-        chatDomain.setTime(new Time(System.currentTimeMillis()));
+        chatDomain.setDate(LocalDate.now());
+        chatDomain.setTime(LocalTime.now());
         return chatDomain;
     }
 
@@ -99,15 +97,14 @@ public class ChatService {
         chatDTO.setChatFrom(ChatFrom.CHAT_BOT);
         chatDTO.setChatType(ChatType.NORMAL);
         chatDTO.setMessage(message);
-        chatDTO.setDate(new Date(System.currentTimeMillis()));
-        chatDTO.setTime(new Time(System.currentTimeMillis()));
+        chatDTO.setDate(LocalDate.now());
+        chatDTO.setTime(LocalTime.now());
         return chatDTO;
     }
 
     public String getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
         return userDetails.getUsername();
     }
 
@@ -119,5 +116,10 @@ public class ChatService {
 
     public List<ChatDTO> getChatsByUserId(String userId) {
         return chatRepository.findByUserId(userId);
+
+    }
+
+    public List<ChatDTO> getChatsByUserIdAndDate(String userId, LocalDate date) {
+        return chatRepository.findByUserIdAndDate(userId, date);
     }
 }
