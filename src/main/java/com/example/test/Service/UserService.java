@@ -85,7 +85,6 @@ public class UserService {
     public DefaultDTO updateUserInfo(ProfileUpdate.Request request) {
         UserDomain user = userRepository.findByUserId(request.getUserId());
         user.setUserName(request.getUserName());
-        user.setProtectorNum(request.getProtectorNumber());
         user.setProtectorName(request.getProtectorName());
         userRepository.save(user);
         return DefaultDTO.builder()
@@ -112,4 +111,21 @@ public class UserService {
                 .baseResponse(BaseResponse.OK)
                 .build();
     }
+
+    public DefaultDTO updatePhoneNumber(ProfileUpdate.Request request) {
+        UserDomain user = userRepository.findByUserId(request.getUserId());
+
+        if(request.getPhoneNumber() != null){
+            user.setPhoneNum(request.getPhoneNumber());
+        }else if(request.getProtectorNumber() != null){
+            user.setProtectorNum(request.getProtectorNumber());
+        }
+
+        userRepository.save(user);
+        return DefaultDTO.builder()
+                .description("success update PhoneNumber.")
+                .baseResponse(BaseResponse.OK)
+                .build();
+    }
+
 }

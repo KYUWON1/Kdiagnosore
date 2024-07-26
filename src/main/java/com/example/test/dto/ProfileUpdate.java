@@ -15,6 +15,7 @@ public class ProfileUpdate {
         private String userId;
         private String protectorName;
         private String protectorNumber;
+        private String certNum;
     }
 
     @Getter
