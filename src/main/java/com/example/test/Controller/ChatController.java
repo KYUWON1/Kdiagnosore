@@ -3,9 +3,13 @@ package com.example.test.Controller;
 import com.example.test.Service.ChatService;
 import com.example.test.Service.UserService;
 import com.example.test.dto.ChatDTO;
+import com.example.test.dto.ChatForUserDto;
+import com.example.test.dto.CustomUserDetails;
 import com.example.test.type.ChatSaveResponse;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,5 +49,19 @@ public class ChatController {
     public List<ChatDTO> getChatsByUserId(@RequestParam String userId,
                                           @RequestParam String date) {
         return chatService.getChatsByUserIdAndDate(userId, date);
+    }
+
+    @GetMapping("/chat/getlist")
+    public List<ChatForUserDto> getChatList(){
+        List<ChatForUserDto> chatList = chatService.getChatList(getUserIdFromToken());
+        return chatList;
+    }
+
+    private String getUserIdFromToken(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        // 토큰으로부터 유저 아이디 가져옴
+        String userId = userDetails.getUsername();
+        return userId;
     }
 }
