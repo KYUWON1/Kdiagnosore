@@ -2,6 +2,7 @@ package com.example.test.Service;
 
 import com.example.test.domain.ChatDomain;
 import com.example.test.dto.ChatDTO;
+import com.example.test.dto.ChatForUserDto;
 import com.example.test.dto.CustomUserDetails;
 import com.example.test.repository.ChatRepository;
 import com.example.test.response.PredictResponse;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
@@ -119,11 +121,25 @@ public class ChatService {
     }
 
     public List<ChatDTO> getChatsByUserId(String userId) {
-        return chatRepository.findByUserId(userId);
+        List<ChatDomain> chatList = chatRepository.findByUserId(userId);
+        return chatList.stream()
+                .map(chat -> ChatDTO.fromEntity(chat))
+                .collect(Collectors.toList());
 
     }
 
     public List<ChatDTO> getChatsByUserIdAndDate(String userId, String date) {
-        return chatRepository.findByUserIdAndDate(userId, date);
+        List<ChatDomain> chatList = chatRepository.findByUserIdAndDate(userId, date);
+        return chatList.stream()
+                .map(chat -> ChatDTO.fromEntity(chat))
+                .collect(Collectors.toList());
+    }
+
+    public List<ChatForUserDto> getChatList(String userId) {
+        List<ChatDomain> chatList = chatRepository.findByUserId(userId);
+
+        return chatList.stream()
+                .map(chat -> ChatForUserDto.fromEntity(chat))
+                .collect(Collectors.toList());
     }
 }
