@@ -1,27 +1,87 @@
 import React, {useState, useEffect} from "react";
-import {View, Text,SafeAreaView, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
+import {View, Text,SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Alert} from 'react-native'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPageModScreen = ({navigation}) => {
+    const [userInfo, setUserInfo] = useState(null);
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await axios.get('http://10.0.2.2:8080/user/profile');
+                setUserInfo(response.data);
+                setUserName(userInfo.userName);
+                setUserID(userInfo.userId);
+                setEmail(userInfo.email);
+                setPassword(userInfo.password);
+                setPhoneNum(userInfo.phoneNum);
+                setProtectorNum(userInfo.protectorNum);
+            } catch (err) {
+                setError(err.message);
+            }
+        };
+
+        fetchUserInfo();
+    }, []);
+
     const [UserName, setUserName] = useState("");
+    const [UserID, setUserID] = useState("");
     const [Email, setEmail] = useState("");
-    const [Password, setPassword] = useState("ooooooooo");
+    const [Password, setPassword] = useState("");
     const [PhoneNum, setPhoneNum] = useState("");
     const [ProtectorName, setProtectorName] = useState("");
     const [ProtectorNum, setProtectorNum] = useState("");
+
+    const handlerModify = async() => {
+        const data = {
+            userName: UserName,
+            protectorName: ProtectorName
+        };
+
+        try {
+            const response = await axios.post('http://10.0.2.2:8080/user/profile/update', JSON.stringify(data), {
+            });
+
+            if (response.status === 200) {
+                Alert.alert('변경 완료', '회원정보가 변경되었습니다.');
+            } else {
+                Alert.alert('변경 실패', response.data.message || '변경 중 오류가 발생했습니다.');
+            }
+        } catch (error) {
+            if (error.response) {
+                // 서버에서 응답을 받았지만 상태 코드는 2xx 범위를 벗어났습니다.
+                Alert.alert('변경 실패', error.response.data.message || '변경 중 오류가 발생했습니다.');
+            } else if (error.request) {
+                // 요청이 만들어졌지만 응답을 받지 못했습니다.
+                Alert.alert('변경 실패', '서버에서 응답을 받지 못했습니다.');
+            } else {
+                // 다른 에러
+                Alert.alert('변경 실패', '네트워크 오류가 발생했습니다.');
+            }
+        }
+
+    }
+
+    
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <AntDesign name='left' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('Setting1')}/>
-                <Text style={{fontSize:20, fontWeight:700}}>회원정보 수정</Text>
+                <Text style={{fontSize:20, fontWeight:700, width:'80%', textAlign:'center'}}>회원정보 수정</Text>
             </View>
-            <View style={{ marginTop:20, alignItems: 'center' }}>
+            <KeyboardAwareScrollView style={{ marginTop:20 }}>
+                <View style={{ alignItems: 'center' }}>
                     <Text style={styles.label}>이름</Text>
                     <TextInput
                         style={styles.input}
                         value={UserName}
                         onChangeText={setUserName}
                     />
+                    <Text style={styles.label}>아이디</Text>
+                    <Text style={styles.idcontent}>{UserID}</Text>
                     <Text style={styles.label}>이메일</Text>
                     <TextInput
                         style={styles.input}
@@ -29,25 +89,25 @@ const MyPageModScreen = ({navigation}) => {
                         onChangeText={setEmail}
                     />
                     <Text style={styles.label}>비밀번호</Text>
-                    <View style={{flexDirection:"row", justifyContent:'space-between', width:'90%'}}>
+                    <View style={styles.fixlabel}>
                         <TextInput
                             style={styles.input1}
                             value={Password}
-                            placeholder='대소문자, 특수문자, 숫자~~'
                             onChangeText={setPassword}
+                            editable={false} //입력 비활성화
                             secureTextEntry
                         />
-                        <TouchableOpacity style={styles.button1} onPress={{}}>
+                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('PasswordMod')}>
                             <Text style={{ fontSize: 20, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.label}>전화번호</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={PhoneNum}
-                        onChangeText={setPhoneNum}
-                        keyboardType="number-pad"
-                    />
+                    <View style={styles.fixlabel}>
+                        <Text style={styles.idcontent}>{PhoneNum}</Text>
+                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('PhoneNumMod')}>
+                                <Text style={{ fontSize: 20, color: '#fff' }}>수정</Text>
+                        </TouchableOpacity>
+                    </View>
                     <Text style={styles.label}>보호자 이름</Text>
                     <TextInput
                         style={styles.input}
@@ -55,16 +115,17 @@ const MyPageModScreen = ({navigation}) => {
                         onChangeText={setProtectorName}
                     />
                     <Text style={styles.label}>보호자 전화번호</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={ProtectorNum}
-                        onChangeText={setProtectorNum}
-                        keyboardType="number-pad"
-                    />
-                    <TouchableOpacity style={styles.button} onPress={{}}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>정보 변경</Text>
+                    <View style={styles.fixlabel}>
+                        <Text>{ProtectorNum}</Text>
+                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('ProtectorNumMod')}>
+                                <Text style={{ fontSize: 20, color: '#fff' }}>수정</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity style={styles.button} onPress={handlerModify}>
+                        <Text style={{ fontSize: 20, color: '#fff' }}>변경하기</Text>
                     </TouchableOpacity>
                 </View>
+            </KeyboardAwareScrollView>
 
         </SafeAreaView>
     )
@@ -89,6 +150,12 @@ const styles = StyleSheet.create({
         width:'90%',
         marginLeft:10,
         fontSize:18,
+    },
+    fixlabel:{
+        flexDirection:"row", 
+        alignItems:"center",
+        justifyContent:'space-between', 
+        width:'90%'
     },
     input:{
       width:'90%',
@@ -128,6 +195,15 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         backgroundColor:'#000',
         borderRadius:10,
+    },
+    idcontent: {
+        width:'50%',
+        height:50,
+        backgroundColor:"white",
+        paddingVertical:10,
+        paddingHorizontal:10,
+        marginVertical:10,
+        fontSize:18,
     },
 
 });
