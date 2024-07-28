@@ -76,9 +76,14 @@ const LoginScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 20, color: '#fff' }}>로그인</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>아이디 찾기</Text>
+                <TouchableOpacity>
+                    <Text onPress={() => navigation.navigate('FindIdVerify')} style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>아이디 찾기</Text>
+                </TouchableOpacity>
                 <Text style={styles.textborder}>|</Text>
-                <Text style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>비밀번호 찾기</Text>
+                <TouchableOpacity>
+                    <Text onPress={() => navigation.navigate('FindPasswordVerify')} style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>비밀번호 찾기</Text>
+                </TouchableOpacity>
+
                 <Text style={styles.textborder}>|</Text>
                 <TouchableOpacity>
                     <Text onPress={() => navigation.navigate('Register')} style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>회원가입</Text>

@@ -1,5 +1,5 @@
 import {React,useState} from "react";
-import {View, Text,SafeAreaView, StyleSheet} from 'react-native'
+import {View, Text,SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"

@@ -5,7 +5,13 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 
 import LoginScreen from '../screens/LoginScreen';
+import FindIdVerifyScreen from "../screens/FindIdVerifyScreen";
+import FindIdScreen from "../screens/FindIdScreen";
+import FindPasswordVerifyScreen from "../screens/FindPasswordVerifyScreen";
+import FindPasswordScreen from "../screens/FindPasswordScreen";
 import RegisterScreen from '../screens/RegisterScreen';
+import Register_PhoneNumScreen from '../screens/Register_PhoneNumScreen'
+import Register_ProtectorNumScreen from "../screens/Register_ProtectorNumScreen";
 import RegisterAcceptScreen from "../screens/RegisterAcceptScreen";
 import ChatScreen from '../screens/ChatScreen';
 import ChatRecordingScreen from "../screens/ChatRecordingScreen";
@@ -17,6 +23,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SetAlarmScreen from "../screens/SetAlarmScreen";
 import SetAccountScreen from "../screens/SetAccountScreen";
 import MyPageModScreen from "../screens/MyPageModScreen";
+import PasswordModScreen from "../screens/PasswordModScreen";
+import PhoneNumModScreen from "../screens/PhoneNumModScreen";
+import ProtectorNumModScreen from "../screens/ProtectorNumModScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -25,12 +34,26 @@ const AppNavigator = () => {
     return(
     <Stack.Navigator screenOptions={{headerShown:false}}>
         <Stack.Screen name="Login" component={LoginScreen}/>
-        <Stack.Screen name="Register" component={RegisterScreen}/>
+        <Stack.Screen name="FindIdVerify" component={FindIdVerifyScreen}/>
+        <Stack.Screen name="FindId" component={FindIdScreen}/>
+        <Stack.Screen name="FindPasswordVerify" component={FindPasswordVerifyScreen}/>
+        <Stack.Screen name="FindPassword" component={FindPasswordScreen}/>
+        <Stack.Screen name="Register" component={RegisterStack}/>
         <Stack.Screen name="RegisterAccept" component={RegisterAcceptScreen}/>
         <Stack.Screen name="App" component={AppStack}/>
     </Stack.Navigator>
     );
 };
+
+const RegisterStack = () => {
+    return(
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+            <Stack.Screen name="Register1" component={RegisterScreen}/>
+            <Stack.Screen name="RegisterPhoneNum" component={Register_PhoneNumScreen}/>
+            <Stack.Screen name="RegisterProtectorNum" component={Register_ProtectorNumScreen}/>
+        </Stack.Navigator>
+    )
+}
 
 const AppStack = () => {
     return(
@@ -83,6 +106,9 @@ const SettingStack = () => {
             <Stack.Screen name="MyPageMod" component={MyPageModScreen}/>
             <Stack.Screen name="SetAlarm" component={SetAlarmScreen}/>
             <Stack.Screen name="SetAccount" component={SetAccountScreen}/>
+            <Stack.Screen name="PasswordMod" component={PasswordModScreen}/>
+            <Stack.Screen name="PhoneNumMod" component={PhoneNumModScreen}/>
+            <Stack.Screen name="ProtectorNumMod" component={ProtectorNumModScreen}/>
         </Stack.Navigator>
         );
 }
