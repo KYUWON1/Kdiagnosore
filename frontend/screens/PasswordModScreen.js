@@ -17,7 +17,11 @@ const PasswordModScreen = ({navigation}) => {
 
         try {
             const response = await axios.post('http://10.0.2.2:8080//user/profile/update/password', JSON.stringify(data), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
+
 
             if (response.status === 200) {
                 Alert.alert('변경 완료', '비밀번호가 변경되었습니다.');
