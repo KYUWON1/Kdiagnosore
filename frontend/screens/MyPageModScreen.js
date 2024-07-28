@@ -7,6 +7,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPageModScreen = ({navigation}) => {
     const [userInfo, setUserInfo] = useState(null);
+    const [UserName, setUserName] = useState("");
+    const [UserID, setUserID] = useState("");
+    const [Email, setEmail] = useState("");
+    const [Password, setPassword] = useState("");
+    const [PhoneNum, setPhoneNum] = useState("");
+    const [ProtectorName, setProtectorName] = useState("");
+    const [ProtectorNum, setProtectorNum] = useState("");
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -27,14 +34,6 @@ const MyPageModScreen = ({navigation}) => {
         fetchUserInfo();
     }, []);
 
-    const [UserName, setUserName] = useState("");
-    const [UserID, setUserID] = useState("");
-    const [Email, setEmail] = useState("");
-    const [Password, setPassword] = useState("");
-    const [PhoneNum, setPhoneNum] = useState("");
-    const [ProtectorName, setProtectorName] = useState("");
-    const [ProtectorNum, setProtectorNum] = useState("");
-
     const handlerModify = async() => {
         const data = {
             userName: UserName,
@@ -43,6 +42,9 @@ const MyPageModScreen = ({navigation}) => {
 
         try {
             const response = await axios.post('http://10.0.2.2:8080/user/profile/update', JSON.stringify(data), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
 
             if (response.status === 200) {
