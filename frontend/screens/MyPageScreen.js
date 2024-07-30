@@ -104,12 +104,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginHorizontal: 10,
         marginVertical: 10,
-        paddingVertical: 10,
+        paddingVertical: 8,
     },
     infotitle: {
         fontSize: 18,
         fontWeight: '600',
-        width: '40%',
+        width: '45%',
     },
     infocontent: {
         marginLeft: 20,

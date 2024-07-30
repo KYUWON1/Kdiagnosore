@@ -16,7 +16,7 @@ const PasswordModScreen = ({navigation}) => {
         };
 
         try {
-            const response = await axios.post('http://10.0.2.2:8080//user/profile/update/password', JSON.stringify(data), {
+            const response = await axios.post('http://10.0.2.2:8080/user/profile/update/password', JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }

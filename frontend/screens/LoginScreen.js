@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, StyleSheet, SafeAreaView, Image, View, Text, TextInput, Alert } from 'react-native';
 import Checkbox from "expo-checkbox";
 import axios from 'axios';
@@ -8,6 +8,15 @@ const LoginScreen = ({ navigation }) => {
     const [ID, setID] = useState("");
     const [Password, setPassword] = useState("");
     const [isLoginChecked, setIsLoginChecked] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setID("");
+            setPassword("");
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     const handleLogin = async () => {
         const data = {
@@ -24,10 +33,9 @@ const LoginScreen = ({ navigation }) => {
 
             if (response.status === 200) {
                 const token = response.headers.authorization; // 서버로부터 토큰을 받아옵니다.
-                Alert.alert('로그인 성공', '로그인이 성공적으로 완료되었습니다.');
                 axios.defaults.headers.common['Authorization'] = token;
                 await AsyncStorage.setItem('userID', ID);
-                navigation.navigate('App'); // 로그인 후 토큰을 다음 화면으로 전달합니다.
+                navigation.navigate('App');
             } else {
                 Alert.alert('로그인 실패', response.data.message || '로그인 중 오류가 발생했습니다.');
             }

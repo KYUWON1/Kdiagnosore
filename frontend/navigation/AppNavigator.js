@@ -63,32 +63,32 @@ const AppStack = () => {
         tabBarActiveTintColor: '#000',
 
     }}>
-        <Tab.Screen 
-        name="Chat" 
-        component={ChatScreen} 
+        <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
         options={{
             tabBarLabel:'채팅창',
             tabBarIcon:({color, size})=>(
                 <MaterialCommunityIcons name="chat-processing" color={color} size={size}/>
             ),}}/>
-        <Tab.Screen 
-        name="ChatRecording" 
+        <Tab.Screen
+        name="ChatRecording"
         component={ChatRecordingScreen}
         options={{
             tabBarLabel:'대화 기록',
             tabBarIcon:({color, size})=>(
                 <FontAwesome name="tasks" color={color} size={size}/>
             ),}}/>
-        <Tab.Screen 
-        name="MyPage" 
+        <Tab.Screen
+        name="MyPage"
         component={MyPageScreen}
         options={{
             tabBarLabel:'내 정보',
             tabBarIcon:({color, size})=>(
                 <MaterialCommunityIcons name="account" color={color} size={size}/>
             ),}}/>
-        <Tab.Screen 
-        name="Setting" 
+        <Tab.Screen
+        name="Setting"
         component={SettingStack}
         options={{tabBarLabel:'설정',
             tabBarIcon:({color, size})=>(
