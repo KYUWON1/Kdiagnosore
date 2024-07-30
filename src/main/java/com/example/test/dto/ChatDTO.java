@@ -37,7 +37,7 @@ public class ChatDTO {
                 .chatFrom(chat.getChatFrom())
                 .chatType(chat.getChatType())
                 .date(String.valueOf(chat.getDate()))
-                .time(String.valueOf(chat.getChatFrom()))
+                .time(String.valueOf(chat.getTime()))
                 .build();
     }
 
