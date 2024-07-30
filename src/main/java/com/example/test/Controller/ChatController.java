@@ -5,6 +5,7 @@ import com.example.test.Service.UserService;
 import com.example.test.dto.ChatDTO;
 import com.example.test.dto.ChatForUserDto;
 import com.example.test.dto.CustomUserDetails;
+import com.example.test.type.ChatFrom;
 import com.example.test.type.ChatSaveResponse;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -63,5 +65,22 @@ public class ChatController {
         // 토큰으로부터 유저 아이디 가져옴
         String userId = userDetails.getUsername();
         return userId;
+    }
+
+    // 결과 test용 api
+    @GetMapping("/chat/createTest")
+    public String getNewTest() {
+        List<ChatDTO> chatList = chatService.getChatsByUserIdAndDate("admin2", LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+
+        String chatMessages = "";
+        for(ChatDTO chat : chatList){
+            if(chat.getChatFrom() == ChatFrom.CHAT_BOT){
+                chatMessages += "A : " + chat.getMessage() + "\n";
+            }
+            else{
+                chatMessages += "B : " + chat.getMessage() + "\n";
+            }
+        }
+        return chatMessages;
     }
 }

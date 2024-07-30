@@ -142,4 +142,19 @@ public class ChatService {
                 .map(chat -> ChatForUserDto.fromEntity(chat))
                 .collect(Collectors.toList());
     }
+
+    public String getChatMessage(String userId, String date) {
+        List<ChatDTO> chatList = getChatsByUserIdAndDate(userId, date);
+        String chatMessages = "";
+        for(ChatDTO chat : chatList){
+
+            if(chat.getChatFrom() == ChatFrom.CHAT_BOT){
+                chatMessages += "A : " + chat.getMessage() + "\n";
+            }
+            else{
+                chatMessages += "B : " + chat.getMessage() + "\n";
+            }
+        }
+        return chatMessages;
+    }
 }
