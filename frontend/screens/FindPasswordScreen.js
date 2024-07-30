@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TouchableOpacity, View, Text, TextInput, SafeAreaView, StyleSheet, Alert } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -9,8 +9,39 @@ const FindPasswordScreen = ({ navigation }) => {
     const [ConfirmPassword, setConfirmPassword] = useState("");
 
     const passwordreset = async () => {
-        //비밀번호 수정
-        navigation.navigate('Login'); 
+        if (Password !== ConfirmPassword) {
+            Alert.alert('오류', '비밀번호가 일치하지 않습니다. 다시 입력해주세요.');
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://10.0.2.2:8080/getPassword/reset', {
+                password: Password,
+                passwordCheck: ConfirmPassword
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.status === 200) {
+                Alert.alert('성공', '비밀번호가 성공적으로 변경되었습니다.');
+                navigation.navigate('Login');
+            } else {
+                Alert.alert('오류', response.data.message || '비밀번호 변경 중 오류가 발생했습니다.');
+            }
+        } catch (error) {
+            if (error.response) {
+                // 서버에서 응답을 받았지만 상태 코드는 2xx 범위를 벗어났습니다.
+                Alert.alert('오류', error.response.data.message || '비밀번호 변경 중 오류가 발생했습니다.');
+            } else if (error.request) {
+                // 요청이 만들어졌지만 응답을 받지 못했습니다.
+                Alert.alert('오류', '서버에서 응답을 받지 못했습니다.');
+            } else {
+                // 다른 에러
+                Alert.alert('오류', '네트워크 오류가 발생했습니다.');
+            }
+        }
     };
 
     return (
@@ -21,24 +52,24 @@ const FindPasswordScreen = ({ navigation }) => {
             </View>
             <View style={{ marginTop: 20, alignItems: 'center'  }}>
                 <Text style={styles.label}>새 비밀번호</Text>
-                    <TextInput
-                            style={styles.input}
-                            value={Password}
-                            placeholder='대소문자, 특수문자, 숫자~~'
-                            onChangeText={setPassword}
-                            secureTextEntry
-                    />
-                    <Text style={styles.label}>새 비밀번호 확인</Text>
-                    <TextInput
-                            style={styles.input}
-                            value={ConfirmPassword}
-                            placeholder='대소문자, 특수문자, 숫자~~'
-                            onChangeText={setConfirmPassword}
-                            secureTextEntry
-                    />
-                    <TouchableOpacity style={styles.button} onPress={passwordreset}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>완료</Text>
-                    </TouchableOpacity>
+                <TextInput
+                    style={styles.input}
+                    value={Password}
+                    placeholder='대소문자, 특수문자, 숫자~~'
+                    onChangeText={setPassword}
+                    secureTextEntry
+                />
+                <Text style={styles.label}>새 비밀번호 확인</Text>
+                <TextInput
+                    style={styles.input}
+                    value={ConfirmPassword}
+                    placeholder='대소문자, 특수문자, 숫자~~'
+                    onChangeText={setConfirmPassword}
+                    secureTextEntry
+                />
+                <TouchableOpacity style={styles.button} onPress={passwordreset}>
+                    <Text style={{ fontSize: 20, color: '#fff' }}>완료</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -46,11 +77,11 @@ const FindPasswordScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
+        flex: 1,
+        backgroundColor: '#fff',
     },
-    header:{
-        flexDirection:'row',
+    header: {
+        flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
         height: 50,
@@ -59,60 +90,33 @@ const styles = StyleSheet.create({
         borderBottomColor: "#E0E0E0",
         overflow: "hidden",
     },
-    label:{
-        width:'90%',
-        marginTop:20,
-        marginLeft:10,
-        fontSize:18,
+    label: {
+        width: '90%',
+        marginTop: 20,
+        marginLeft: 10,
+        fontSize: 18,
     },
-    fixlabel:{
-        flexDirection:"row", 
-        alignItems:"center",
-        justifyContent:'space-between', 
-        width:'90%'
+    input: {
+        width: '90%',
+        height: 50,
+        borderColor: "#E0E0E0",
+        borderWidth: 1,
+        borderRadius: 10,
+        backgroundColor: "white",
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+        fontSize: 18,
     },
-    input:{
-      width:'90%',
-      height:50,
-      borderColor:"#E0E0E0",
-      borderWidth:1,
-      borderRadius:10,
-      backgroundColor:"white",
-      paddingVertical:10,
-      paddingHorizontal:10,
-      marginVertical:10,
-      fontSize:18,
-    },
-    input1:{
-        width:'70%',
-        height:50,
-        borderColor:"#E0E0E0",
-        borderWidth:1,
-        borderRadius:10,
-        backgroundColor:"white",
-        paddingVertical:10,
-        paddingHorizontal:10,
-        marginVertical:10,
-        fontSize:18,
-      },
-    button:{
-        marginVertical:30,
-        width:'90%',
-        height:50,
-        alignItems:'center',
-        justifyContent:'center',
-        backgroundColor:'#000',
-        borderRadius:10,
-    },
-    button1:{
-        marginVertical:15,
-        width:80,
-        height:50,
-        alignItems:'center',
-        justifyContent:'center',
-        backgroundColor:'#000',
-        borderRadius:10,
-    },
+    button: {
+        marginVertical: 30,
+        width: '90%',
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#000',
+        borderRadius: 10,
+    }
 });
 
 export default FindPasswordScreen;

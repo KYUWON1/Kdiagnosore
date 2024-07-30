@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { TouchableOpacity, View, Text, TextInput, SafeAreaView, StyleSheet, Alert } from 'react-native';
+import React from "react";
+import { TouchableOpacity, View, Text, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const FindIdScreen = ({ navigation }) => {
-    const [UserId, setUserId] = useState("");
+const FindIdScreen = ({ route, navigation }) => {
+    const { userId } = route.params;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -14,18 +14,18 @@ const FindIdScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 20, fontWeight: '700', width:'80%', textAlign:'center'}}>아이디 찾기</Text>
             </View>
             <View style={{ marginTop: 20,alignItems: 'center'  }}>
-                    <Text style={styles.content}>입력한 정보와 일치하는 아이디입니다.</Text>
-                    <View style={styles.idcontent}>
-                       <Text style={{ fontSize : 20, textAlign:'center'}}>아이디 : {UserId}</Text>
-                    </View>
-                    <View style={styles.buttonlayout}>
-                        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Login')}>
-                            <Text style={{ fontSize: 20, color: '#fff' }}>로그인 하기</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('FindPasswordVerify')}>
-                            <Text style={{ fontSize: 20, color: '#fff' }}>비밀번호 찾기</Text>
-                        </TouchableOpacity>
-                    </View>
+                <Text style={styles.content}>입력한 정보와 일치하는 아이디입니다.</Text>
+                <View style={styles.idcontent}>
+                    <Text style={{ fontSize : 20, textAlign:'center'}}>아이디 : {userId}</Text>
+                </View>
+                <View style={styles.buttonlayout}>
+                    <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Login')}>
+                        <Text style={{ fontSize: 20, color: '#fff' }}>로그인 하기</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('FindPasswordVerify')}>
+                        <Text style={{ fontSize: 20, color: '#fff' }}>비밀번호 찾기</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </SafeAreaView>
     );
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
       marginVertical:20,
       fontSize:18,
     },
-
     buttonlayout:{
         flexDirection:'row',
         alignItems: 'center',

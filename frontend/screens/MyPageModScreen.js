@@ -20,14 +20,17 @@ const MyPageModScreen = ({navigation}) => {
             try {
                 const response = await axios.get('http://10.0.2.2:8080/user/profile');
                 setUserInfo(response.data);
-                setUserName(userInfo.userName);
-                setUserID(userInfo.userId);
-                setEmail(userInfo.email);
-                setPassword(userInfo.password);
-                setPhoneNum(userInfo.phoneNum);
-                setProtectorNum(userInfo.protectorNum);
+                if (response.data) {
+                    setUserName(response.data.userName);
+                    setUserID(response.data.userId);
+                    setEmail(response.data.email);
+                    setPassword(response.data.password);
+                    setPhoneNum(response.data.phoneNum);
+                    setProtectorName(response.data.protectorName);
+                    setProtectorNum(response.data.protectorNum);
+                }
             } catch (err) {
-                setError(err.message);
+                console.error('Error verifying code:', err);
             }
         };
 
@@ -83,7 +86,7 @@ const MyPageModScreen = ({navigation}) => {
                         onChangeText={setUserName}
                     />
                     <Text style={styles.label}>아이디</Text>
-                    <Text style={styles.idcontent}>{UserID}</Text>
+                    <Text style={styles.idstyle}>{UserID}</Text>
                     <Text style={styles.label}>이메일</Text>
                     <TextInput
                         style={styles.input}
@@ -118,7 +121,7 @@ const MyPageModScreen = ({navigation}) => {
                     />
                     <Text style={styles.label}>보호자 전화번호</Text>
                     <View style={styles.fixlabel}>
-                        <Text>{ProtectorNum}</Text>
+                        <Text style={styles.idcontent}>{ProtectorNum}</Text>
                         <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('ProtectorNumMod')}>
                                 <Text style={{ fontSize: 20, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
@@ -152,6 +155,7 @@ const styles = StyleSheet.create({
         width:'90%',
         marginLeft:10,
         fontSize:18,
+        fontWeight: 'bold'
     },
     fixlabel:{
         flexDirection:"row", 
@@ -199,11 +203,20 @@ const styles = StyleSheet.create({
         borderRadius:10,
     },
     idcontent: {
-        width:'50%',
+        width: '80%',
         height:50,
         backgroundColor:"white",
         paddingVertical:10,
-        paddingHorizontal:10,
+        paddingHorizontal:7,
+        marginVertical:10,
+        fontSize:18,
+    },
+    idstyle: {
+        width: '90%',
+        height:50,
+        backgroundColor:"white",
+        paddingVertical:10,
+        paddingHorizontal:7,
         marginVertical:10,
         fontSize:18,
     },
