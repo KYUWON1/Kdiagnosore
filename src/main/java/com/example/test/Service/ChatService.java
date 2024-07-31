@@ -110,8 +110,16 @@ public class ChatService {
 
     public String getUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return userDetails.getUsername();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) principal;
+            return userDetails.getUsername();
+        } else if (principal instanceof String) {
+            return (String) principal;
+        } else {
+            throw new IllegalStateException("Unexpected principal type: " + principal.getClass().getName());
+        }
     }
 
     public void validateMessage(String message){
