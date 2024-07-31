@@ -21,19 +21,18 @@ const MyPageModScreen = ({navigation}) => {
                 const response = await axios.get('http://10.0.2.2:8080/user/profile');
                 setUserInfo(response.data);
                 if (response.data) {
-                    setUserName(response.data.userName);
-                    setUserID(response.data.userId);
-                    setEmail(response.data.email);
-                    setPassword(response.data.password);
-                    setPhoneNum(response.data.phoneNum);
-                    setProtectorName(response.data.protectorName);
-                    setProtectorNum(response.data.protectorNum);
+                setUserName(response.data.userName);
+                setUserID(response.data.userId);
+                setEmail(response.data.email);
+                setPassword(response.data.password);
+                setPhoneNum(response.data.phoneNum);
+                setProtectorName(response.data.protectorName);
+                setProtectorNum(response.data.protectorNum);
                 }
             } catch (err) {
                 console.error('Error verifying code:', err);
-            }
+                }
         };
-
         fetchUserInfo();
     }, []);
 
