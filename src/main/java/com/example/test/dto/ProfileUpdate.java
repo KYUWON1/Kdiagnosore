@@ -9,6 +9,7 @@ public class ProfileUpdate {
     public static class Request{
         private String userName;
         private String phoneNumber;
+        private String email;
         private String passwordBefore;
         private String passwordAfter;
         private String passwordCheck;

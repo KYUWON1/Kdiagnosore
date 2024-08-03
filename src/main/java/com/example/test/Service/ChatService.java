@@ -26,7 +26,10 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -146,8 +149,27 @@ public class ChatService {
     public List<ChatForUserDto> getChatList(String userId) {
         List<ChatDomain> chatList = chatRepository.findByUserId(userId);
 
+        Map<LocalDate,ChatDomain> lastCharPerDate = chatList.stream()
+                .collect(Collectors.groupingBy(
+                        chatDomain -> chatDomain.getDate(),
+                        Collectors.collectingAndThen(
+                                Collectors.maxBy(Comparator.comparing(ChatDomain::getTime)),
+                                Optional::get
+                        )
+                ));
+
+        return lastCharPerDate.values().stream()
+                .sorted(Comparator.comparing(ChatDomain::getDate))
+                .map(ChatForUserDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<ChatForUserDto> getChatListByDate(String userId,String date) {
+        List<ChatDomain> chatList = chatRepository.findByUserIdAndDate(userId
+                ,date);
+
         return chatList.stream()
-                .map(chat -> ChatForUserDto.fromEntity(chat))
+                .map(ChatForUserDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
