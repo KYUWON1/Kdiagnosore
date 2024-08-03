@@ -59,6 +59,16 @@ public class ChatController {
         return chatList;
     }
 
+    @GetMapping("/chat/getlist/{date}")
+    public List<ChatForUserDto> getChatListByDate(
+            @PathVariable String date
+    ){
+        List<ChatForUserDto> chatList =
+                chatService.getChatListByDate(getUserIdFromToken(),date);
+        return chatList;
+    }
+
+
     private String getUserIdFromToken(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

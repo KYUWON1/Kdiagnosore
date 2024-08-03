@@ -68,7 +68,7 @@ public class SecurityConfig {
         http
                 .csrf((auth) -> auth.disable());
 
-        //From 로그인 방식 disable, filter를 사용해서 만들어주어야함
+        //Forxm 로그인 방식 disable, filter를 사용해서 만들어주어야함
         http
                 .formLogin((auth) -> auth.disable());
 

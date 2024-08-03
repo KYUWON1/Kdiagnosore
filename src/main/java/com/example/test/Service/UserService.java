@@ -85,6 +85,7 @@ public class UserService {
     public DefaultDTO updateUserInfo(ProfileUpdate.Request request) {
         UserDomain user = userRepository.findByUserId(request.getUserId());
         user.setUserName(request.getUserName());
+        user.setEmail(request.getEmail());
         user.setProtectorName(request.getProtectorName());
         userRepository.save(user);
         return DefaultDTO.builder()

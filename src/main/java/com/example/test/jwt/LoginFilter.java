@@ -53,7 +53,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password, null);
             System.out.println(authToken);
 
-            return authenticationManager.authenticate(authToken);
+                return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
             System.out.println(e);
             throw new RuntimeException(e);
