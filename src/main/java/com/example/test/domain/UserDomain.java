@@ -5,6 +5,13 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection="user") //user 컬렉션 사용
 @Getter
 @Setter
@@ -20,6 +27,8 @@ public class UserDomain {
     private String phoneNum;
     private String protectorName;
     private String protectorNum;
+
+    private List<String> alarmTimes = new ArrayList<>();
 
     private String role;
 
