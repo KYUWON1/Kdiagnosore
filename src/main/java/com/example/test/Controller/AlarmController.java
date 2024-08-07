@@ -3,15 +3,15 @@ package com.example.test.Controller;
 import com.example.test.Service.AlarmService;
 import com.example.test.dto.Alarm;
 import com.example.test.dto.AlarmDto;
+import com.example.test.dto.AlarmListResponse;
 import com.example.test.dto.CustomUserDetails;
 import com.example.test.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +38,17 @@ public class AlarmController {
         return Alarm.Response.builder()
                 .userId(result.getUserId())
                 .time(result.getTime())
+                .build();
+    }
+
+    @GetMapping("/user/alarm")
+    public AlarmListResponse getAlarmList() {
+        String userId = getUserIdFromToken();
+        List<String> alarmList =
+                alarmService.getAlarmList(userId);
+        return AlarmListResponse.builder()
+                .userId(userId)
+                .times(alarmList)
                 .build();
     }
 
