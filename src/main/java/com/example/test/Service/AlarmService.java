@@ -73,4 +73,21 @@ public class AlarmService {
 
         return kstTimeString;
     }
+
+    public List<String> getAlarmList(String userId) {
+        UserDomain user = userRepository.findByUserId(userId);
+        List<String> alarmTimes = user.getAlarmTimes();
+        List<String> formattedAlarmTimes = new ArrayList<>();
+
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("a h:mm").withLocale(java.util.Locale.forLanguageTag("ko"));
+
+        for (String time : alarmTimes) {
+            LocalTime localTime = LocalTime.parse(time, inputFormatter);
+            String formattedTime = localTime.format(outputFormatter);
+            formattedAlarmTimes.add(formattedTime);
+        }
+
+        return formattedAlarmTimes;
+    }
 }
