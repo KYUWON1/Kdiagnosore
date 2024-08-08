@@ -1,23 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPageScreen = ({ navigation }) => {
     const [userInfo, setUserInfo] = useState(null);
     const [error, setError] = useState(null);
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
 
     useEffect(() => {
-        const fetchUserInfo = async () => {
+        const getApiBaseUrl = async () => {
             try {
-                const response = await axios.get('http://10.0.2.2:8080/user/profile');
-                setUserInfo(response.data);
-            } catch (err) {
-                setError(err.message);
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                    fetchUserInfo(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
             }
         };
 
-        fetchUserInfo();
+        getApiBaseUrl();
     }, []);
+
+    const fetchUserInfo = async (url) => {
+        try {
+            const response = await axios.get(`${url}/user/profile`);
+            setUserInfo(response.data);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
 
     if (error) {
         return (

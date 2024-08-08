@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
-import {View, Text,SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Alert} from 'react-native'
+import {View, Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Alert} from 'react-native';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import axios from 'axios';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPageModScreen = ({navigation}) => {
@@ -14,27 +14,45 @@ const MyPageModScreen = ({navigation}) => {
     const [PhoneNum, setPhoneNum] = useState("");
     const [ProtectorName, setProtectorName] = useState("");
     const [ProtectorNum, setProtectorNum] = useState("");
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
+
+    useEffect(() => {
+        const getApiBaseUrl = async () => {
+            try {
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
+            }
+        };
+
+        getApiBaseUrl();
+    }, []);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('http://10.0.2.2:8080/user/profile');
+                const response = await axios.get(`${apiBaseUrl}/user/profile`);
                 setUserInfo(response.data);
                 if (response.data) {
-                setUserName(response.data.userName);
-                setUserID(response.data.userId);
-                setEmail(response.data.email);
-                setPassword(response.data.password);
-                setPhoneNum(response.data.phoneNum);
-                setProtectorName(response.data.protectorName);
-                setProtectorNum(response.data.protectorNum);
+                    setUserName(response.data.userName);
+                    setUserID(response.data.userId);
+                    setEmail(response.data.email);
+                    setPassword(response.data.password);
+                    setPhoneNum(response.data.phoneNum);
+                    setProtectorName(response.data.protectorName);
+                    setProtectorNum(response.data.protectorNum);
                 }
             } catch (err) {
                 console.error('Error verifying code:', err);
-                }
+            }
         };
-        fetchUserInfo();
-    }, []);
+        if (apiBaseUrl) {
+            fetchUserInfo();
+        }
+    }, [apiBaseUrl]);
 
     const handlerModify = async() => {
         const data = {
@@ -43,7 +61,7 @@ const MyPageModScreen = ({navigation}) => {
         };
 
         try {
-            const response = await axios.post('http://10.0.2.2:8080/user/profile/update', JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/user/profile/update`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -66,10 +84,8 @@ const MyPageModScreen = ({navigation}) => {
                 Alert.alert('변경 실패', '네트워크 오류가 발생했습니다.');
             }
         }
-
     }
 
-    
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -157,9 +173,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     fixlabel:{
-        flexDirection:"row", 
+        flexDirection:"row",
         alignItems:"center",
-        justifyContent:'space-between', 
+        justifyContent:'space-between',
         width:'90%'
     },
     input:{

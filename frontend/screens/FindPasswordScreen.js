@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, View, Text, TextInput, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,22 @@ import axios from 'axios';
 const FindPasswordScreen = ({ navigation }) => {
     const [Password, setPassword] = useState("");
     const [ConfirmPassword, setConfirmPassword] = useState("");
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
+
+    useEffect(() => {
+        const getApiBaseUrl = async () => {
+            try {
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
+            }
+        };
+
+        getApiBaseUrl();
+    }, []);
 
     const passwordreset = async () => {
         if (Password !== ConfirmPassword) {
@@ -15,7 +31,7 @@ const FindPasswordScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post('http://10.0.2.2:8080/getPassword/reset', {
+            const response = await axios.post(`${apiBaseUrl}/getPassword/reset`, {
                 password: Password,
                 passwordCheck: ConfirmPassword
             }, {
@@ -47,10 +63,10 @@ const FindPasswordScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('FindPasswordVerify')}/>
-                <Text style={{ fontSize: 20, fontWeight: '700', width:'80%', textAlign:'center'}}>비밀번호 찾기</Text>
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('FindPasswordVerify')} />
+                <Text style={{ fontSize: 20, fontWeight: '700', width: '80%', textAlign: 'center' }}>비밀번호 찾기</Text>
             </View>
-            <View style={{ marginTop: 20, alignItems: 'center'  }}>
+            <View style={{ marginTop: 20, alignItems: 'center' }}>
                 <Text style={styles.label}>새 비밀번호</Text>
                 <TextInput
                     style={styles.input}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, View, Text, TextInput, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -9,10 +9,26 @@ const FindPasswordVerifyScreen = ({ navigation }) => {
     const [UserId, setUserId] = useState("");
     const [PhoneNum, setPhoneNum] = useState("");
     const [VerifyNum, setVerifyNum] = useState("");
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
+
+    useEffect(() => {
+        const getApiBaseUrl = async () => {
+            try {
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
+            }
+        };
+
+        getApiBaseUrl();
+    }, []);
 
     const passwordrequest = async () => {
         try {
-            const response = await axios.post('http://10.0.2.2:8080/getPassword/request', {
+            const response = await axios.post(`${apiBaseUrl}/getPassword/request`, {
                 userId: UserId,
                 phoneNumber: PhoneNum
             }, {
@@ -37,7 +53,7 @@ const FindPasswordVerifyScreen = ({ navigation }) => {
 
     const passwordverify = async () => {
         try {
-            const response = await axios.post('http://10.0.2.2:8080/getPassword/verify', {
+            const response = await axios.post(`${apiBaseUrl}/getPassword/verify`, {
                 certNum: VerifyNum
             }, {
                 headers: {

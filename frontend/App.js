@@ -3,19 +3,31 @@ import { View, StyleSheet } from 'react-native';
 import SplashScreen from './screens/SplashScreen';
 import AppNavigator from './navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorag
+e from '@react-native-async-storage/async-storage';
+
+const URL = 'http://10.0.2.2:8080';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {setIsLoading(false)}, 3000);
+    const initialize = async () => {
+      try {
+        await AsyncStorage.setItem('API_BASE_URL', URL);
+        setTimeout(() => { setIsLoading(false); }, 3000);
+      } catch (e) {
+        console.error('Failed to set API base URL:', e);
+      }
+    };
+
+    initialize();
   }, []);
 
   return (
-      <NavigationContainer>
-        {isLoading ? <SplashScreen/> : <AppNavigator/>
-        }
-      </NavigationContainer>
+    <NavigationContainer>
+      {isLoading ? <SplashScreen /> : <AppNavigator />}
+    </NavigationContainer>
   );
 }
 
@@ -26,5 +38,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-export default App;
 
+export default App;

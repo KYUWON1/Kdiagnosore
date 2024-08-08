@@ -6,7 +6,7 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//채팅창 디자인
+// 채팅창 디자인
 const ChatBox = (props) => {
     return (
         <Bubble {...props}
@@ -39,7 +39,7 @@ const ChatBox = (props) => {
     );
 };
 
-//시간 텍스트 디자인
+// 시간 텍스트 디자인
 const TimeText = (props) => {
     return (
         <Time {...props}
@@ -55,7 +55,7 @@ const TimeText = (props) => {
     );
 };
 
-//입력창 디자인
+// 입력창 디자인
 const InputStyle = (props) => {
     return (
         <InputToolbar
@@ -81,7 +81,7 @@ const InputStyle = (props) => {
     );
 };
 
-//전송 버튼 디자인
+// 전송 버튼 디자인
 const SendButton = (props) => {
     const { text } = props;
     return (
@@ -105,14 +105,17 @@ const SendButton = (props) => {
 const ChatScreen = () => {
     const [messages, setMessages] = useState([]);
     const [userId, setUserId] = useState('');
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
 
     useEffect(() => {
-        const loadUserId = async () => {
+        const loadUserData = async () => {
             const storedUserId = await AsyncStorage.getItem('userID');
+            const storedApiBaseUrl = await AsyncStorage.getItem('API_BASE_URL');
             setUserId(storedUserId);
+            setApiBaseUrl(storedApiBaseUrl);
         };
 
-        loadUserId();
+        loadUserData();
 
         setMessages([
             {
@@ -128,13 +131,12 @@ const ChatScreen = () => {
         ]);
     }, []);
 
-    //채팅창에 렌더링
+    // 채팅창에 렌더링
     const onSend = useCallback(async (messages = []) => {
-        console.log('messages: ', messages)
         setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
         const userMessage = messages[0].text;
         try {
-            const response = await axios.post('http://10.0.2.2:8080/chat/question', { message: userMessage }, {
+            const response = await axios.post(`${apiBaseUrl}/chat/question`, { message: userMessage }, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -165,7 +167,7 @@ const ChatScreen = () => {
                 Alert.alert('오류', '네트워크 오류가 발생했습니다.');
             }
         }
-    }, []);
+    }, [apiBaseUrl]);
 
     return (
         <SafeAreaView style={styles.container}>

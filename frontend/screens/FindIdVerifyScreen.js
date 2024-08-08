@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, View, Text, TextInput, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -10,6 +10,16 @@ const FindIdVerifyScreen = ({ navigation }) => {
     const [Email, setEmail] = useState("");
     const [PhoneNum, setPhoneNum] = useState("");
     const [VerifyNum, setVerifyNum] = useState("");
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
+
+    useEffect(() => {
+        const loadApiBaseUrl = async () => {
+            const storedApiBaseUrl = await AsyncStorage.getItem('API_BASE_URL');
+            setApiBaseUrl(storedApiBaseUrl);
+        };
+
+        loadApiBaseUrl();
+    }, []);
 
     const idrequest = async () => {
         try {
@@ -18,7 +28,7 @@ const FindIdVerifyScreen = ({ navigation }) => {
                 email: Email,
                 phoneNumber: PhoneNum
             };
-            const response = await axios.post('http://10.0.2.2:8080/getId/request', JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/getId/request`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -46,7 +56,7 @@ const FindIdVerifyScreen = ({ navigation }) => {
                 email: Email,
                 certNum: VerifyNum
             };
-            const response = await axios.post('http://10.0.2.2:8080/getId/verify', JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/getId/verify`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }

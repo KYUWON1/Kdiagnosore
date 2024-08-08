@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PhoneNumModScreen = ({ navigation }) => {
     const [PhoneNum, setPhoneNum] = useState("");
     const [VerifyNum, setVerifyNum] = useState("");
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
+
+    useEffect(() => {
+        const getApiBaseUrl = async () => {
+            try {
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
+            }
+        };
+
+        getApiBaseUrl();
+    }, []);
 
     const requestVerification = async () => {
         try {
-            const response = await axios.post('http://10.0.2.2:8080/user/profile/update/phoneNumber/request',
+            const response = await axios.post(`${apiBaseUrl}/user/profile/update/phoneNumber/request`,
                 JSON.stringify({ phoneNumber: PhoneNum }),
                 {
                     headers: {
@@ -29,7 +45,7 @@ const PhoneNumModScreen = ({ navigation }) => {
 
     const verifyAndChangePhoneNumber = async () => {
         try {
-            const response = await axios.post('http://10.0.2.2:8080/user/profile/update/phoneNumber/verify',
+            const response = await axios.post(`${apiBaseUrl}/user/profile/update/phoneNumber/verify`,
                 JSON.stringify({ phoneNumber: PhoneNum, certNum: VerifyNum }),
                 {
                     headers: {
@@ -50,7 +66,7 @@ const PhoneNumModScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{ marginHorizontal: 10, }} onPress={() => navigation.navigate('MyPageMod')} />
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('MyPageMod')} />
                 <Text style={{ fontSize: 20, fontWeight: 700, width: '80%', textAlign: 'center' }}>전화번호 변경</Text>
             </View>
             <View style={styles.title}>

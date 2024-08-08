@@ -8,6 +8,22 @@ const LoginScreen = ({ navigation }) => {
     const [ID, setID] = useState("");
     const [Password, setPassword] = useState("");
     const [isLoginChecked, setIsLoginChecked] = useState(false);
+    const [apiBaseUrl, setApiBaseUrl] = useState("");
+
+    useEffect(() => {
+        const getApiBaseUrl = async () => {
+            try {
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
+            }
+        };
+
+        getApiBaseUrl();
+    }, []);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -25,7 +41,7 @@ const LoginScreen = ({ navigation }) => {
         };
 
         try {
-            const response = await axios.post('http://10.0.2.2:8080/login', JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/login`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -136,4 +152,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Register_ProtectorNumScreen = ({route,navigation}) => {
+const Register_ProtectorNumScreen = ({ route, navigation }) => {
     const [UserId, setUserId] = useState("");
     const [UserName, setUserName] = useState("");
     const [Email, setEmail] = useState("");
@@ -15,6 +15,22 @@ const Register_ProtectorNumScreen = ({route,navigation}) => {
     const [ProtectorNum, setProtectorNum] = useState("");
     const [VerifyNum, setVerifyNum] = useState("");
     const [receivedCertNum, setReceivedCertNum] = useState("");
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
+
+    useEffect(() => {
+        const getApiBaseUrl = async () => {
+            try {
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
+            }
+        };
+
+        getApiBaseUrl();
+    }, []);
 
     const handleRegister = async () => {
         if (Password !== ConfirmPassword) {
@@ -38,7 +54,7 @@ const Register_ProtectorNumScreen = ({route,navigation}) => {
         };
 
         try {
-            const response = await axios.post('http://10.0.2.2:8080/join', JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/join`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -64,8 +80,7 @@ const Register_ProtectorNumScreen = ({route,navigation}) => {
 
     const sendSMS = async () => {
         try {
-            const token = await AsyncStorage.getItem('userToken');
-            const response = await axios.post('http://10.0.2.2:8080/check/sendSMS', {
+            const response = await axios.post(`${apiBaseUrl}/check/sendSMS`, {
                 phoneNumber: ProtectorNum,
             }, {
                 headers: {
@@ -99,13 +114,13 @@ const Register_ProtectorNumScreen = ({route,navigation}) => {
         setConfirmPassword(ConfirmPassword);
         setProtectorName(ProtectorName);
         setPhoneNum(PhoneNum);
-    }, []);
+    }, [route.params]);
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{ marginHorizontal: 10, }} onPress={() => navigation.navigate('RegisterPhoneNum', { UserId, UserName, Email, Password, ConfirmPassword, ProtectorName })} />
-                <Text style={{ fontSize: 20, fontWeight: 700, width: '80%', textAlign: 'center' }}>회원가입</Text>
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('RegisterPhoneNum', { UserId, UserName, Email, Password, ConfirmPassword, ProtectorName })} />
+                <Text style={{ fontSize: 20, fontWeight: '700', width: '80%', textAlign: 'center' }}>회원가입</Text>
             </View>
             <View style={styles.title}>
                 <Text style={styles.maintitle}>보호자 전화번호 인증</Text>
@@ -136,10 +151,9 @@ const Register_ProtectorNumScreen = ({route,navigation}) => {
                     <Text style={{ fontSize: 20, color: '#fff' }}>회원가입 완료</Text>
                 </TouchableOpacity>
             </View>
-
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
