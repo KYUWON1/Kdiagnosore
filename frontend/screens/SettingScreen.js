@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,6 +9,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = ({ navigation }) => {
     const [isOn, setIsOn] = useState(false);
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
+
+    useEffect(() => {
+        const getApiBaseUrl = async () => {
+            try {
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
+            }
+        };
+
+        getApiBaseUrl();
+    }, []);
 
     const handleToggle = () => {
         // 알림 설정 버튼 on/off
@@ -17,7 +33,7 @@ const SettingScreen = ({ navigation }) => {
 
     const handleLogout = async () => {
         try {
-            const response = await axios.get('http://10.0.2.2:8080/logout.do');
+            const response = await axios.get(`${apiBaseUrl}/logout.do`);
             if (response.status === 200) {
                 Alert.alert('로그아웃 성공', '성공적으로 로그아웃 되었습니다.');
                 delete axios.defaults.headers.common['Authorization'];
@@ -108,7 +124,6 @@ const styles = StyleSheet.create({
     settingcontent: {
         fontSize: 18,
         marginLeft: 10,
-
     },
     alarmdetail: {
         fontSize: 15,
@@ -121,8 +136,6 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         paddingHorizontal: 20,
     }
-
 });
 
 export default SettingScreen;
-
