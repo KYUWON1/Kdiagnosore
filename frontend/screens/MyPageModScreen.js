@@ -108,24 +108,17 @@ const MyPageModScreen = ({navigation}) => {
                         value={Email}
                         onChangeText={setEmail}
                     />
-                    <Text style={styles.label}>비밀번호</Text>
-                    <View style={styles.fixlabel}>
-                        <TextInput
-                            style={styles.input1}
-                            value={Password}
-                            onChangeText={setPassword}
-                            editable={false} //입력 비활성화
-                            secureTextEntry
-                        />
+                    <View style={styles.fixlabel1}>
+                        <Text style={styles.label1}>비밀번호</Text>
                         <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('PasswordMod')}>
-                            <Text style={{ fontSize: 20, color: '#fff' }}>수정</Text>
+                            <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.label}>전화번호</Text>
                     <View style={styles.fixlabel}>
                         <Text style={styles.idcontent}>{PhoneNum}</Text>
                         <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('PhoneNumMod')}>
-                                <Text style={{ fontSize: 20, color: '#fff' }}>수정</Text>
+                                <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.label}>보호자 이름</Text>
@@ -138,11 +131,11 @@ const MyPageModScreen = ({navigation}) => {
                     <View style={styles.fixlabel}>
                         <Text style={styles.idcontent}>{ProtectorNum}</Text>
                         <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('ProtectorNumMod')}>
-                                <Text style={{ fontSize: 20, color: '#fff' }}>수정</Text>
+                                <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.button} onPress={handlerModify}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>변경하기</Text>
+                        <Text style={{ fontSize: 18, color: '#fff' }}>변경하기</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAwareScrollView>
@@ -169,7 +162,12 @@ const styles = StyleSheet.create({
     label:{
         width:'90%',
         marginLeft:10,
-        fontSize:18,
+        fontSize:20,
+        fontWeight: 'bold'
+    },
+    label1:{
+        marginLeft:5,
+        fontSize:20,
         fontWeight: 'bold'
     },
     fixlabel:{
@@ -177,6 +175,13 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:'space-between',
         width:'90%'
+    },
+    fixlabel1:{
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:'space-between',
+        width:'90%',
+        marginBottom:10,
     },
     input:{
       width:'90%',
