@@ -8,7 +8,6 @@ import Toogle from "../component/Toogle";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = ({ navigation }) => {
-    const [isOn, setIsOn] = useState(false);
     const [apiBaseUrl, setApiBaseUrl] = useState('');
 
     useEffect(() => {
@@ -25,11 +24,6 @@ const SettingScreen = ({ navigation }) => {
 
         getApiBaseUrl();
     }, []);
-
-    const handleToggle = () => {
-        // 알림 설정 버튼 on/off
-        setIsOn(previousState => !previousState);
-    };
 
     const handleLogout = async () => {
         try {
@@ -51,17 +45,12 @@ const SettingScreen = ({ navigation }) => {
             <View style={styles.header}>
                 <Text style={{ fontSize: 20, fontWeight: '700' }}>설정</Text>
             </View>
-            <View style={styles.settingalarm}>
-                <View style={styles.setting1_box}>
-                    <View style={styles.setting1}>
-                        <MaterialCommunityIcons name='alarm' size={25} style={{ marginLeft: 15 }} />
-                        <Text style={styles.settingcontent}>알림 설정</Text>
-                    </View>
-                    <Toogle onToggle={handleToggle} isOn={isOn} />
+            <View style={styles.setting}>
+                <View style={styles.setting1}>
+                    <MaterialCommunityIcons name='alarm' size={25} style={{ marginLeft: 15 }} />
+                    <Text style={styles.settingcontent}>알람 설정</Text>
                 </View>
-                <View>
-                    <Text style={styles.alarmdetail}>알림을 설정하면 챗봇이 주기적으로 대화를 신청합니다.</Text>
-                </View>
+                <AntDesign name='right' size={25} style={{ marginHorizontal: 10, }} onPress={() => navigation.navigate('SetAlarm')} />
             </View>
             <View style={styles.setting}>
                 <View style={styles.setting1}>

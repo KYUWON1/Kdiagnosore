@@ -3,8 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import SplashScreen from './screens/SplashScreen';
 import AppNavigator from './navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
-import AsyncStorag
-e from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const URL = 'http://10.0.2.2:8080';
 

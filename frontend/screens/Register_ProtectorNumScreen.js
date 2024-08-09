@@ -62,7 +62,8 @@ const Register_ProtectorNumScreen = ({ route, navigation }) => {
 
             if (response.status === 200) {
                 Alert.alert('회원가입 성공', '회원가입이 성공적으로 완료되었습니다.');
-                navigation.navigate('Login');
+                await AsyncStorage.setItem('R_userID', UserId);
+                navigation.navigate('RegisterAlarm');
             } else {
                 Alert.alert('회원가입 실패', response.data.message || '회원가입 중 오류가 발생했습니다.');
             }

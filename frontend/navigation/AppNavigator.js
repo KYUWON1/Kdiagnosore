@@ -12,7 +12,7 @@ import FindPasswordScreen from "../screens/FindPasswordScreen";
 import RegisterScreen from '../screens/RegisterScreen';
 import Register_PhoneNumScreen from '../screens/Register_PhoneNumScreen'
 import Register_ProtectorNumScreen from "../screens/Register_ProtectorNumScreen";
-import RegisterAcceptScreen from "../screens/RegisterAcceptScreen";
+import Register_AlarmScreen from "../screens/Register_AlarmScreen";
 import ChatScreen from '../screens/ChatScreen';
 import ChatRecordingScreen from "../screens/ChatRecordingScreen";
 import MyPageScreen from "../screens/MyPageScreen";
@@ -21,7 +21,6 @@ import SettingScreen from "../screens/SettingScreen";
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import SetAlarmScreen from "../screens/SetAlarmScreen";
-import SetAccountScreen from "../screens/SetAccountScreen";
 import MyPageModScreen from "../screens/MyPageModScreen";
 import PasswordModScreen from "../screens/PasswordModScreen";
 import PhoneNumModScreen from "../screens/PhoneNumModScreen";
@@ -39,7 +38,6 @@ const AppNavigator = () => {
         <Stack.Screen name="FindPasswordVerify" component={FindPasswordVerifyScreen}/>
         <Stack.Screen name="FindPassword" component={FindPasswordScreen}/>
         <Stack.Screen name="Register" component={RegisterStack}/>
-        <Stack.Screen name="RegisterAccept" component={RegisterAcceptScreen}/>
         <Stack.Screen name="App" component={AppStack}/>
     </Stack.Navigator>
     );
@@ -51,6 +49,7 @@ const RegisterStack = () => {
             <Stack.Screen name="Register1" component={RegisterScreen}/>
             <Stack.Screen name="RegisterPhoneNum" component={Register_PhoneNumScreen}/>
             <Stack.Screen name="RegisterProtectorNum" component={Register_ProtectorNumScreen}/>
+            <Stack.Screen name="RegisterAlarm" component={Register_AlarmScreen}/>
         </Stack.Navigator>
     )
 }
@@ -59,6 +58,7 @@ const AppStack = () => {
     return(
     <Tab.Navigator screenOptions={{
         headerShown:false,
+        unmountOnBlur:true,
         tabBarInactiveTintColor: "#AAA",
         tabBarActiveTintColor: '#000',
 
@@ -105,7 +105,6 @@ const SettingStack = () => {
             <Stack.Screen name="Setting1" component={SettingScreen}/>
             <Stack.Screen name="MyPageMod" component={MyPageModScreen}/>
             <Stack.Screen name="SetAlarm" component={SetAlarmScreen}/>
-            <Stack.Screen name="SetAccount" component={SetAccountScreen}/>
             <Stack.Screen name="PasswordMod" component={PasswordModScreen}/>
             <Stack.Screen name="PhoneNumMod" component={PhoneNumModScreen}/>
             <Stack.Screen name="ProtectorNumMod" component={ProtectorNumModScreen}/>
