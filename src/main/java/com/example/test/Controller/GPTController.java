@@ -53,10 +53,12 @@ public class GPTController {
                 
                 예시) 어제 오후에는 어디 가셨다고 하셨죠?
                 """;
-        String chatMessages = chatService.getChatMessage(chatService.getUserId(), LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_LOCAL_DATE));
+        String chatMessages = chatService.getChatMessage(chatService.getUserId(), LocalDate.now().minusDays(13).format(DateTimeFormatter.ISO_LOCAL_DATE));
         prompt += chatMessages + add;
         GPTRequestDTO request = new GPTRequestDTO(model, prompt);
         GPTResponseDTO response =  template.postForObject(apiURL, request, GPTResponseDTO.class);
-        return response.getChoices().get(0).getMessage().getContent();
+        String createdTest = response.getChoices().get(0).getMessage().getContent();
+        chatService.saveTestChat(createdTest);
+        return createdTest;
     }
 }
