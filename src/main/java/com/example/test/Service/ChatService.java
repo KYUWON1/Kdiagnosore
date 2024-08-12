@@ -1,10 +1,12 @@
 package com.example.test.Service;
 
 import com.example.test.domain.ChatDomain;
+import com.example.test.domain.TestDomain;
 import com.example.test.dto.ChatDTO;
 import com.example.test.dto.ChatForUserDto;
 import com.example.test.dto.CustomUserDetails;
 import com.example.test.repository.ChatRepository;
+import com.example.test.repository.TestRepository;
 import com.example.test.response.PredictResponse;
 import com.example.test.type.ChatFrom;
 import com.example.test.type.ChatSaveResponse;
@@ -37,10 +39,12 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final RestTemplate restTemplate;
     private final String PREDICTION_URL = "http://localhost:5000/api/predict";
+    private final TestRepository testRepository;
 
-    public ChatService(ChatRepository chatRepository,RestTemplate chatRestTemplate){
+    public ChatService(ChatRepository chatRepository,RestTemplate chatRestTemplate, TestRepository testRepository){
         this.chatRepository = chatRepository;
         this.restTemplate = chatRestTemplate;
+        this.testRepository = testRepository;
     }
 
     public PredictResponse sendRequest(String url,String jsonBody){
@@ -187,4 +191,25 @@ public class ChatService {
         }
         return chatMessages;
     }
+
+    public ChatSaveResponse saveTestChat(String test){
+        try{
+            String userId = getUserId();
+            TestDomain testDomain = setTestContent(userId, test);
+            testRepository.save(testDomain);
+            return ChatSaveResponse.SAVE_SUCCESS;
+        }catch (Exception e){
+            return ChatSaveResponse.SAVE_FAIL;
+        }
+    }
+
+    public TestDomain setTestContent(String userId,String question){
+        TestDomain testDomain = new TestDomain();
+        testDomain.setUserId(userId);
+        testDomain.setQuestion(question);
+        testDomain.setDate(LocalDate.now());
+        testDomain.setTime(LocalTime.now());
+        return testDomain;
+    }
 }
+
