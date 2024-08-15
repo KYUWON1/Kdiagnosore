@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "879227038442",
+    "project_id": "kdiagnosore-c2b1b",
+    "storage_bucket": "kdiagnosore-c2b1b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879227038442:android:1b2fd49a60133a3e63c593",
+        "android_client_info": {
+          "package_name": "com.Kdiagnosore.RememberMe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3TMN_QUN90ZUy2ZGrMgbApjBRiWj14VY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

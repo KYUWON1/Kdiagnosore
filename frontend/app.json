@@ -15,6 +15,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.Kdiagnosore.RememberMe",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -22,6 +24,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "baaa9754-7ddd-4206-bddf-799f937654d7"
+      }
+    },
+    "owner": "dltlgus2"
   }
 }
