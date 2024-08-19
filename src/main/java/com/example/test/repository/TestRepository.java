@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TestRepository extends MongoRepository<TestDomain,String> {
     List<TestDomain> findByUserId(String userId);
-    List<TestDomain> findByUserIdAndDate(String userId, String date);
+    TestDomain findByUserIdAndDate(String userId, String date);
 }
