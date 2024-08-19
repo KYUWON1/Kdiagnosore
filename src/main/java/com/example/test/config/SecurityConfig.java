@@ -1,5 +1,6 @@
 package com.example.test.config;
 
+import com.example.test.Service.PushNotificationService;
 import com.example.test.jwt.JWTFilter;
 import com.example.test.jwt.JWTUtil;
 import com.example.test.jwt.LoginFilter;
@@ -26,10 +27,12 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final PushNotificationService pushNotificationService;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,JWTUtil jwtUtil){
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, PushNotificationService pushNotificationService){
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
+        this.pushNotificationService = pushNotificationService;
     }
 
     @Bean // auth Manager Bean으로 등록
@@ -89,7 +92,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JWTFilter(jwtUtil),LoginFilter.class);
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),pushNotificationService,jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         //세션 설정 stateless하게 설정
         http

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "sample",
-    "slug": "sample",
+    "slug": "kdiagnosore",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,9 +27,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "baaa9754-7ddd-4206-bddf-799f937654d7"
+        "projectId": "d8d2fc57-2923-4901-984a-b5ab1134e0d3"
       }
     },
-    "owner": "dltlgus2"
+    "owner": "shimkyuwon"
   }
 }
