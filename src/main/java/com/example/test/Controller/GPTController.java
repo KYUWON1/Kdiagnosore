@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/gpt")
@@ -53,12 +54,24 @@ public class GPTController {
                 
                 예시) 어제 오후에는 어디 가셨다고 하셨죠?
                 """;
-        String chatMessages = chatService.getChatMessage(chatService.getUserId(), LocalDate.now().minusDays(13).format(DateTimeFormatter.ISO_LOCAL_DATE));
-        prompt += chatMessages + add;
-        GPTRequestDTO request = new GPTRequestDTO(model, prompt);
-        GPTResponseDTO response =  template.postForObject(apiURL, request, GPTResponseDTO.class);
-        String createdTest = response.getChoices().get(0).getMessage().getContent();
-        chatService.saveTestChat(createdTest);
-        return createdTest;
+        List<String> allUserId = userService.findAllUserId();
+        for(String userId : allUserId){
+            String chatMessages = chatService.getChatMessage(userId,
+                    LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE));
+//            String chatMessages = chatService.getChatMessage(userId,
+//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+            if(chatMessages.equals("No Data")){
+                continue;
+            }
+            prompt += chatMessages + add;
+            GPTRequestDTO request = new GPTRequestDTO(model, prompt);
+            GPTResponseDTO response =  template.postForObject(apiURL, request, GPTResponseDTO.class);
+            String createdTest = response.getChoices().get(0).getMessage().getContent();
+            chatService.saveTestChat(userId,createdTest);
+            log.info("Test Created {}.",userId);
+        }
+
+        log.info("Test Created End.");
+        return "Create Test Question";
     }
 }

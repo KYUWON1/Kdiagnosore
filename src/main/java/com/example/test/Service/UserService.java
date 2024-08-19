@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
 
@@ -127,6 +130,13 @@ public class UserService {
                 .description("success update PhoneNumber.")
                 .baseResponse(BaseResponse.OK)
                 .build();
+    }
+    
+    public List<String> findAllUserId(){
+        List<UserDomain> allUser = userRepository.findAll();
+        return allUser.stream()
+                .map(user -> user.getUserId())
+                .collect(Collectors.toList());
     }
 
 }

@@ -179,6 +179,10 @@ public class ChatService {
 
     public String getChatMessage(String userId, String date) {
         List<ChatDTO> chatList = getChatsByUserIdAndDate(userId, date);
+        if(chatList.isEmpty()){
+            return "No Data";
+        }
+
         String chatMessages = "";
         for(ChatDTO chat : chatList){
 
@@ -192,9 +196,8 @@ public class ChatService {
         return chatMessages;
     }
 
-    public ChatSaveResponse saveTestChat(String test){
+    public ChatSaveResponse saveTestChat(String userId,String test){
         try{
-            String userId = getUserId();
             TestDomain testDomain = setTestContent(userId, test);
             testRepository.save(testDomain);
             return ChatSaveResponse.SAVE_SUCCESS;
@@ -209,6 +212,7 @@ public class ChatService {
         testDomain.setQuestion(question);
         testDomain.setDate(LocalDate.now());
         testDomain.setTime(LocalTime.now());
+        testDomain.setAnswer("");
         return testDomain;
     }
 }
