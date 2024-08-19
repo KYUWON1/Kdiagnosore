@@ -16,7 +16,7 @@ const ChatBox = (props) => {
                     borderBottomRightRadius: 25,
                     borderTopLeftRadius: 25,
                     borderBottomLeftRadius: 25,
-                    backgroundColor: '#93C9C0',
+                    backgroundColor: '#d1e7dd',
                     padding: 5,
                 },
                 left: {
@@ -29,6 +29,7 @@ const ChatBox = (props) => {
             }}
             textStyle={{
                 right: {
+                    color:'#000',
                     fontSize: 18,
                 },
                 left: {
@@ -45,6 +46,7 @@ const TimeText = (props) => {
         <Time {...props}
             timeTextStyle={{
                 right: {
+                    color:'#4f4f4f',
                     fontSize: 12,
                 },
                 left: {
@@ -124,7 +126,7 @@ const ChatScreen = () => {
                 createdAt: new Date(),
                 user: {
                     _id: 2,
-                    name: 'React Native',
+                    name: 'ChatBot',
                     avatar: Logo,
                 },
             },

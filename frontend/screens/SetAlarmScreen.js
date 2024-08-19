@@ -193,6 +193,7 @@ const SetAlarmScreen = ({navigation}) => {
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="time"
+                display="spinner"
                 textColor="black" 
                 value={selectedTime}
                 onConfirm={handleTimeConfirm}
