@@ -5,7 +5,7 @@ import AppNavigator from './navigation/AppNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializePushNotifications } from './services/notificationService';
 
-const URL = 'http://172.30.1.26:8080';
+const URL = 'http://192.168.123.167:8080';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +16,7 @@ function App() {
         await AsyncStorage.setItem('API_BASE_URL', URL);
         initializePushNotifications(); // 푸시 알림 초기화
         setTimeout(() => setIsLoading(false), 3000);
-      } catch (e) {
+      } catch (e) { 
         console.error('Failed to initialize app:', e);
       }
     };

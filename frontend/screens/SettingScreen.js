@@ -59,13 +59,13 @@ const SettingScreen = ({ navigation }) => {
                 </View>
                 <AntDesign name='right' size={25} style={{ marginHorizontal: 10, }} onPress={() => navigation.navigate('MyPageMod')} />
             </View>
-            <TouchableOpacity style={styles.setting} onPress={handleLogout}>
+            <View style={styles.setting}>
                 <View style={styles.setting1}>
                     <Ionicons name='exit-outline' size={25} style={{ marginLeft: 15 }} />
                     <Text style={styles.settingcontent}>로그아웃</Text>
                 </View>
-                <AntDesign name='right' size={25} style={{ marginHorizontal: 10 }} />
-            </TouchableOpacity>
+                <AntDesign name='right' size={25} style={{ marginHorizontal: 10 }} onPress={handleLogout}/>
+            </View>
             <View style={styles.settingout}>
                 <Text style={{ color: '#B6B6B6', fontSize: 15, textAlign: 'right' }}>회원탈퇴</Text>
             </View>

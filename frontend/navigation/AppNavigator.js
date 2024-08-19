@@ -15,6 +15,7 @@ import Register_ProtectorNumScreen from "../screens/Register_ProtectorNumScreen"
 import Register_AlarmScreen from "../screens/Register_AlarmScreen";
 import ChatScreen from '../screens/ChatScreen';
 import ChatRecordingScreen from "../screens/ChatRecordingScreen";
+import ChatDateScreen from "../screens/ChatDateScreen";
 import MyPageScreen from "../screens/MyPageScreen";
 import SettingScreen from "../screens/SettingScreen";
 
@@ -73,7 +74,7 @@ const AppStack = () => {
             ),}}/>
         <Tab.Screen
         name="ChatRecording"
-        component={ChatRecordingScreen}
+        component={ChatRecordStack}
         options={{
             tabBarLabel:'대화 기록',
             tabBarIcon:({color, size})=>(
@@ -98,6 +99,15 @@ const AppStack = () => {
     )
 
 };
+
+const ChatRecordStack = () => {
+    return(
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+            <Stack.Screen name="ChatRecording1" component={ChatRecordingScreen}/>
+            <Stack.Screen name="ChatDate" component={ChatDateScreen}/>
+        </Stack.Navigator>
+        );
+}
 
 const SettingStack = () => {
     return(
