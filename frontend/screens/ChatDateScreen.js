@@ -98,7 +98,8 @@ const ChatDateScreen = ({ route, navigation }) => {
                     if (response.status === 200) {
                         // 서버에서 받은 데이터 정렬: 최신 메시지가 하단에 오도록
                         const sortedData = response.data.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
-                        const formattedMessages = formatMessagesForGiftedChat(sortedData);
+                        const reversedData = sortedData.slice().reverse(); // 역순으로 변환
+                        const formattedMessages = formatMessagesForGiftedChat(reversedData);
                         setMessages(formattedMessages);
                     } else {
                         Alert.alert('채팅 가져오기 실패', '채팅 기록을 가져오는 중 문제가 발생했습니다.');

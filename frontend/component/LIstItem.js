@@ -10,7 +10,7 @@ export default function ListItem({ id, text, date, chatFrom }) {
             </View>
             <View style={styles.contentContainer}>
                 <View style={[styles.messageBubble, chatFrom === 'USER' ? styles.userBubble : styles.botBubble]}>
-                    <Text style={styles.messageText}>{text}</Text>
+                    <Text style={styles.messageText} numberOfLines={1} ellipsizeMode='tail'>{text}</Text>
                     <View style={[styles.triangle, chatFrom === 'USER' ? styles.userTriangle : styles.botTriangle]} />
                 </View>
             </View>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     messageBubble: {
-        maxWidth: '70%', 
+        //maxWidth: '90%', 
         padding: 10,
         borderRadius: 15,
         position: 'relative',
