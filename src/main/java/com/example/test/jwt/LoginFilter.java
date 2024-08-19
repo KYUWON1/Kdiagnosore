@@ -1,5 +1,6 @@
 package com.example.test.jwt;
 
+import com.example.test.Service.PushNotificationService;
 import com.example.test.dto.CustomUserDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -21,11 +22,13 @@ import java.util.Map;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filter를 상속받아 사용
 
     private final AuthenticationManager authenticationManager;
+    private final PushNotificationService pushNotificationService;
     private final JWTUtil jwtUtil;
 
     // 매니져 의존성 주입
-    public LoginFilter(AuthenticationManager authenticationManager,JWTUtil jwtUtil){
+    public LoginFilter(AuthenticationManager authenticationManager, PushNotificationService pushNotificationService, JWTUtil jwtUtil){
         this.authenticationManager = authenticationManager;
+        this.pushNotificationService = pushNotificationService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -33,6 +36,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String userId = null;
         String password = null;
+        String pushToken = null;
 
         // App의 JSON 값이랑, 포스트맨에서 날리는 JSON값이 다른것같음
         // 그래서 그냥 2개로 바꿈. 에뮬레이터랑 포스트맨에서 동작 테스트 완료함
@@ -42,16 +46,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
                 Map<String, String> requestBody = new ObjectMapper().readValue(request.getInputStream(), Map.class);
                 userId = requestBody.get("userId");
                 password = requestBody.get("password");
+                pushToken = requestBody.get("pushToken");
             } else {
                 // URL 인코딩된 폼 데이터 요청 처리
                 userId = obtainUsername(request);
                 password = obtainPassword(request);
+                pushToken = request.getParameter("pushToken");
             }
 
-            System.out.println(userId + " : " + password);
+            System.out.println(userId + " : " + password + " : " + pushToken);
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password, null);
-            System.out.println(authToken);
+            request.setAttribute("pushToken", pushToken); // 푸시 토큰을 요청 속성에 저장
 
                 return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
@@ -68,7 +74,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
 
         // 사실상 UserID를 반환함 메소드 이름 변경이 불가
         String userId = customUserDetails.getUsername();
-
+        String pushToken = (String) request.getAttribute("pushToken");
+        // 인증 성공 후 Push Token 저장
+        if (pushToken != null && !pushToken.isEmpty()) {
+            pushNotificationService.savePushToken(userId, pushToken); // 인증 성공 후 푸시 토큰 저장
+        }
+        
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends  GrantedAuthority> iter = authorities.iterator();
         GrantedAuthority auth = iter.next();

@@ -5,7 +5,7 @@ import AppNavigator from './navigation/AppNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializePushNotifications } from './services/notificationService';
 
-const URL = 'http://192.168.0.102:8080';
+const URL = 'http://172.30.1.26:8080';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
