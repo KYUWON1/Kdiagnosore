@@ -2,10 +2,10 @@ package com.example.test.Service;
 
 import com.example.test.domain.UserDomain;
 import com.example.test.dto.JoinDTO;
+import com.example.test.dto.ProtectorJoinDto;
 import com.example.test.exception.JoinException;
 import com.example.test.repository.UserRepository;
 import com.example.test.type.ErrorCode;
-import org.apache.catalina.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,10 +22,48 @@ public class JoinService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public JoinDTO joinProcess(JoinDTO joinDTO) {
-        // 필수 입력 값 검증
-        System.out.println(joinDTO);
+    public JoinDTO userJoinProcess(JoinDTO joinDTO) {
+        checkJoinValidation(joinDTO);
+        // User 도메인 객체 생성
+        UserDomain user = setDefaultUser(joinDTO);
+        user.setRole("user");
+        user.setProtector(false);
+        userRepository.save(user);
 
+        return joinDTO;
+    }
+
+    public JoinDTO protectorJoinProcess(ProtectorJoinDto protectorJoinDto) {
+        JoinDTO joinDTO = protectorJoinDto;
+        // 검증
+        checkJoinValidation(joinDTO);
+
+        // User 조회 및 데이터 수정
+        UserDomain user = userRepository.findByUserNameAndPhoneNum(
+                        protectorJoinDto.getWardName(), protectorJoinDto.getWardPhoneNumber());
+        user.setProtector(true);
+        user.setProtectorNum(joinDTO.getPhoneNum());
+        user.setProtectorName(joinDTO.getUserName());
+        userRepository.save(user);
+
+        // Protector 도메인 객체 생성
+        UserDomain protector = setDefaultUser(joinDTO);
+        protector.setRole("protector");
+        userRepository.save(protector);
+
+        return joinDTO;
+    }
+
+    public boolean findUser(String userName,String phoneNumber) {
+        UserDomain user = userRepository.findByUserNameAndPhoneNum(userName,
+                phoneNumber);
+        if(user == null){
+            throw new JoinException(ErrorCode.USER_NOT_FOUND);
+        }
+        return true;
+    }
+
+    private void checkJoinValidation(JoinDTO joinDTO){
         if (!StringUtils.hasText(joinDTO.getUserId())) {
             throw new JoinException(ErrorCode.INVALID_ARGUMENT);
         }
@@ -38,20 +76,17 @@ public class JoinService {
         if (userRepository.existsByUserId(joinDTO.getUserId())) {
             throw new JoinException(ErrorCode.USER_ALREADY_EXITS);
         }
+    }
 
-        // User 도메인 객체 생성
-        UserDomain data = new UserDomain();
-        data.setUserId(joinDTO.getUserId());
-        data.setUserName(joinDTO.getUserName());
-        data.setEmail(joinDTO.getEmail());
-        data.setRole("user");
-        data.setPassword(bCryptPasswordEncoder.encode(joinDTO.getPassword()));
-        data.setPhoneNum(joinDTO.getPhoneNum()); // 선택적으로 처리
-        data.setProtectorName(joinDTO.getProtectorName()); // 선택적으로 처리
-        data.setProtectorNum(joinDTO.getProtectorNum()); // 선택적으로 처리
+    // 아이디 비밀번호 이름 이메일 전화번호 저장
+    private UserDomain setDefaultUser(JoinDTO joinDTO){
+        UserDomain user = new UserDomain();
+        user.setUserId(joinDTO.getUserId());
+        user.setUserName(joinDTO.getUserName());
+        user.setEmail(joinDTO.getEmail());
+        user.setPassword(bCryptPasswordEncoder.encode(joinDTO.getPassword()));
+        user.setPhoneNum(joinDTO.getPhoneNum());
 
-        userRepository.save(data);
-
-        return joinDTO;
+        return user;
     }
 }

@@ -30,6 +30,8 @@ public class UserDomain {
 
     private List<String> alarmTimes = new ArrayList<>();
 
+    private boolean isProtector;
+
     private String role;
 
     public UserDomain(){
