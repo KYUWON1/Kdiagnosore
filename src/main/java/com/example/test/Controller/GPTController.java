@@ -86,10 +86,10 @@ public class GPTController {
                 """;
         List<String> allUserId = userService.findAllUserId();
         for(String userId : allUserId){
-//            String chatMessages = chatService.getChatMessage(userId,
-//                    LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE));
             String chatMessages = chatService.getChatMessage(userId,
-                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                    LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE));
+//            String chatMessages = chatService.getChatMessage(userId,
+//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
             if(chatMessages.equals("No Data")){
                 continue;
             }
