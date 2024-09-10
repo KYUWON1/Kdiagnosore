@@ -43,15 +43,13 @@ public class MainController {
         if(!user.getPhoneNum().equals(request.getPhoneNumber())){
             throw new UserException(ErrorCode.USER_NOT_MATCH);
         }
-        SmsSend.Response response = smsCertificateController.sendSMS(session,
-                new SmsSend.Request(request.getPhoneNumber()));
+        SmsSend.Response response = smsCertificateController.sendSMS(new SmsSend.Request(request.getPhoneNumber()));
         return response;
     }
 
     // 비밀번호 찾기 -> 인증번호 확인
     @PostMapping("/getId/verify")
     public FindUserInfo.Response findIdVerify(
-            HttpSession session,
             @RequestBody FindUserInfo.Request request
     ){
         System.out.println(request.getUserName()+" "+request.getEmail());
@@ -60,8 +58,7 @@ public class MainController {
         SmsCertificate.Request certReq = new SmsCertificate.Request();
         certReq.setCertNum(request.getCertNum());
         SmsCertificate.Response response =
-                smsCertificateController.verifySMS(
-                        session,certReq);
+                smsCertificateController.verifySMS(certReq);
         if(response.getCertificateResponse() != CertificateResponse.OK){
             throw new CertificationException(ErrorCode.VERIFY_CODE_NOT_MATCH);
         }
@@ -79,9 +76,8 @@ public class MainController {
             @RequestBody FindUserInfo.Request request
     ){
         userService.findUserbyUserId(request.getUserId());
-        session.setAttribute("userId",request.getUserId());
         // sms컨트롤러를 통해서 인증
-        SmsSend.Response response = smsCertificateController.sendSMS(session,
+        SmsSend.Response response = smsCertificateController.sendSMS(
                 new SmsSend.Request(request.getPhoneNumber()));
         return response;
     }
@@ -95,8 +91,7 @@ public class MainController {
         SmsCertificate.Request certReq = new SmsCertificate.Request();
         certReq.setCertNum(request.getCertNum());
         SmsCertificate.Response response =
-                smsCertificateController.verifySMS(
-                        session,certReq);
+                smsCertificateController.verifySMS(certReq);
 
         return new FindUserInfo.Response().builder()
                 .certificateResponse(response.getCertificateResponse())

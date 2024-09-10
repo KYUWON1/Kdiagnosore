@@ -2,7 +2,9 @@ package com.example.test.Service;
 
 import com.example.test.domain.UserDomain;
 import com.example.test.dto.JoinDTO;
+import com.example.test.exception.JoinException;
 import com.example.test.repository.UserRepository;
+import com.example.test.type.ErrorCode;
 import org.apache.catalina.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,17 +25,18 @@ public class JoinService {
     public JoinDTO joinProcess(JoinDTO joinDTO) {
         // 필수 입력 값 검증
         System.out.println(joinDTO);
+
         if (!StringUtils.hasText(joinDTO.getUserId())) {
-            System.out.println(joinDTO.getUserName());
-            throw new IllegalArgumentException("아이디를 입력해야 합니다.");
+            throw new JoinException(ErrorCode.INVALID_ARGUMENT);
         }
+
         if (!StringUtils.hasText(joinDTO.getPassword())) {
-            throw new IllegalArgumentException("비밀번호를 입력해야 합니다.");
+            throw new JoinException(ErrorCode.INVALID_ARGUMENT);
         }
 
         // 중복 아이디 확인
         if (userRepository.existsByUserId(joinDTO.getUserId())) {
-            throw new RuntimeException("해당 아이디는 이미 존재합니다.");
+            throw new JoinException(ErrorCode.USER_ALREADY_EXITS);
         }
 
         // User 도메인 객체 생성
