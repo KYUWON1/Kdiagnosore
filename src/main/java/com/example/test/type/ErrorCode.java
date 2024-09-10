@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
     USER_NOT_FOUND("사용자가 없습니다."),
+    MAX_ALARM_IS_3("최대 3개까지 알람을 설정할수있습니다."),
     VERIFY_CODE_NOT_MATCH("인증코드가 옳바르지 않습니다"),
     OLD_VERIFY_CODE("인증코드가 만료되었습니다."),
     PASSWORD_CHECK_UN_MATCH("설정하실 비밀번호를 한번 더 확인해주세요"),

@@ -3,6 +3,7 @@ package com.example.test.Service;
 import com.example.test.domain.UserDomain;
 import com.example.test.dto.Alarm;
 import com.example.test.dto.AlarmDto;
+import com.example.test.exception.AlarmException;
 import com.example.test.exception.UserException;
 import com.example.test.repository.UserRepository;
 import com.example.test.type.ErrorCode;
@@ -32,6 +33,9 @@ public class AlarmService {
             alarmList.add(formatTime);
             user.setAlarmTimes(alarmList);
         }else{
+            if(user.getAlarmTimes().size() > 2){
+                throw new AlarmException(ErrorCode.MAX_ALARM_IS_3);
+            }
             user.getAlarmTimes().add(formatTime);
         }
 

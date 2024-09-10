@@ -11,6 +11,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(AlarmException.class)
+    public ResponseEntity<ErrorResponse> handleAlarmException(AlarmException e) {
+        log.error("AlarmException exception {} is occurred.", e.getMessage(), e);
+        ErrorResponse response = new ErrorResponse(
+                e.getErrorCode(),  // ErrorCode Enum 값 설정
+                e.getMessage()  // 커스텀 메시지
+        );
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
 
     @ExceptionHandler(JoinException.class)
     public ResponseEntity<ErrorResponse> handleJoinException(JoinException e) {
