@@ -10,8 +10,5 @@ public class JoinDTO {
     private String userName;
     private String email;
     private String password;
-
     private String phoneNum;
-    private String protectorName;
-    private String protectorNum;
 }

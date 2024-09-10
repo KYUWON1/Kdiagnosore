@@ -2,13 +2,13 @@ package com.example.test.Controller;
 
 import com.example.test.Service.JoinService;
 import com.example.test.dto.JoinDTO;
-import org.springframework.http.HttpStatus;
+import com.example.test.dto.ProtectorJoinDto;
+import com.example.test.dto.UserExist;
+import com.example.test.exception.JoinException;
+import com.example.test.type.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.HashMap;
@@ -25,10 +25,10 @@ public class JoinController {
         this.joinService = joinService;
     }
 
-    @PostMapping("/join")
-    public ResponseEntity<?> joinProcess(@RequestBody JoinDTO joinDTO){
+    @PostMapping("/join/user")
+    public ResponseEntity<?> userJoinProcess(@RequestBody JoinDTO joinDTO){
         try{
-            JoinDTO data = joinService.joinProcess(joinDTO);
+            JoinDTO data = joinService.userJoinProcess(joinDTO);
             return ResponseEntity.ok(data);
         }catch(IllegalArgumentException ex){
             Map<String, Object> errorDetails = new HashMap<>();
@@ -41,13 +41,36 @@ public class JoinController {
             errorDetails.put("message", ex.getMessage());
             return ResponseEntity.badRequest().body(errorDetails);
         }
-
     }
 
-    // 예외 처리 핸들러를 별도로 정의할 수 있습니다.
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleException(Exception ex, WebRequest request) {
-        // 전역적 예외 처리를 위한 메시지
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + ex.getMessage());
+    @PostMapping("/join/protector")
+    public ResponseEntity<?> protectorJoinProcess(
+            @RequestBody ProtectorJoinDto protectorJoinDto
+    ){
+        try{
+            JoinDTO data = joinService.protectorJoinProcess(protectorJoinDto);
+            return ResponseEntity.ok(data);
+        }catch(IllegalArgumentException ex){
+            Map<String, Object> errorDetails = new HashMap<>();
+            errorDetails.put("success", false);
+            errorDetails.put("message", ex.getMessage());
+            return ResponseEntity.badRequest().body(errorDetails);
+        }catch(RuntimeException ex){
+            Map<String, Object> errorDetails = new HashMap<>();
+            errorDetails.put("success", false);
+            errorDetails.put("message", ex.getMessage());
+            return ResponseEntity.badRequest().body(errorDetails);
+        }
     }
+
+    @GetMapping("/join/check-user")
+    public UserExist.Response checkUserExist(
+            @RequestParam String userName,
+            @RequestParam String phoneNumber
+            ){
+        joinService.findUser(userName,phoneNumber);
+        return new UserExist.Response(userName,
+                phoneNumber);
+    }
+
 }

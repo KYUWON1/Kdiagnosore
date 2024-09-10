@@ -15,6 +15,8 @@ public interface UserRepository extends MongoRepository<UserDomain, String> {
 
     UserDomain findByUserNameAndEmail(String userName,String email);
 
+    UserDomain findByUserNameAndPhoneNum(String userName,String phoneNumber);
+
     Boolean existsByUserId(String userId);
 
     UserDomain findByUserName(String userName);
