@@ -7,11 +7,10 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @Builder
-public class UserException extends RuntimeException{
+public class JoinException extends RuntimeException{
     private ErrorCode errorCode;
-
     // 기본 생성자에 errorCode와 메시지를 전달
-    public UserException(ErrorCode errorCode) {
+    public JoinException(ErrorCode errorCode) {
         super(errorCode.getDescription());  // RuntimeException의 message 필드 설정
         this.errorCode = errorCode;
     }

@@ -9,6 +9,7 @@ public class SmsCertificate {
     @Getter
     @Setter
     public static class Request{
+        private String phoneNumber;
         private String certNum;
     }
 
