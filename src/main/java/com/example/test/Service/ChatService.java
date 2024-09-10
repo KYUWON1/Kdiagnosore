@@ -7,6 +7,7 @@ import com.example.test.dto.ChatForUserDto;
 import com.example.test.dto.CustomUserDetails;
 import com.example.test.repository.ChatRepository;
 import com.example.test.repository.TestRepository;
+import com.example.test.repository.UserRepository;
 import com.example.test.response.PredictResponse;
 import com.example.test.type.ChatFrom;
 import com.example.test.type.ChatSaveResponse;
@@ -32,6 +33,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +44,7 @@ public class ChatService {
     private final String PREDICTION_URL = "http://localhost:5000/api/predict";
     private final TestRepository testRepository;
 
-    public ChatService(ChatRepository chatRepository,RestTemplate chatRestTemplate, TestRepository testRepository){
+    public ChatService(ChatRepository chatRepository, RestTemplate chatRestTemplate, TestRepository testRepository, UserRepository userRepository){
         this.chatRepository = chatRepository;
         this.restTemplate = chatRestTemplate;
         this.testRepository = testRepository;
@@ -202,21 +205,43 @@ public class ChatService {
 
     public ChatSaveResponse saveTestChat(String userId,String test){
         try{
-            TestDomain testDomain = setTestContent(userId, test);
-            testRepository.save(testDomain);
+            parsingCreatedTestAndSave(userId,test);
             return ChatSaveResponse.SAVE_SUCCESS;
         }catch (Exception e){
             return ChatSaveResponse.SAVE_FAIL;
         }
     }
 
-    public TestDomain setTestContent(String userId,String question){
+    private void parsingCreatedTestAndSave(String userId,String test) {
+        Pattern pattern = Pattern.compile("Q (.*?)@\\nA (.*?)@\\nR (.*?) " +
+                "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+?)@");
+        Matcher matcher = pattern.matcher(test);
+        while(matcher.find()){
+            String question = matcher.group(1);
+            System.out.println("question = " + question);
+            String predictAnswer = matcher.group(2);
+            System.out.println("predictAnswer = " + predictAnswer);
+            String reason = matcher.group(3);
+            System.out.println("reason = " + reason);
+            String timeStamp = matcher.group(4);
+            System.out.println("timeStamp = " + timeStamp);
+            TestDomain newTest = setTestContent(userId,question,predictAnswer
+                    ,reason,timeStamp);
+            testRepository.save(newTest);
+        }
+    }
+
+    public TestDomain setTestContent(String userId,String question,
+                                     String predictAnswer,String reason,
+                                     String timeStamp){
         TestDomain testDomain = new TestDomain();
         testDomain.setUserId(userId);
         testDomain.setQuestion(question);
+        testDomain.setPredictAnswer(predictAnswer);
+        testDomain.setReason(reason);
+        testDomain.setReasonAt(timeStamp);
         testDomain.setDate(LocalDate.now());
         testDomain.setTime(LocalTime.now());
-        testDomain.setAnswer("");
         return testDomain;
     }
 }

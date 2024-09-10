@@ -21,8 +21,10 @@ public class TestDomain {
 
     private String userId;
     private String question;
+    private String predictAnswer;
+    private String reason;
+    private String reasonAt;
 
-    private String answer;
     private String date;
     private String time;
 
