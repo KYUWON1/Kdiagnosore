@@ -187,10 +187,14 @@ public class ChatService {
         for(ChatDTO chat : chatList){
 
             if(chat.getChatFrom() == ChatFrom.CHAT_BOT){
-                chatMessages += "A : " + chat.getMessage() + "\n";
+                chatMessages += "챗봇 : " + chat.getMessage() + "\n";
+                chatMessages += "Date :" + chat.getDate() + "\n";
+                chatMessages += "Time :" + chat.getTime() + "\n";
             }
             else{
-                chatMessages += "B : " + chat.getMessage() + "\n";
+                chatMessages += "사용자 : " + chat.getMessage() + "\n";
+                chatMessages += "Date :" + chat.getDate() + "\n";
+                chatMessages += "Time :" + chat.getTime() + "\n";
             }
         }
         return chatMessages;
