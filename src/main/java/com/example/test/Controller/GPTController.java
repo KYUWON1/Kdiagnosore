@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,6 +54,7 @@ public class GPTController {
                 
                 질문은 사용자가 자신이 했던 일을 잘 기억하고 있는지 확인하는 목적이어야해.
                 질문은 반드시 제공해준 어제 대화 내용에 관한 질문이여야해.
+                질문은 어떤 단어를 대답할 수 있는 형태인 질문이여야해.
                 질문에서 "오늘은 어떤가요?" 같은 현재에 대해 묻는 질문은 없어야해.
                 질문은 사용자가 답변할 수 있는 형태의 질문이여야해.
                 질문은 반드시 과거에 대한 질문이여야해.

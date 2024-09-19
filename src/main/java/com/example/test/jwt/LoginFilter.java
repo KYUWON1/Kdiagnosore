@@ -58,7 +58,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password, null);
             request.setAttribute("pushToken", pushToken); // 푸시 토큰을 요청 속성에 저장
-
+            System.out.println(authToken);
                 return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
             System.out.println(e);
