@@ -49,11 +49,12 @@ public class PushNotificationService {
             System.out.println(byId.getPushToken());
             if(byId.getPushToken() != null){
                 log.info("Send PushAlarm to {}",userId);
-                TestDomain test = testRepository.findByUserIdAndDate(userId,
+                List<TestDomain> test =
+                        testRepository.findByUserIdAndDate(userId,
                         LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
                 sendPushNotification(PushNotificationRequest.builder()
                         .title("오늘의 질문")
-                        .message(test.getQuestion())
+                        .message(test.get(0).getQuestion())
                         .token(byId.getPushToken())
                         .build());
             }

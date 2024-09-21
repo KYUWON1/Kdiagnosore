@@ -19,12 +19,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/gpt")
 @Slf4j
-public class GPTController {
+public class GptTestController {
 
     private final ChatService chatService;
     private final UserService userService;
 
-    public GPTController(ChatService chatService, UserService userService){
+    public GptTestController(ChatService chatService, UserService userService){
         this.chatService = chatService;
         this.userService = userService;
     }
@@ -87,13 +87,14 @@ public class GPTController {
         List<String> allUserId = userService.findAllUserId();
         for(String userId : allUserId){
             String chatMessages = chatService.getChatMessage(userId,
-                    LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE));
+                    LocalDate.now().minusDays(0).format(DateTimeFormatter.ISO_LOCAL_DATE));
 //            String chatMessages = chatService.getChatMessage(userId,
 //                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
             if(chatMessages.equals("No Data")){
                 continue;
             }
             prompt += chatMessages + add;
+            System.out.println("userId: "+userId);
             System.out.println(prompt);
             GPTRequestDTO request = new GPTRequestDTO(model, prompt);
             GPTResponseDTO response =  template.postForObject(apiURL, request, GPTResponseDTO.class);
@@ -104,6 +105,6 @@ public class GPTController {
         }
 
         log.info("Test Created End.");
-        return "Create Test Question";
+        return "Create Test Question!";
     }
 }

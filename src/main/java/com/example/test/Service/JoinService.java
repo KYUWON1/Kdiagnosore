@@ -26,6 +26,8 @@ public class JoinService {
         checkJoinValidation(joinDTO);
         // User 도메인 객체 생성
         UserDomain user = setDefaultUser(joinDTO);
+        user.setProtectorName(joinDTO.getProtectorName());
+        user.setProtectorNum(joinDTO.getProtectorNum());
         user.setRole("user");
         user.setProtector(false);
         userRepository.save(user);
@@ -34,13 +36,17 @@ public class JoinService {
     }
 
     public JoinDTO protectorJoinProcess(ProtectorJoinDto protectorJoinDto) {
-        JoinDTO joinDTO = protectorJoinDto;
+        JoinDTO joinDTO = JoinDTO.fromProtectorJoinDto(protectorJoinDto);
         // 검증
         checkJoinValidation(joinDTO);
 
         // User 조회 및 데이터 수정
         UserDomain user = userRepository.findByUserNameAndPhoneNum(
                         protectorJoinDto.getWardName(), protectorJoinDto.getWardPhoneNumber());
+        if (user == null) {
+            throw new JoinException(ErrorCode.NO_PROTECTOR); // 사용자 찾지 못할 경우 예외 처리
+        }
+
         user.setProtector(true);
         user.setProtectorNum(joinDTO.getPhoneNum());
         user.setProtectorName(joinDTO.getUserName());

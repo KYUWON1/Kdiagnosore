@@ -9,8 +9,6 @@ import com.example.test.type.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-
 import java.util.HashMap;
 import java.util.Map;
 

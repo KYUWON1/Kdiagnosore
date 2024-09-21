@@ -68,31 +68,37 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
 
     //인증성공시 동작 부분, JWT 발급
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,Authentication authentication) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         // 사실상 UserID를 반환함 메소드 이름 변경이 불가
         String userId = customUserDetails.getUsername();
         String pushToken = (String) request.getAttribute("pushToken");
+
         // 인증 성공 후 Push Token 저장
         if (pushToken != null && !pushToken.isEmpty()) {
             pushNotificationService.savePushToken(userId, pushToken); // 인증 성공 후 푸시 토큰 저장
         }
-        
+
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends  GrantedAuthority> iter = authorities.iterator();
+        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
         GrantedAuthority auth = iter.next();
 
         String role = auth.getAuthority();
+        System.out.println("role = " + role);
 
-        //JWT 토큰 생성 10시간
-        String token = jwtUtil.createJwt(userId,role,10 * 60 * 60 * 1000L);
+        // JWT 토큰 생성 (10시간)
+        String token = jwtUtil.createJwt(userId, role, 10 * 60 * 60 * 1000L);
 
         // 헤더에 토큰을 담아서 전달
-        response.addHeader("Authorization","Bearer "+token);
+        response.addHeader("Authorization", "Bearer " + token);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write("{\"success\": true, \"message\": \"Authentication successful\"}");
+
+        // JSON 응답으로 userId와 role 반환
+        response.getWriter().write("{\"success\": true, \"message\": \"Authentication successful\", " +
+                "\"userId\": \"" + userId + "\", " +
+                "\"role\": \"" + role + "\"}");
     }
     
     //인증실패시 동작 부분
