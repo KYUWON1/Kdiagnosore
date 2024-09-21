@@ -75,7 +75,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
         // 사실상 UserID를 반환함 메소드 이름 변경이 불가
         String userId = customUserDetails.getUsername();
         String pushToken = (String) request.getAttribute("pushToken");
-
         // 인증 성공 후 Push Token 저장
         if (pushToken != null && !pushToken.isEmpty()) {
             pushNotificationService.savePushToken(userId, pushToken); // 인증 성공 후 푸시 토큰 저장

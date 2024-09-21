@@ -25,4 +25,5 @@ public class JoinDTO {
                 .phoneNum(dto.getPhoneNum())
                 .build();
     }
+
 }
