@@ -4,7 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GiftedChat, Bubble, Time } from 'react-native-gifted-chat';
-import Logo from '../assets/image/Logo.png'; 
+import Logo from '../../assets/image/Logo.png'; 
 
 // 채팅창 디자인
 const ChatBox = (props) => (
@@ -52,7 +52,7 @@ const TimeText = (props) => (
 // 서버로부터 받은 데이터를 GiftedChat 형식으로 변환
 const formatMessagesForGiftedChat = (messages) => {
     return messages.map((message) => ({
-        _id: Math.random().toString(36).substring(7), // 랜덤 ID 생성
+        _id: index + 1,  // 고정된 ID 사용
         text: message.message,
         createdAt: new Date(`${message.date}T${message.time}`), 
         user: {
@@ -126,7 +126,7 @@ const ChatDateScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('ChatRecording1')} />
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('ChatRecording')} />
                 <Text style={styles.headerText}>대화 기록</Text>
             </View>
             <View style={{ flex: 1 }}>

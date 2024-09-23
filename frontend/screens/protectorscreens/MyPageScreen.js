@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
 import axios from 'axios';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyPageScreen = ({ navigation }) => {
@@ -62,7 +63,8 @@ const MyPageScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={{ fontSize: 20, fontWeight: '700' }}>내 정보</Text>
+                <AntDesign name='left' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('Setting')}/>
+                <Text style={{fontSize:20, fontWeight:700, width:'80%', textAlign:'center'}}>내 정보</Text>
             </View>
             <View style={styles.mypage}>
                 <View style={styles.info}>
@@ -82,11 +84,11 @@ const MyPageScreen = ({ navigation }) => {
                     <Text style={styles.infocontent}>{userInfo.phoneNum}</Text>
                 </View>
                 <View style={styles.info}>
-                    <Text style={styles.infotitle}>보호자 이름</Text>
+                    <Text style={styles.infotitle}>피보호자 이름</Text>
                     <Text style={styles.infocontent}>{userInfo.protectorName}</Text>
                 </View>
                 <View style={styles.info}>
-                    <Text style={styles.infotitle}>보호자 전화번호</Text>
+                    <Text style={styles.infotitle}>피보호자 전화번호</Text>
                     <Text style={styles.infocontent}>{userInfo.protectorNum}</Text>
                 </View>
             </View>
@@ -99,15 +101,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    header: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
+    header:{
+        flexDirection:'row',
+        alignItems:'center',
+        width:'100%',
         height: 50,
         borderBottomWidth: 1,
-        borderStyle: 'solid',
-        borderBottomColor: '#E0E0E0',
-        overflow: 'hidden',
+        borderStyle: "solid",
+        borderBottomColor:"#E0E0E0",
+        overflow: "hidden",
     },
     mypage: {
         width: '90%',

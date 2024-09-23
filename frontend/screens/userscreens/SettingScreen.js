@@ -4,7 +4,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import axios from 'axios';
-import Toogle from "../component/Toogle";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = ({ navigation }) => {
@@ -31,7 +30,7 @@ const SettingScreen = ({ navigation }) => {
             if (response.status === 200) {
                 Alert.alert('로그아웃 성공', '성공적으로 로그아웃 되었습니다.');
                 delete axios.defaults.headers.common['Authorization'];
-                navigation.navigate('Login'); // 로그인 화면으로 네비게이트
+                navigation.replace('Auth'); // 로그인 화면으로 네비게이트
             } else {
                 Alert.alert('로그아웃 실패', '로그아웃 중 문제가 발생했습니다.');
             }
@@ -43,7 +42,8 @@ const SettingScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={{ fontSize: 20, fontWeight: '700' }}>설정</Text>
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('ChatMain')} />
+                <Text style={{ fontSize: 20, fontWeight: '700', width:'80%', textAlign:'center'}}>설정</Text>
             </View>
             <View style={styles.setting}>
                 <View style={styles.setting1}>
@@ -51,6 +51,13 @@ const SettingScreen = ({ navigation }) => {
                     <Text style={styles.settingcontent}>알람 설정</Text>
                 </View>
                 <AntDesign name='right' size={25} style={{ marginHorizontal: 10, }} onPress={() => navigation.navigate('SetAlarm')} />
+            </View>
+            <View style={styles.setting}>
+                <View style={styles.setting1}>
+                    <MaterialCommunityIcons name="account" size={25} style={{ marginLeft: 15 }}/>
+                    <Text style={styles.settingcontent}>내 정보</Text>
+                </View>
+                <AntDesign name='right' size={25} style={{ marginHorizontal: 10, }} onPress={() => navigation.navigate('MyPage')} />
             </View>
             <View style={styles.setting}>
                 <View style={styles.setting1}>
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     header: {
-        justifyContent: 'center',
+        flexDirection:'row',
         alignItems: 'center',
         width: '100%',
         height: 50,

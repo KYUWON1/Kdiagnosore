@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const RegisterScreen = ({ navigation }) => {
+const UserFormScreen = ({ navigation }) => {
     const [UserId, setUserId] = useState("");
     const [UserName, setUserName] = useState("");
     const [Email, setEmail] = useState("");
@@ -15,13 +15,13 @@ const RegisterScreen = ({ navigation }) => {
 
     const nextRegister = async () => {
         //다음 화면으로 값 넘기기
-        navigation.navigate('RegisterPhoneNum', {UserId, UserName, Email, Password, ConfirmPassword, ProtectorName}); 
+        navigation.navigate('UserPhone', {UserId, UserName, Email, Password, ConfirmPassword, ProtectorName}); 
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('Login')}/>
+                <AntDesign name='left' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('Register')}/>
                 <Text style={{ fontSize: 20, fontWeight: '700', width:'80%', textAlign:'center'}}>회원가입</Text>
             </View>
             <KeyboardAwareScrollView style={{ marginTop: 20 }}>
@@ -118,4 +118,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RegisterScreen;
+export default UserFormScreen;
