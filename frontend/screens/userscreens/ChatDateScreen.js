@@ -51,7 +51,7 @@ const TimeText = (props) => (
 
 // 서버로부터 받은 데이터를 GiftedChat 형식으로 변환
 const formatMessagesForGiftedChat = (messages) => {
-    return messages.map((message) => ({
+    return messages.map((message, index) => ({
         _id: index + 1,  // 고정된 ID 사용
         text: message.message,
         createdAt: new Date(`${message.date}T${message.time}`), 
