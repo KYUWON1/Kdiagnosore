@@ -51,7 +51,12 @@ const LoginScreen = ({ navigation }) => {
                 const token = response.headers.authorization; // 서버로부터 토큰을 받아옵니다.
                 axios.defaults.headers.common['Authorization'] = token;
                 await AsyncStorage.setItem('userID', ID);
-                navigation.navigate('App');
+                const authType = response.data.role;
+                if (authType === 'user') {
+                    navigation.replace('UserNavigator');
+                } else if (authType === 'protector') {
+                    navigation.replace('ProtectorNavigator');
+                }
             } else {
                 Alert.alert('로그인 실패', response.data.message || '로그인 중 오류가 발생했습니다.');
             }
@@ -73,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <Text style={{ marginTop: 100, fontSize: 15, color: '#828282' }}>인지기능 훈련 챗봇</Text>
             <Text style={{ justifyContent: 'center', fontSize: 30, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Remember Me</Text>
-            <Image source={require('../assets/image/Logo.png')} style={{ width: 80, height: 80, marginVertical: 30 }} />
+            <Image source={require('../../assets/image/Logo.png')} style={{ width: 80, height: 80, marginVertical: 30 }} />
             <TextInput
                 style={styles.input}
                 value={ID}

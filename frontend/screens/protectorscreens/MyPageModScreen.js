@@ -89,7 +89,7 @@ const MyPageModScreen = ({navigation}) => {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('Setting1')}/>
+                <AntDesign name='left' size={25} style={{marginHorizontal:10,}} onPress={()=>navigation.navigate('Setting')}/>
                 <Text style={{fontSize:20, fontWeight:700, width:'80%', textAlign:'center'}}>회원정보 수정</Text>
             </View>
             <KeyboardAwareScrollView style={{ marginTop:20 }}>
@@ -117,20 +117,20 @@ const MyPageModScreen = ({navigation}) => {
                     <Text style={styles.label}>전화번호</Text>
                     <View style={styles.fixlabel}>
                         <Text style={styles.idcontent}>{PhoneNum}</Text>
-                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('PhoneNumMod')}>
+                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('ProtectorMod')}>
                                 <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.label}>보호자 이름</Text>
+                    <Text style={styles.label}>피보호자 이름</Text>
                     <TextInput
                         style={styles.input}
                         value={ProtectorName}
                         onChangeText={setProtectorName}
                     />
-                    <Text style={styles.label}>보호자 전화번호</Text>
+                    <Text style={styles.label}>피보호자 전화번호</Text>
                     <View style={styles.fixlabel}>
                         <Text style={styles.idcontent}>{ProtectorNum}</Text>
-                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('ProtectorNumMod')}>
+                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('UserMod')}>
                                 <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
                     </View>

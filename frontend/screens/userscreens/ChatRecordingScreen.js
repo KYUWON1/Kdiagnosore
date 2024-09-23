@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {View, Text,SafeAreaView,TextInput, StyleSheet, FlatList, ScrollView,  Alert, ActivityIndicator, TouchableOpacity} from 'react-native'
 import axios from 'axios';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import ListItem from "../component/LIstItem";
+import ListItem from "../../component/LIstItem";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatRecordingScreen = ({navigation}) => {
@@ -54,9 +55,9 @@ const ChatRecordingScreen = ({navigation}) => {
 
     return(
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>대화 기록</Text>
-                <Ionicons name="calendar-sharp" size={35} color="#000" style={styles.icon}/>
+             <View style={styles.header}>
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('ChatMain')} />
+                <Text style={{ fontSize: 20, fontWeight: '700', width:'80%', textAlign:'center'}}>대화 기록</Text>
             </View>
             <View style={styles.listtitle}>
                 <Text style={styles.idtext}>번호</Text>
@@ -89,15 +90,14 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
     },
     header: {
-        flexDirection: 'row',
-        justifyContent: 'center',
+        flexDirection:'row',
         alignItems: 'center',
         width: '100%',
         height: 50,
         borderBottomWidth: 1,
+        borderStyle: "solid",
         borderBottomColor: "#E0E0E0",
         overflow: "hidden",
-        position: 'relative',
     },
     headerText: {
         fontSize: 20,

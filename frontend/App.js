@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import SplashScreen from './screens/SplashScreen';
-import AppNavigator from './navigation/AppNavigator';
+import { createStackNavigator } from '@react-navigation/stack';
+import SplashScreen from './screens/authscreens/SplashScreen';
+import AuthNavigator from './navigation/AuthNavigator';
+import UserNavigator from './navigation/UserNavigator';
+import ProtectorNavigator from './navigation/ProtectorNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializePushNotifications } from './services/notificationService';
 
-const URL = 'http://10.0.2.2:8080';
+const Stack = createStackNavigator();
+const URL = 'http://192.168.48.125:8080';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,20 +18,28 @@ function App() {
     const initialize = async () => {
       try {
         await AsyncStorage.setItem('API_BASE_URL', URL);
-
         initializePushNotifications();
         setTimeout(() => setIsLoading(false), 3000);
-      } catch (e) { 
+      } catch (e) {
         console.error('Failed to initialize app:', e);
       }
     };
-
     initialize();
   }, []);
 
   return (
     <NavigationContainer>
-      {isLoading ? <SplashScreen /> : <AppNavigator />}
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {isLoading ? (
+          <Stack.Screen name="Splash" component={SplashScreen} />
+        ) : (
+          <>
+            <Stack.Screen name="Auth" component={AuthNavigator}/>
+            <Stack.Screen name="UserNavigator" component={UserNavigator} />
+            <Stack.Screen name="ProtectorNavigator" component={ProtectorNavigator} />
+          </>
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

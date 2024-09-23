@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {View, Text,SafeAreaView, StyleSheet, ScrollView, FlatList, TouchableOpacity, Alert, Modal, Button} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toogle from "../component/Toogle";
+import Toogle from "../../component/Toogle";
 import axios from 'axios';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -167,7 +167,7 @@ const SetAlarmScreen = ({navigation}) => {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{ marginHorizontal: 10,}} onPress={() => navigation.navigate('Setting1')} />
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10,}} onPress={() => navigation.navigate('Setting')} />
                 <Text style={{ fontSize: 20, fontWeight: 700, width: '80%', textAlign: 'center' }}>알림 설정</Text>
             </View>
             <View style={styles.settingalarm}>

@@ -4,11 +4,17 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Register_PhoneNumScreen = ({ route, navigation }) => {
+const ProtectorPhone1Screen = ({ route, navigation }) => {
+    const [UserId, setUserId] = useState("");
+    const [UserName, setUserName] = useState("");
+    const [Email, setEmail] = useState("");
+    const [Password, setPassword] = useState("");
+    const [ConfirmPassword, setConfirmPassword] = useState("");
     const [PhoneNum, setPhoneNum] = useState("");
+    const [ProtectorName, setProtectorName] = useState("");
+    const [ProtectorNum, setProtectorNum] = useState("");
     const [VerifyNum, setVerifyNum] = useState("");
     const [receivedCertNum, setReceivedCertNum] = useState("");
-    const { UserId, UserName, Email, Password, ConfirmPassword, ProtectorName } = route.params;
     const [apiBaseUrl, setApiBaseUrl] = useState('');
 
     useEffect(() => {
@@ -26,10 +32,57 @@ const Register_PhoneNumScreen = ({ route, navigation }) => {
         getApiBaseUrl();
     }, []);
 
+    const handleRegister = async () => {
+        if (Password !== ConfirmPassword) {
+            Alert.alert('회원가입 실패', '비밀번호가 일치하지 않습니다.');
+            return;
+        }
+
+        if (VerifyNum !== receivedCertNum) {
+            Alert.alert('회원가입 실패', '인증번호가 일치하지 않습니다.');
+            return;
+        }
+
+        const data = {
+            userId: UserId,
+            userName: UserName,
+            email: Email,
+            password: Password,
+            phoneNum: PhoneNum,
+            protectorName: ProtectorName,
+            protectorNum: ProtectorNum
+        };
+
+        try {
+            const response = await axios.post(`${apiBaseUrl}/join/user`, JSON.stringify(data), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 200) {
+                Alert.alert('회원가입 성공', '회원가입이 성공적으로 완료되었습니다.');
+                await AsyncStorage.setItem('R_userID', UserId);
+                navigation.navigate('Alarm');
+            } else {
+                Alert.alert('회원가입 실패', response.data.message || '회원가입 중 오류가 발생했습니다.');
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('Error response:', error.response);
+                Alert.alert('회원가입 실패', error.response.data.message || '회원가입 중 오류가 발생했습니다.');
+            } else if (error.request) {
+                Alert.alert('회원가입 실패', '서버에서 응답을 받지 못했습니다.');
+            } else {
+                Alert.alert('회원가입 실패', '네트워크 오류가 발생했습니다.');
+            }
+        }
+    };
+
     const sendSMS = async () => {
         try {
             const response = await axios.post(`${apiBaseUrl}/check/sendSMS`, {
-                phoneNumber: PhoneNum,
+                phoneNumber: ProtectorNum,
             }, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,47 +90,41 @@ const Register_PhoneNumScreen = ({ route, navigation }) => {
             });
 
             if (response.status === 200) {
-                Alert.alert('인증번호 발송 성공', '인증번호가 발송되었습니다.');
                 setReceivedCertNum(response.data.certNumber);
+                Alert.alert('인증번호 발송', '인증번호가 발송되었습니다.');
             } else {
                 Alert.alert('인증번호 발송 실패', response.data.message || '인증번호 발송 중 오류가 발생했습니다.');
             }
         } catch (error) {
-            console.error('Error sending SMS:', error);
-            Alert.alert('인증번호 발송 실패', error.response?.data?.message || '서버에서 응답을 받지 못했습니다.');
-        }
-    };
-
-    const verifyCode = async () => {
-        try {
-            const response = await axios.post(`${apiBaseUrl}/check/verify`, {
-                certNum: VerifyNum,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (response.status === 200 && response.data.certificateResponse === 'OK') {
-                Alert.alert('인증 성공', '전화번호 인증이 성공적으로 완료되었습니다.');
-                navigation.navigate('RegisterProtectorNum', { UserId, UserName, Email, Password, ConfirmPassword, ProtectorName, PhoneNum });
+            if (error.response) {
+                Alert.alert('인증번호 발송 실패', error.response.data.message || '인증번호 발송 중 오류가 발생했습니다.');
+            } else if (error.request) {
+                Alert.alert('인증번호 발송 실패', '서버에서 응답을 받지 못했습니다.');
             } else {
-                Alert.alert('인증 실패', '인증번호가 올바르지 않습니다.');
+                Alert.alert('인증번호 발송 실패', '네트워크 오류가 발생했습니다.');
             }
-        } catch (error) {
-            console.error('Error verifying code:', error);
-            Alert.alert('인증 실패', error.response?.data?.message || '서버에서 응답을 받지 못했습니다.');
         }
     };
+
+    useEffect(() => {
+        const { UserId, UserName, Email, Password, ConfirmPassword, ProtectorName, PhoneNum } = route.params;
+        setUserId(UserId);
+        setUserName(UserName);
+        setEmail(Email);
+        setPassword(Password);
+        setConfirmPassword(ConfirmPassword);
+        setProtectorName(ProtectorName);
+        setPhoneNum(PhoneNum);
+    }, [route.params]);
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('Register1')} />
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('UserPhone', { UserId, UserName, Email, Password, ConfirmPassword, ProtectorName })} />
                 <Text style={{ fontSize: 20, fontWeight: '700', width: '80%', textAlign: 'center' }}>회원가입</Text>
             </View>
             <View style={styles.title}>
-                <Text style={styles.maintitle}>전화번호 인증</Text>
+                <Text style={styles.maintitle}>보호자 전화번호 인증</Text>
                 <Text style={styles.subtitle}>원활한 서비스 이용을 위해 번호 인증을 해주세요.</Text>
             </View>
             <View style={{ marginTop: 20, alignItems: 'center' }}>
@@ -85,9 +132,9 @@ const Register_PhoneNumScreen = ({ route, navigation }) => {
                 <View style={styles.fixlabel}>
                     <TextInput
                         style={styles.input1}
-                        value={PhoneNum}
+                        value={ProtectorNum}
                         placeholder='-없이 번호 입력'
-                        onChangeText={setPhoneNum}
+                        onChangeText={setProtectorNum}
                         keyboardType="number-pad"
                     />
                     <TouchableOpacity style={styles.button1} onPress={sendSMS}>
@@ -101,8 +148,8 @@ const Register_PhoneNumScreen = ({ route, navigation }) => {
                     onChangeText={setVerifyNum}
                     keyboardType="number-pad"
                 />
-                <TouchableOpacity style={styles.button} onPress={verifyCode}>
-                    <Text style={{ fontSize: 20, color: '#fff' }}>다음 단계</Text>
+                <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                    <Text style={{ fontSize: 20, color: '#fff' }}>회원가입 완료</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -148,7 +195,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: 'space-between',
-        width: '90%',
+        width: '90%'
     },
     input: {
         width: '90%',
@@ -192,6 +239,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
         borderRadius: 10,
     },
+
 });
 
-export default Register_PhoneNumScreen;
+export default ProtectorPhone1Screen;
