@@ -21,6 +21,8 @@ public interface UserRepository extends MongoRepository<UserDomain, String> {
 
     UserDomain findByUserName(String userName);
 
+    UserDomain findByProtectorName(String protectorName);
+
     @Query("{'alarmTimes': ?0}")
     List<UserDomain> findByAlarmTime(String alarmTime);
 }
