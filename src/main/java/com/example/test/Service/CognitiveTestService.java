@@ -18,6 +18,7 @@ public class CognitiveTestService {
     private final TestRepository testRepository;
     private final UserRepository userRepository;
 
+    // todo : 보호자아이디랑 피보호자 연동해야할듯 ID
     public List<TestDomain> getTestList(String userId) {
         // 보호자 아이디
         UserDomain user = userRepository.findByUserId(userId);
@@ -46,8 +47,15 @@ public class CognitiveTestService {
     }
 
     public List<TestDomain> getTestListbyDate(String userId, String date) {
-        List<TestDomain> testList = testRepository.findByUserIdAndDate(userId,
-                date);
+        UserDomain user = userRepository.findByUserId(userId);
+        List<TestDomain> testList = new ArrayList<>();
+        if(user.getRole().equals("user")){
+            testList = testRepository.findByUserIdAndDate(userId, date);
+        }else if(user.getRole().equals("protector")){
+            UserDomain byProtector = userRepository.findByProtectorName(user.getUserName());
+            testList = testRepository.findByUserIdAndDate(byProtector.getUserId(),date);
+        }
+
         return testList;
     }
 
