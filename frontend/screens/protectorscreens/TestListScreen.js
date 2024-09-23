@@ -35,12 +35,12 @@ const TestListScreen = ({navigation}) => {
                         headers: { 'Content-Type': 'application/json' },
                     });
                     if (response.status === 200) {
-                        setRecordingData(response.data);
+                        setRecordingData(response.data.reverse());
                     } else {
-                        Alert.alert('채팅 가져오기 실패', '채팅 목록을 가져오는 중 문제가 발생했습니다.');
+                        Alert.alert('테스트 결과 가져오기 실패', '테스트 목록을 가져오는 중 문제가 발생했습니다.');
                     }
                 } catch (error) {
-                    Alert.alert('채팅 가져오기 실패', '채팅 목록을 가져오는 중 문제가 발생했습니다.');
+                    Alert.alert('테스트 결과 가져오기 실패', '테스트 목록을 가져오는 중 문제가 발생했습니다.');
                 } finally {
                     setLoading(false);
                 }

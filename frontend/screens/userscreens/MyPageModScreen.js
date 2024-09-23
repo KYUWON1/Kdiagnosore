@@ -57,7 +57,8 @@ const MyPageModScreen = ({navigation}) => {
     const handlerModify = async() => {
         const data = {
             userName: UserName,
-            protectorName: ProtectorName
+            protectorName: ProtectorName,
+            email:Email,
         };
 
         try {
@@ -117,7 +118,7 @@ const MyPageModScreen = ({navigation}) => {
                     <Text style={styles.label}>전화번호</Text>
                     <View style={styles.fixlabel}>
                         <Text style={styles.idcontent}>{PhoneNum}</Text>
-                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('PhoneNumMod')}>
+                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('UserPhoneMod')}>
                                 <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
@@ -130,7 +131,7 @@ const MyPageModScreen = ({navigation}) => {
                     <Text style={styles.label}>보호자 전화번호</Text>
                     <View style={styles.fixlabel}>
                         <Text style={styles.idcontent}>{ProtectorNum}</Text>
-                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('ProtectorNumMod')}>
+                        <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('ProtectorPhoneMod')}>
                                 <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
