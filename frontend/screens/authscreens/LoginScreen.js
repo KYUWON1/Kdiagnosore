@@ -3,11 +3,14 @@ import { TouchableOpacity, StyleSheet, SafeAreaView, Image, View, Text, TextInpu
 import Checkbox from "expo-checkbox";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 const LoginScreen = ({ navigation }) => {
     const [ID, setID] = useState("");
     const [Password, setPassword] = useState("");
     const [isLoginChecked, setIsLoginChecked] = useState(false);
+    const [expoPushToken, setExpoPushToken] = useState("");
     const [apiBaseUrl, setApiBaseUrl] = useState("");
 
     useEffect(() => {
@@ -25,6 +28,32 @@ const LoginScreen = ({ navigation }) => {
         getApiBaseUrl();
     }, []);
 
+    // Expo Push Token 등록
+    useEffect(() => {
+        const registerForPushNotificationsAsync = async () => {
+            let token;
+            if (Device.isDevice) {
+                const { status: existingStatus } = await Notifications.getPermissionsAsync();
+                let finalStatus = existingStatus;
+                if (existingStatus !== 'granted') {
+                    const { status } = await Notifications.requestPermissionsAsync();
+                    finalStatus = status;
+                }
+                if (finalStatus !== 'granted') {
+                    Alert.alert('Failed to get push token for push notification!');
+                    return;
+                }
+                token = (await Notifications.getExpoPushTokenAsync()).data;
+                console.log('Expo Push Token:', token);
+                setExpoPushToken(token);  // Expo Push Token 저장
+            } else {
+                Alert.alert('Must use physical device for Push Notifications');
+            }
+        };
+
+        registerForPushNotificationsAsync();
+    }, []);
+
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setID("");
@@ -35,9 +64,15 @@ const LoginScreen = ({ navigation }) => {
     }, [navigation]);
 
     const handleLogin = async () => {
+        if (!expoPushToken) {
+            Alert.alert('Error', 'Push token is not available.');
+            return;
+        }
+
         const data = {
             userId: ID,
-            password: Password
+            password: Password,
+            pushToken: expoPushToken // Expo Push Token을 함께 전송
         };
 
         try {
@@ -51,24 +86,21 @@ const LoginScreen = ({ navigation }) => {
                 const token = response.headers.authorization; // 서버로부터 토큰을 받아옵니다.
                 axios.defaults.headers.common['Authorization'] = token;
                 await AsyncStorage.setItem('userID', ID);
-                const authType = response.data.role;
+                const authType = response.data.role;  // role을 통해 페이지 구분
                 if (authType === 'user') {
-                    navigation.replace('UserNavigator');
+                    navigation.replace('UserNavigator');  // 사용자 화면으로 이동
                 } else if (authType === 'protector') {
-                    navigation.replace('ProtectorNavigator');
+                    navigation.replace('ProtectorNavigator');  // 보호자 화면으로 이동
                 }
             } else {
                 Alert.alert('로그인 실패', response.data.message || '로그인 중 오류가 발생했습니다.');
             }
         } catch (error) {
             if (error.response) {
-                // 서버에서 응답을 받았지만 상태 코드는 2xx 범위를 벗어났습니다.
                 Alert.alert('로그인 실패', error.response.data.message || '로그인 중 오류가 발생했습니다.');
             } else if (error.request) {
-                // 요청이 만들어졌지만 응답을 받지 못했습니다.
                 Alert.alert('로그인 실패', '서버에서 응답을 받지 못했습니다.');
             } else {
-                // 다른 에러
                 Alert.alert('로그인 실패', '네트워크 오류가 발생했습니다.');
             }
         }
@@ -112,7 +144,6 @@ const LoginScreen = ({ navigation }) => {
                 <TouchableOpacity>
                     <Text onPress={() => navigation.navigate('FindPasswordVerify')} style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>비밀번호 찾기</Text>
                 </TouchableOpacity>
-
                 <Text style={styles.textborder}>|</Text>
                 <TouchableOpacity>
                     <Text onPress={() => navigation.navigate('Register')} style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>회원가입</Text>
