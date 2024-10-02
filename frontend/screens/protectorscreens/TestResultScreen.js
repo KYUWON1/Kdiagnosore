@@ -119,7 +119,7 @@ const TestResultScreen = ({ navigation, route }) => {
 
     const upperMessages = [
         {
-            _id: 1,
+            _id: currentIndex * 2 + 1,
             text: data[currentIndex]?.question || "질문 없음",
             createdAt: new Date(`${data[currentIndex]?.date}T${data[currentIndex]?.time}`),
             user: {
@@ -129,7 +129,7 @@ const TestResultScreen = ({ navigation, route }) => {
             },
         },
         {
-            _id: 2,
+            _id: currentIndex * 2 + 2,
             text: data[currentIndex]?.answer || "답변 없음",
             createdAt: new Date(`${data[currentIndex]?.date}T${data[currentIndex]?.time}`),
             user: {
