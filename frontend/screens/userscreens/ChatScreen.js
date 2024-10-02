@@ -4,6 +4,7 @@ import { GiftedChat, Send, Bubble, InputToolbar, Time } from 'react-native-gifte
 import Logo from '../../assets/image/Logo.png';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -176,7 +177,7 @@ const ChatScreen = ({navigation}) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
             <View style={styles.leftHeader}>
-                <FontAwesome name="tasks" size={25} onPress={() => navigation.navigate('ChatRecordDrawer')} />
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('MainMenu')} />
             </View>
             <View style={styles.centerHeader}>
                 <Text style={{ fontSize: 20, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Remember Me</Text>
