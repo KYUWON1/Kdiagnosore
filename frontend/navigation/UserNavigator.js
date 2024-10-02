@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+import MainMenuScreen from "../screens/userscreens/MainMenuScreen";
 import ChatScreen from '../screens/userscreens/ChatScreen';
 import ChatRecordingScreen from "../screens/userscreens/ChatRecordingScreen";
 import ChatDateScreen from "../screens/userscreens/ChatDateScreen";
@@ -13,6 +14,7 @@ import MyPageModScreen from "../screens/userscreens/MyPageModScreen";
 import PasswordModScreen from "../screens/userscreens/PasswordModScreen";
 import UserPhoneModScreen from "../screens/userscreens/UserPhoneModScreen";
 import ProtectorPhoneModScreen from "../screens/userscreens/ProtectorPhoneModScreen";
+import DiaryScreen from "../screens/userscreens/DiaryScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -21,7 +23,9 @@ const Drawer = createDrawerNavigator();
 const UserNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="MainMenu" component={MainMenuScreen} />
             <Stack.Screen name="ChatMain" component={ChatScreen} />
+            <Stack.Screen name="Diary" component={DiaryScreen} />
             <Stack.Screen name="ChatRecordDrawer" component={ChatRecordStack} 
                 options={{ animation: 'slide_from_left' }} // 왼쪽에서 오른쪽으로 슬라이드
             />

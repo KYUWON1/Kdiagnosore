@@ -20,9 +20,7 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping
-    public createDiaryResponse createDiary(
-            @RequestBody CreateDiaryRequest request
-        ){
+    public createDiaryResponse createDiary(@RequestBody CreateDiaryRequest request){
         String userId = getUserIdFromToken();
         return diaryService.createDiary(userId,request);
     }

@@ -1,6 +1,7 @@
 package com.example.test.Service;
 
 import com.example.test.domain.DiaryDomain;
+import com.example.test.dto.ChatDTO;
 import com.example.test.dto.CreateDiaryRequest;
 import com.example.test.dto.GetDiaryListDto;
 import com.example.test.dto.createDiaryResponse;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,8 +44,18 @@ public class DiaryService {
 
     @Transactional
     public String getYesterdayDiaryData(String userId){
-        DiaryDomain data = diaryRepository.findByUserIdAndDate(userId,
-                LocalDate.now().minusDays(1));
-        return data.getContent();
+        System.out.println(userId);
+        System.out.println(LocalDate.now().minusDays(0));
+        DiaryDomain data = diaryRepository.findByUserIdAndDate(userId, LocalDate.now().minusDays(0));
+        if(data == null){
+            return "No Data";
+        }
+        else{
+            if(!data.getContent().isEmpty())
+                return data.getContent();
+            else
+                return "No Data";
+        }
+
     }
 }
