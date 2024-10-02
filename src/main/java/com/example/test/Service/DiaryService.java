@@ -39,4 +39,11 @@ public class DiaryService {
     public GetDiaryListDto getDiaryDetail(String userId, LocalDate date) {
         return GetDiaryListDto.fromEntityAllContent(diaryRepository.findByUserIdAndDate(userId, date));
     }
+
+    @Transactional
+    public String getYesterdayDiaryData(String userId){
+        DiaryDomain data = diaryRepository.findByUserIdAndDate(userId,
+                LocalDate.now().minusDays(1));
+        return data.getContent();
+    }
 }

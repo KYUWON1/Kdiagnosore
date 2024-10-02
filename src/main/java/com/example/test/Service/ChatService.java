@@ -5,6 +5,7 @@ import com.example.test.domain.TestDomain;
 import com.example.test.dto.ChatDTO;
 import com.example.test.dto.ChatForUserDto;
 import com.example.test.dto.CustomUserDetails;
+import com.example.test.exception.UserException;
 import com.example.test.repository.ChatRepository;
 import com.example.test.repository.TestRepository;
 import com.example.test.repository.UserRepository;
@@ -12,6 +13,7 @@ import com.example.test.response.PredictResponse;
 import com.example.test.type.ChatFrom;
 import com.example.test.type.ChatSaveResponse;
 import com.example.test.type.ChatType;
+import com.example.test.type.ErrorCode;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -174,6 +176,9 @@ public class ChatService {
     public List<ChatForUserDto> getChatListByDate(String userId,String date) {
         List<ChatDomain> chatList = chatRepository.findByUserIdAndDate(userId
                 ,date);
+        if(chatList.isEmpty()){
+            throw new UserException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
 
         return chatList.stream()
                 .map(ChatForUserDto::fromEntity)

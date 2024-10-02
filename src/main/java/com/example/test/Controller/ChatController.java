@@ -59,6 +59,14 @@ public class ChatController {
         return chatList;
     }
 
+    @GetMapping("/chat/today")
+    public List<ChatForUserDto> getChatListToday(){
+        List<ChatForUserDto> chatList =
+                chatService.getChatListByDate(getUserIdFromToken(),
+                        LocalDate.now().toString());
+        return chatList;
+    }
+
     @GetMapping("/chat/getlist/{date}")
     public List<ChatForUserDto> getChatListByDate(
             @PathVariable String date
