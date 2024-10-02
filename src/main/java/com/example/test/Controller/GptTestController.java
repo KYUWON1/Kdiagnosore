@@ -38,6 +38,8 @@ public class GptTestController {
     @Autowired
     private RestTemplate template;
 
+    // todo : 다른 ID에 대해서도 테스트가 생김
+                  
     @GetMapping("/createTest")
     public String chat(){
         String prompt = """

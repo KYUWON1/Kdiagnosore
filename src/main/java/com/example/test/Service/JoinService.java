@@ -22,7 +22,7 @@ public class JoinService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public JoinDTO userJoinProcess(JoinDTO joinDTO) {
+    public JoinDTO  userJoinProcess(JoinDTO joinDTO) {
         checkJoinValidation(joinDTO);
         // User 도메인 객체 생성
         UserDomain user = setDefaultUser(joinDTO);

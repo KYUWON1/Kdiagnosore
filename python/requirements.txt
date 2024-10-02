@@ -1,7 +1,0 @@
-transformers
-torch
-scikit-learn
-joblib
-pandas
-accelerate
-flask

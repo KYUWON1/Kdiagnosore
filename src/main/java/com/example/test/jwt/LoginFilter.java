@@ -32,39 +32,39 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter { // filte
         this.jwtUtil = jwtUtil;
     }
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String userId = null;
-        String password = null;
-        String pushToken = null;
+        @Override
+        public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+            String userId = null;
+            String password = null;
+            String pushToken = null;
 
-        // App의 JSON 값이랑, 포스트맨에서 날리는 JSON값이 다른것같음
-        // 그래서 그냥 2개로 바꿈. 에뮬레이터랑 포스트맨에서 동작 테스트 완료함
-        try {
-            if (request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
-                // JSON 요청 처리
-                Map<String, String> requestBody = new ObjectMapper().readValue(request.getInputStream(), Map.class);
-                userId = requestBody.get("userId");
-                password = requestBody.get("password");
-                pushToken = requestBody.get("pushToken");
-            } else {
-                // URL 인코딩된 폼 데이터 요청 처리
-                userId = obtainUsername(request);
-                password = obtainPassword(request);
-                pushToken = request.getParameter("pushToken");
+            // App의 JSON 값이랑, 포스트맨에서 날리는 JSON값이 다른것같음
+            // 그래서 그냥 2개로 바꿈. 에뮬레이터랑 포스트맨에서 동작 테스트 완료함
+            try {
+                if (request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
+                    // JSON 요청 처리
+                    Map<String, String> requestBody = new ObjectMapper().readValue(request.getInputStream(), Map.class);
+                    userId = requestBody.get("userId");
+                    password = requestBody.get("password");
+                    pushToken = requestBody.get("pushToken");
+                } else {
+                    // URL 인코딩된 폼 데이터 요청 처리
+                    userId = obtainUsername(request);
+                    password = obtainPassword(request);
+                    pushToken = request.getParameter("pushToken");
+                }
+
+                System.out.println(userId + " : " + password + " : " + pushToken);
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password, null);
+                request.setAttribute("pushToken", pushToken); // 푸시 토큰을 요청 속성에 저장
+                System.out.println(authToken);
+                    return authenticationManager.authenticate(authToken);
+            } catch (IOException e) {
+                System.out.println(e);
+                throw new RuntimeException(e);
             }
-
-            System.out.println(userId + " : " + password + " : " + pushToken);
-
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, password, null);
-            request.setAttribute("pushToken", pushToken); // 푸시 토큰을 요청 속성에 저장
-            System.out.println(authToken);
-                return authenticationManager.authenticate(authToken);
-        } catch (IOException e) {
-            System.out.println(e);
-            throw new RuntimeException(e);
         }
-    }
 
     //인증성공시 동작 부분, JWT 발급
     @Override
