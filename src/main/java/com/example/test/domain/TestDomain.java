@@ -1,7 +1,5 @@
 package com.example.test.domain;
 
-import com.example.test.type.ChatFrom;
-import com.example.test.type.ChatType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -10,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.UUID;
 
 @Document(collection="test")
@@ -20,11 +19,18 @@ public class TestDomain {
     private String testId = UUID.randomUUID().toString(); // 각 채팅에 고유 ID 할당
 
     private String userId;
+    // 주관식 질문
     private String question;
-    private String answer;
+    private String answer; // 사용자 정답
     private String predictAnswer;
     private String reason;
     private String reasonAt;
+
+    // 객관식 질문
+    private boolean isGaggwan;
+    private Map<Long,String> gaggawnList;
+    private Long gaggawnAnswer;
+    private String gaggawnReason;
 
     private String date;
     private String time;

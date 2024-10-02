@@ -40,16 +40,25 @@ public class GptTestController {
 
     // todo : 다른 ID에 대해서도 테스트가 생김
                   
-    @GetMapping("/createTest")
-    public String chat(){
-        String prompt = """
+    @GetMapping("/createTest/jugwan")
+    public String createTestJugwanByChat(){
+        List<String> allUserId = userService.findAllUserId();
+        for(String userId : allUserId){
+            String chatMessages = chatService.getChatMessage(userId,
+                    LocalDate.now().minusDays(0).format(DateTimeFormatter.ISO_LOCAL_DATE));
+//            String chatMessages = chatService.getChatMessage(userId,
+//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+            if(chatMessages.equals("No Data")){
+                continue;
+            }
+            String prompt = """
                 너는 이제부터 일상 정보 기반 질문 생성 AI야.
                 모든 문장의 끝에는 @ 를 항상 붙여주고, 줄 바꿈은 하지 말아줘.
                 아래는 사용자와 챗봇이 어제 나눈 대화내용이야.
                 Date와 Time은 해당 채팅을 입력한 날짜와 시간이야.
                 
                 """;
-        String add = """
+            String add = """
                 
                 위에 대화 내용을 바탕으로 질문과 예상 답변과 근거을 생성해줘.
                 질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄께.
@@ -86,15 +95,6 @@ public class GptTestController {
                 근거에도 마지막에 @를 붙여줘.
                 줄바꿈은 하지 말아줘.
                 """;
-        List<String> allUserId = userService.findAllUserId();
-        for(String userId : allUserId){
-            String chatMessages = chatService.getChatMessage(userId,
-                    LocalDate.now().minusDays(0).format(DateTimeFormatter.ISO_LOCAL_DATE));
-//            String chatMessages = chatService.getChatMessage(userId,
-//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
-            if(chatMessages.equals("No Data")){
-                continue;
-            }
             prompt += chatMessages + add;
             System.out.println("userId: "+userId);
             System.out.println(prompt);
@@ -103,6 +103,67 @@ public class GptTestController {
             String createdTest = response.getChoices().get(0).getMessage().getContent();
             System.out.println(createdTest);
             chatService.saveTestChat(userId,createdTest);
+            log.info("Test Created {}.",userId);
+        }
+
+        log.info("Test Created End.");
+        return "Create Test Question!";
+    }
+
+    @GetMapping("/createTest/gaggwan")
+    public String createTestGaggwanByChat(){
+        List<String> allUserId = userService.findAllUserId();
+        for(String userId : allUserId){
+
+            String chatMessages = chatService.getChatMessage(userId,
+                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+//            String chatMessages = chatService.getChatMessage(userId,
+//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+            if(chatMessages.equals("No Data")){
+                continue;
+            }
+            String prompt = """
+                너는 이제부터 일상 정보 기반 질문 생성 AI야.
+                줄 바꿈은 하지 말아줘.
+                아래는 사용자와 챗봇이 어제 나눈 대화내용이야.
+                Date와 Time은 해당 채팅을 입력한 날짜와 시간이야.
+                
+                """;
+            String add = """
+                
+                위에 대화 내용을 바탕으로 객관식 문제를 생성해줘.
+                객관식은 사용자가 어제의 일을 잘 기억하고있나 체크하기위한 객관식이야.
+                객관식 문항은 총 4가지로 되어있고, 정답은 오직 하나야.
+                객관식의 문항은 단어로 구성되어야만해.
+                문제가 너무 쉽지 않도록, 정답과 유사성이 있는 단어로 문항을 구성해줘.
+                질문은 반드시 제공해준 어제 대화 내용에 관한 질문이여야해.
+                질문은 반드시 과거에 대한 질문이여야해.
+                사용자가 라는 단어는 사용하지말고, 질문해줘.
+                질문을 제공할때 존댓말을 사용해줘.
+                질문의 형태는 공손한 대화형 질문체를 사용해줘.
+                
+                내가 제공해준 내용을 바탕으로 3개의 객관식 문제를 제공해줘.
+                문제와 문항, 정답 총 3가지를 제공해줘.
+                정답의 이유도 제공해줘.
+                정답의 이유는 제공해준 대화내용에 근거해야해.
+                추측성 근거는 제시하지말아줘.
+                
+                예시 형태를 제공해줄게.
+                ex)질문: 질문입니다! 어제 점심에 무었을 드셨나요?@
+                1. 삼겹살 2. 라면 3. 비빔밥 4. 소고기@
+                정답 : 4@
+                이유 : 어제 점심에 라면을 드시러 간다고 하셨습니다.@
+                
+                데이터를 파싱해서 저장할 수 있도록 예시 형태를 잘 유지해줘.
+               
+                """;
+            prompt += chatMessages + add;
+            System.out.println("userId: "+userId);
+            System.out.println(prompt);
+            GPTRequestDTO request = new GPTRequestDTO(model, prompt);
+            GPTResponseDTO response =  template.postForObject(apiURL, request, GPTResponseDTO.class);
+            String createdTest = response.getChoices().get(0).getMessage().getContent();
+            System.out.println(createdTest);
             log.info("Test Created {}.",userId);
         }
 
