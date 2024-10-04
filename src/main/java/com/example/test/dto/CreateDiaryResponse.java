@@ -10,13 +10,13 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class createDiaryResponse {
+public class CreateDiaryResponse {
     private String diaryId;
     private String userId;
     private LocalDate createAt;
 
-    public static createDiaryResponse fromEntity(DiaryDomain data){
-        return createDiaryResponse.builder()
+    public static CreateDiaryResponse fromEntity(DiaryDomain data){
+        return CreateDiaryResponse.builder()
                 .userId(data.getUserId())
                 .diaryId(data.getDiaryId())
                 .createAt(data.getDate())

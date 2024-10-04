@@ -1,10 +1,7 @@
 package com.example.test.Controller;
 
 import com.example.test.Service.DiaryService;
-import com.example.test.dto.CreateDiaryRequest;
-import com.example.test.dto.CustomUserDetails;
-import com.example.test.dto.GetDiaryListDto;
-import com.example.test.dto.createDiaryResponse;
+import com.example.test.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +17,7 @@ public class DiaryController {
     private final DiaryService diaryService;
 
     @PostMapping
-    public createDiaryResponse createDiary(@RequestBody CreateDiaryRequest request){
+    public CreateDiaryResponse createDiary(@RequestBody CreateDiaryRequest request){
         String userId = getUserIdFromToken();
         return diaryService.createDiary(userId,request);
     }
@@ -37,6 +34,15 @@ public class DiaryController {
             ){
         String userId = getUserIdFromToken();
         return diaryService.getDiaryDetail(userId,date);
+    }
+
+    @PatchMapping("/{date}")
+    public UpdateDiaryResponse updateDiary(
+            @PathVariable LocalDate date,
+            @RequestBody UpdateDiaryRequest request
+    ){
+        String userId = getUserIdFromToken();
+        return diaryService.updateDiary(userId,date,request);
     }
 
     private String getUserIdFromToken(){
