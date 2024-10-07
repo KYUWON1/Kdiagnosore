@@ -232,6 +232,7 @@ public class ChatService {
             System.out.println("timeStamp = " + timeStamp);
             TestDomain newTest = setTestContent(userId,question,predictAnswer
                     ,reason,timeStamp);
+            newTest.setGaggwan(false);
             testRepository.save(newTest);
         }
     }

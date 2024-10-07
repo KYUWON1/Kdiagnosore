@@ -7,6 +7,7 @@ import com.example.test.repository.TestRepository;
 import com.example.test.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -59,6 +60,7 @@ public class CognitiveTestService {
         return testList;
     }
 
+    @Transactional
     public TestDomain setCognitiveTestAnswer(String answer, String testId,
                                        String userId) {
         TestDomain test = testRepository.findByUserIdAndTestId(userId,
@@ -68,5 +70,48 @@ public class CognitiveTestService {
         return save;
     }
 
+    @Transactional
+    public void saveTestGaggwan(String userId,String createdTest) {
+        String[] questions = createdTest.split("\n\n");
+        for (int i = 0; i < questions.length; i++) {
+            System.out.println("블록"+i+questions[i]);
+        }
+
+        for (String questionBlock : questions) {
+            String[] parts = questionBlock.split("@");
+
+            // parts 배열 길이 확인
+            if (parts.length < 7) {
+                System.out.println("형식 오류: 예상한 형식에 맞지 않는 데이터입니다.");
+                continue;
+            }
+            TestDomain newTest = new TestDomain();
+            newTest.setUserId(userId);
+            // 질문 텍스트
+            String question = parts[0].replace("Q 질문입니다! ", "").trim();
+            System.out.println("question = " + question);
+            newTest.setQuestion(question);
+            // 보기 텍스트들
+            Map<Integer,String> map = new HashMap<>();
+            for (int i = 1; i <= 4; i++) {
+                String answer = parts[i].replaceAll("^[0-9]+ ", "").trim();
+                System.out.println("option " + i + " = " + answer);
+                map.put(i,answer);
+            }
+            newTest.setGaggawnList(map);
+            // 정답
+            String answer = parts[5].replace("A ", "").trim();
+            System.out.println("answer = " + answer);
+            newTest.setGaggawnAnswer(Integer.parseInt(answer));
+
+            // 이유
+            String reason = parts[6].replace("R ", "").trim();
+            System.out.println("reason = " + reason);
+            newTest.setGaggawnReason(reason);
+            newTest.setGaggwan(true);
+            testRepository.save(newTest);
+            System.out.println("---------------");
+        }
+    }
 
 }

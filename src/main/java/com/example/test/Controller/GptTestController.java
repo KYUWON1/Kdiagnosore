@@ -1,6 +1,7 @@
 package com.example.test.Controller;
 
 import com.example.test.Service.ChatService;
+import com.example.test.Service.CognitiveTestService;
 import com.example.test.Service.DiaryService;
 import com.example.test.Service.UserService;
 import com.example.test.dto.GPTRequestDTO;
@@ -23,11 +24,13 @@ import java.util.List;
 public class GptTestController {
 
     private final ChatService chatService;
+    private final CognitiveTestService cognitiveTestService;
     private final UserService userService;
     private final DiaryService diaryService;
 
-    public GptTestController(ChatService chatService, UserService userService, DiaryService diaryService){
+    public GptTestController(ChatService chatService, CognitiveTestService cognitiveTestService, UserService userService, DiaryService diaryService){
         this.chatService = chatService;
+        this.cognitiveTestService = cognitiveTestService;
         this.userService = userService;
         this.diaryService = diaryService;
     }
@@ -153,11 +156,16 @@ public class GptTestController {
                     추측성 근거는 제시하지말아줘.
                                     
                     예시 형태를 제공해줄게.
-                    ex)질문: 질문입니다! 어제 점심에 무었을 드셨나요?@
-                    1. 삼겹살 2. 라면 3. 비빔밥 4. 소고기@
-                    정답 : 4@
-                    이유 : 어제 점심에 라면을 드시러 간다고 하셨습니다.@
+                    ex)Q 질문입니다! 어제 점심에 무었을 드셨나요?@
+                    1 삼겹살@
+                    2 라면@
+                    3 비빔밥@ 
+                    4 소고기@
+                    A 4@
+                    R 어제 점심에 라면을 드시러 간다고 하셨습니다.@
                                     
+                    줄바꿈은 하지 말아줘.
+                    Q1,A1 같은 번호는 따로 지정해주지않아도되.
                     데이터를 파싱해서 저장할 수 있도록 예시 형태를 잘 유지해줘.
                                    
                     """;
@@ -168,6 +176,7 @@ public class GptTestController {
             GPTResponseDTO response = template.postForObject(apiURL, request, GPTResponseDTO.class);
             String createdTest = response.getChoices().get(0).getMessage().getContent();
             System.out.println(createdTest);
+            cognitiveTestService.saveTestGaggwan(userId,createdTest);
         }
         log.info("Test Created End.");
         return "Create Test Question!";

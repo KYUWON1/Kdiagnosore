@@ -28,8 +28,8 @@ public class TestDomain {
 
     // 객관식 질문
     private boolean isGaggwan;
-    private Map<Long,String> gaggawnList;
-    private Long gaggawnAnswer;
+    private Map<Integer,String> gaggawnList;
+    private Integer gaggawnAnswer;
     private String gaggawnReason;
 
     private String date;
