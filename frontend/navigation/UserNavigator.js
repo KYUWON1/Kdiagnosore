@@ -15,6 +15,8 @@ import PasswordModScreen from "../screens/userscreens/PasswordModScreen";
 import UserPhoneModScreen from "../screens/userscreens/UserPhoneModScreen";
 import ProtectorPhoneModScreen from "../screens/userscreens/ProtectorPhoneModScreen";
 import DiaryScreen from "../screens/userscreens/DiaryScreen";
+import DiaryListScreen from "../screens/userscreens/DiaryListScreen";
+import DiaryContentScreen from "../screens/userscreens/DiaryContentScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -26,6 +28,8 @@ const UserNavigator = () => {
             <Stack.Screen name="MainMenu" component={MainMenuScreen} />
             <Stack.Screen name="ChatMain" component={ChatScreen} />
             <Stack.Screen name="Diary" component={DiaryScreen} />
+            <Stack.Screen name="DiaryList" component={DiaryListScreen} />
+            <Stack.Screen name="DiaryContent" component={DiaryContentScreen} />
             <Stack.Screen name="ChatRecordDrawer" component={ChatRecordStack} 
                 options={{ animation: 'slide_from_left' }} // 왼쪽에서 오른쪽으로 슬라이드
             />
