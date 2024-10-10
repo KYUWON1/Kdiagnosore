@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -109,6 +110,8 @@ public class CognitiveTestService {
             System.out.println("reason = " + reason);
             newTest.setGaggawnReason(reason);
             newTest.setGaggwan(true);
+            newTest.setDate(LocalDate.now());
+            newTest.setTime(LocalTime.now());
             testRepository.save(newTest);
             System.out.println("---------------");
         }
