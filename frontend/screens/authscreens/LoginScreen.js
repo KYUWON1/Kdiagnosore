@@ -29,30 +29,30 @@ const LoginScreen = ({ navigation }) => {
     }, []);
 
     // Expo Push Token 등록
-    useEffect(() => {
-        const registerForPushNotificationsAsync = async () => {
-            let token;
-            if (Device.isDevice) {
-                const { status: existingStatus } = await Notifications.getPermissionsAsync();
-                let finalStatus = existingStatus;
-                if (existingStatus !== 'granted') {
-                    const { status } = await Notifications.requestPermissionsAsync();
-                    finalStatus = status;
-                }
-                if (finalStatus !== 'granted') {
-                    Alert.alert('Failed to get push token for push notification!');
-                    return;
-                }
-                token = (await Notifications.getExpoPushTokenAsync()).data;
-                console.log('Expo Push Token:', token);
-                setExpoPushToken(token);  // Expo Push Token 저장
-            } else {
-                Alert.alert('Must use physical device for Push Notifications');
-            }
-        };
-
-        registerForPushNotificationsAsync();
-    }, []);
+//    useEffect(() => {
+//        const registerForPushNotificationsAsync = async () => {
+//            let token;
+//            if (Device.isDevice) {
+//                const { status: existingStatus } = await Notifications.getPermissionsAsync();
+//                let finalStatus = existingStatus;
+//                if (existingStatus !== 'granted') {
+//                    const { status } = await Notifications.requestPermissionsAsync();
+//                    finalStatus = status;
+//                }
+//                if (finalStatus !== 'granted') {
+//                    Alert.alert('Failed to get push token for push notification!');
+//                    return;
+//                }
+//                token = (await Notifications.getExpoPushTokenAsync()).data;
+//                console.log('Expo Push Token:', token);
+//                setExpoPushToken(token);  // Expo Push Token 저장
+//            } else {
+//                Alert.alert('Must use physical device for Push Notifications');
+//            }
+//        };
+//
+//        registerForPushNotificationsAsync();
+//    }, []);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -64,10 +64,7 @@ const LoginScreen = ({ navigation }) => {
     }, [navigation]);
 
     const handleLogin = async () => {
-        if (!expoPushToken) {
-            Alert.alert('Error', 'Push token is not available.');
-            return;
-        }
+
 
         const data = {
             userId: ID,
