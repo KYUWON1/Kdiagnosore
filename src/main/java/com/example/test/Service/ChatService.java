@@ -208,20 +208,22 @@ public class ChatService {
         return chatMessages;
     }
 
-    public ChatSaveResponse saveTestChat(String userId,String test){
-        try{
-            parsingCreatedTestAndSave(userId,test);
-            return ChatSaveResponse.SAVE_SUCCESS;
-        }catch (Exception e){
-            return ChatSaveResponse.SAVE_FAIL;
+    public boolean saveTestChat(String userId, String test) {
+        try {
+            boolean allSavedSuccessfully = parsingCreatedTestAndSave(userId, test);
+            return allSavedSuccessfully;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
-    private void parsingCreatedTestAndSave(String userId,String test) {
-        Pattern pattern = Pattern.compile("Q (.*?)@\\nA (.*?)@\\nR (.*?) " +
-                "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+?)@");
+    private boolean parsingCreatedTestAndSave(String userId, String test) {
+        Pattern pattern = Pattern.compile("Q (.*?)@\\nA (.*?)@\\nR (.*?) (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+?)@");
         Matcher matcher = pattern.matcher(test);
-        while(matcher.find()){
+        boolean allSavedSuccessfully = true;
+
+        while (matcher.find()) {
             String question = matcher.group(1);
             System.out.println("question = " + question);
             String predictAnswer = matcher.group(2);
@@ -230,13 +232,20 @@ public class ChatService {
             System.out.println("reason = " + reason);
             String timeStamp = matcher.group(4);
             System.out.println("timeStamp = " + timeStamp);
-            TestDomain newTest = setTestContent(userId,question,predictAnswer
-                    ,reason,timeStamp);
+
+            TestDomain newTest = setTestContent(userId, question, predictAnswer, reason, timeStamp);
             newTest.setDate(LocalDate.now());
             newTest.setTime(LocalTime.now());
             newTest.setGaggwan(false);
-            testRepository.save(newTest);
+
+            try {
+                testRepository.save(newTest);
+            } catch (Exception e) {
+                e.printStackTrace();
+                allSavedSuccessfully = false;  // 저장 실패 시 false로 변경
+            }
         }
+        return allSavedSuccessfully;
     }
 
     public TestDomain setTestContent(String userId,String question,

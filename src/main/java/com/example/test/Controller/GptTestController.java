@@ -73,6 +73,8 @@ public class GptTestController {
                 질문은 반드시 제공해준 어제 대화 내용에 관한 질문이여야해.
                 질문은 어떤 단어를 대답할 수 있는 형태인 질문이여야해.
                 질문에서 "오늘은 어떤가요?" 같은 현재에 대해 묻는 질문은 없어야해.
+                질문은 "정답"을 말할 수 있는 질문이야해.
+                질문은 "응 맞아" 같은 대답을 하는 질문이 아니야. 
                 질문은 사용자가 답변할 수 있는 형태의 질문이여야해.
                 질문은 반드시 과거에 대한 질문이여야해.
                 질문은 존댓말을 사용해줘.
@@ -145,14 +147,14 @@ public class GptTestController {
                     문제가 너무 쉽지 않도록, 정답과 유사성이 있는 단어로 문항을 구성해줘.
                     질문은 반드시 제공해준 어제 대화 내용에 관한 질문이여야해.
                     질문은 반드시 과거에 대한 질문이여야해.
-                    사용자가 라는 단어는 사용하지말고, 질문해줘.
+                    사용자가 라는 단어는 사용하지말고 질문해줘.
                     질문을 제공할때 존댓말을 사용해줘.
                     질문의 형태는 공손한 대화형 질문체를 사용해줘.
                                     
                     내가 제공해준 내용을 바탕으로 3개의 객관식 문제를 제공해줘.
                     문제와 문항, 정답 총 3가지를 제공해줘.
                     정답의 이유도 제공해줘.
-                    정답의 이유는 제공해준 대화내용에 근거해야해.
+                    정답의 이유는 제공해준 대화 내용에 근거해야해.
                     추측성 근거는 제시하지말아줘.
                     추측성 문제는 제시하지말아줘.
                                     
@@ -194,6 +196,7 @@ public class GptTestController {
                 위의 내용을 바탕으로 질문과 예상 답변과 근거를 생성해줘.
                 질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄게.
                 Date와 Time은 해당 채팅을 입력한 날짜와 시간이야.
+                
                 """;
 
             String add = """
@@ -248,11 +251,15 @@ public class GptTestController {
             GPTResponseDTO response = template.postForObject(apiURL, request, GPTResponseDTO.class);
             String createdTest = response.getChoices().get(0).getMessage().getContent();
             System.out.println(createdTest);
-            chatService.saveTestChat(userId,createdTest);
+            // 저장을 시도하고 실패하면 재시도
+            boolean saveSuccess = chatService.saveTestChat(userId, createdTest);
+            if(!saveSuccess){
+                log.info("Test Created Fail..retry {}",userId);
+
+            }
             log.info("Test Created {}.",userId);
         }
 
-        log.info("Test Created End.");
         return "Create Test Question!";
     }
 
@@ -267,6 +274,7 @@ public class GptTestController {
                 위의 내용을 바탕으로 질문과 예상 답변과 근거를 생성해줘.
                 질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄께.
                 Date와 Time은 해당 채팅을 입력한 날짜와 시간이야.
+                
                 """;
 
             String add = """
@@ -314,7 +322,7 @@ public class GptTestController {
             GPTResponseDTO response = template.postForObject(apiURL, request, GPTResponseDTO.class);
             String createdTest = response.getChoices().get(0).getMessage().getContent();
             System.out.println(createdTest);
-            chatService.saveTestChat(userId,createdTest);
+            cognitiveTestService.saveTestGaggwan(userId,createdTest);
             log.info("Test Created {}.",userId);
         }
 
