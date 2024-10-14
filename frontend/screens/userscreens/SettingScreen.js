@@ -42,7 +42,7 @@ const SettingScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('ChatMain')} />
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('MainMenu')} />
                 <Text style={{ fontSize: 20, fontWeight: '700', width:'80%', textAlign:'center'}}>설정</Text>
             </View>
             <View style={styles.setting}>

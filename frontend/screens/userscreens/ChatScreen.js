@@ -7,6 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TouchableOpacity } from "react-native";
 
 // 채팅창 디자인
 const ChatBox = (props) => {
@@ -139,6 +140,7 @@ const ChatScreen = ({navigation}) => {
     const onSend = useCallback(async (messages = []) => {
         setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
         const userMessage = messages[0].text;
+        console.log('Loaded API Base URL:', apiBaseUrl);
         try {
             const response = await axios.post(`${apiBaseUrl}/chat/question`, { message: userMessage }, {
                 headers: {
@@ -177,13 +179,15 @@ const ChatScreen = ({navigation}) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
             <View style={styles.leftHeader}>
-                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('MainMenu')} />
+                <AntDesign name='left' size={25} onPress={() => navigation.navigate('MainMenu')} />
             </View>
             <View style={styles.centerHeader}>
                 <Text style={{ fontSize: 20, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Remember Me</Text>
             </View>
             <View style={styles.rightHeader}>
-                <FontAwesome name="cog" size={25} onPress={() => navigation.navigate('SettingDrawer')} />
+                <TouchableOpacity onPress={() => navigation.navigate('ChatRecordDrawer')}>
+                    <Text style={{ fontSize: 18, color: '#7C95EF' }}>목록</Text> 
+                </TouchableOpacity>
             </View>
             </View>
             <GiftedChat
