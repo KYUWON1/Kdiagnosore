@@ -17,6 +17,9 @@ import ProtectorPhoneModScreen from "../screens/userscreens/ProtectorPhoneModScr
 import DiaryScreen from "../screens/userscreens/DiaryScreen";
 import DiaryListScreen from "../screens/userscreens/DiaryListScreen";
 import DiaryContentScreen from "../screens/userscreens/DiaryContentScreen";
+import TestScreen from "../screens/userscreens/TestScreen";
+import TestListScreen from "../screens/userscreens/TestListScreen"
+import TestDateScreen from "../screens/userscreens/TestDateScreen"
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -30,8 +33,12 @@ const UserNavigator = () => {
             <Stack.Screen name="Diary" component={DiaryScreen} />
             <Stack.Screen name="DiaryList" component={DiaryListScreen} />
             <Stack.Screen name="DiaryContent" component={DiaryContentScreen} />
+            <Stack.Screen name="Test" component={TestScreen} />
+            <Stack.Screen name="TestDrawer" component={TestRecordStack} 
+                options={{ animation: 'slide_from_right' }} // 왼쪽에서 오른쪽으로 슬라이드
+            />
             <Stack.Screen name="ChatRecordDrawer" component={ChatRecordStack} 
-                options={{ animation: 'slide_from_left' }} // 왼쪽에서 오른쪽으로 슬라이드
+                options={{ animation: 'slide_from_right' }} // 왼쪽에서 오른쪽으로 슬라이드
             />
             <Stack.Screen name="SettingDrawer" component={SettingStack}
                 options={{ animation: 'slide_from_right' }} // 오른쪽에서 왼쪽으로 슬라이드
@@ -73,6 +80,15 @@ const ChatRecordStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="ChatRecording" component={ChatRecordingScreen} />
             <Stack.Screen name="ChatDate" component={ChatDateScreen} />
+        </Stack.Navigator>
+    );
+};
+
+const TestRecordStack = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="TestList" component={TestListScreen} />
+            <Stack.Screen name="TestDate" component={TestDateScreen} />
         </Stack.Navigator>
     );
 };
