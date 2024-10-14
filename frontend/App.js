@@ -9,7 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializePushNotifications } from './services/notificationService';
 
 const Stack = createStackNavigator();
-const URL = 'http://10.0.2.2:8080';
+const URL = 'http://172.30.1.24:8080';
+// 10.0.2.2:8080
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
