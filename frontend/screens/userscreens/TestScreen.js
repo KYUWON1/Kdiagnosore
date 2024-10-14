@@ -55,7 +55,7 @@ const TestScreen = ({ navigation }) => {
                     });
                     if (response.status === 200) {
                         setQuestions(response.data);
-                        const allAnswered = data.every(question => question.answer !== null);
+                        const allAnswered = response.data.every(question => question.answer !== null);
                         if (allAnswered) {
                             setIsTestEnded(true); // 모든 답변이 있을 경우 종료 상태로 설정
                         }
@@ -115,15 +115,22 @@ const TestScreen = ({ navigation }) => {
     
         try {
             // 모든 답변을 순회하며 개별적으로 API 호출
-            for (const [testId, answer] of Object.entries(answers)) {
-                const response = await axios.post(`${apiBaseUrl}/test/answer`, {
+            const promises = Object.entries(answers).map(([testId, answer]) => {
+                return axios.post(`${apiBaseUrl}/test/answer`, {
                     testId: testId,
                     answer: answer
                 }, {
                     headers: { 'Content-Type': 'application/json' }
                 });
+            });
+        
+            // 모든 API 호출이 성공적으로 완료되었는지 확인
+            const results = await Promise.all(promises);
+        
+            // 에러 없이 모든 API 호출이 완료된 경우에만 테스트 완료 알림
+            if (results.every(response => response.status === 200)) {
+                Alert.alert("테스트 완료", "답변이 제출되었습니다.");
             }
-            Alert.alert("테스트 완료", "답변이 제출되었습니다.");
     
         } catch (error) {
             Alert.alert("제출 실패", "답변 제출 중 오류가 발생했습니다.");
