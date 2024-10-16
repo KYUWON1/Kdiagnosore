@@ -10,12 +10,10 @@ import com.example.test.repository.UserRepository;
 import com.example.test.type.ErrorCode;
 import com.example.test.type.QuestionType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -183,13 +181,13 @@ public class QuestionService {
         test.setResult(totalScore);
         String comment;
         if (totalScore <= 3) {
-            comment =  "인지기능 저하 없음";
+            comment =  "훌륭하네요. 인지기능이 건강합니다! ";
         } else if (totalScore <= 5) {
-            comment =  "경미한 인지기능 저하";
+            comment =  "경미한 인지기능의 저하가 보이지만, 괜찮습니다!";
         } else if (totalScore <= 7) {
-            comment =  "중간 정도의 인지기능 저하";
+            comment =  "주의가 필요한 인지기능의 저하가 보입니다. 인지기능 향상을 위해 노력해주세요.";
         } else {
-            comment =  "중증 인지기능 저하 가능성";
+            comment =  "중증 인지기능 저하가 보입니다. 주변 가족, 병원과 상담해보시길 권장드립니다.";
         }
         test.setDescription(comment);
         questionRepository.save(test);
@@ -209,5 +207,25 @@ public class QuestionService {
     public GetResultDetailDto getResultDetail(String userId, LocalDate date) {
         return GetResultDetailDto.fromEntity(questionRepository.findByUserIdAndTestCreateAt(userId, date)
                 .orElseThrow(()-> new UserException(ErrorCode.INVALID_ARGUMENT)));
+    }
+
+    public GetUserTestStatusDto getUserStatus(String userId) {
+        UserDomain user = userRepository.findByUserId(userId);
+        LocalDate now= LocalDate.now();
+        if(user.getLastTestDate() == null){
+            return new GetUserTestStatusDto(true,0);
+        }
+        LocalDate lastTestDate = user.getLastTestDate();
+        LocalDate eligibleDate = lastTestDate.plusDays(30);
+        boolean canTest =
+                now.isAfter(eligibleDate) || now.isEqual(eligibleDate);
+        if(canTest){
+            return new GetUserTestStatusDto(true,0);
+        }else{
+            int left = (int) ChronoUnit.DAYS.between(now,eligibleDate);
+            return new GetUserTestStatusDto(false,left);
+        }
+
+
     }
 }

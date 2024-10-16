@@ -50,6 +50,11 @@ public class QuestionController {
         return questionService.getResultDetail(getUserIdFromToken(),date);
     }
 
+    @GetMapping("/status")
+    public GetUserTestStatusDto getUserStatus(){
+        return questionService.getUserStatus(getUserIdFromToken());
+    }
+
 
     private String getUserIdFromToken(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
