@@ -225,7 +225,5 @@ public class QuestionService {
             int left = (int) ChronoUnit.DAYS.between(now,eligibleDate);
             return new GetUserTestStatusDto(false,left);
         }
-
-
     }
 }
