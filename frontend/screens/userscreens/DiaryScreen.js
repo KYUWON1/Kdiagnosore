@@ -11,6 +11,7 @@ const DiaryScreen = ({ navigation }) => {
     const [diaryText, setDiaryText] = useState('');
     const [loading, setLoading] = useState(true); // 로딩 상태 관리
     const [isExistingDiary, setIsExistingDiary] = useState(false); // 다이어리 존재 여부
+    const [originalDiaryText, setOriginalDiaryText] = useState(''); //다이어리 수정 여부
 
     useEffect(() => {
         const loadUserData = async () => {
@@ -44,6 +45,7 @@ const DiaryScreen = ({ navigation }) => {
 
                 if (response.status === 200) {
                     setDiaryText(response.data.content); // 기존 다이어리 내용 설정
+                    setOriginalDiaryText(response.data.content);
                     setIsExistingDiary(true); // 다이어리가 이미 존재함을 설정
                 }
             } catch (error) {
@@ -64,6 +66,10 @@ const DiaryScreen = ({ navigation }) => {
     // 다이어리 생성 또는 업데이트
     const saveDiary = async () => {
         if (!diaryText.trim()) {
+            return;
+        }
+
+        if (diaryText === originalDiaryText) {
             return;
         }
 

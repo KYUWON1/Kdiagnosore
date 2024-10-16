@@ -193,6 +193,9 @@ const TestDateScreen = ({ navigation, route }) => {
                     scrollToBottom={false}
                     inverted={false}
                     style={{ flex: 0 }}
+                    listViewProps={{
+                        scrollEnabled: false, // 스크롤 비활성화
+                      }}
                 />
                 {renderMultipleChoiceOptions()} 
             </View>
