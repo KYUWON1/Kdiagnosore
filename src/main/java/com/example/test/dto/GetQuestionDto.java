@@ -15,6 +15,7 @@ public class GetQuestionDto {
 
     public static GetQuestionDto fromEntity(QuestionDomain data){
         return GetQuestionDto.builder()
+                .story(data.getExplain())
                 .question(data.getQuestion())
                 .build();
     }

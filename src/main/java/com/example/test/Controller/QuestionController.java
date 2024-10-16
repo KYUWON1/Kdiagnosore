@@ -18,10 +18,10 @@ import java.util.Map;
 public class QuestionController {
     private final QuestionService questionService;
 
-    @PostMapping("/testtest")
-    public void createQuestion(){
-        questionService.createTest();
-    }
+//    @PostMapping("/testtest")
+//    public void createQuestion(){
+//        questionService.createTest();
+//    }
 
     @GetMapping
     public GetQuestionResultDto getQuestion(

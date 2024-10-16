@@ -1,5 +1,6 @@
 package com.example.test.domain;
 
+import com.example.test.dto.GetQuestionDto;
 import com.example.test.type.QuestionType;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class QuestionDomain {
     @Id
     private String questionId = UUID.randomUUID().toString();
-    private String story;
+    private String explain;
     private String question;
     private QuestionType type;
 
