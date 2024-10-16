@@ -24,10 +24,10 @@ public class QuestionController {
 //    }
 
     @GetMapping
-    public GetQuestionResultDto getQuestion(
+    public GetQuestionResultDto createQuestion(
             @RequestParam QuestionType type
     ){
-        return questionService.getQuestion(type, getUserIdFromToken());
+        return questionService.createQuestion(type, getUserIdFromToken());
     }
 
     @PostMapping

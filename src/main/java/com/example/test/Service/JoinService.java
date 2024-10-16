@@ -50,10 +50,14 @@ public class JoinService {
         user.setProtector(true);
         user.setProtectorNum(joinDTO.getPhoneNum());
         user.setProtectorName(joinDTO.getUserName());
+        user.setProtectorId(joinDTO.getUserId());
         userRepository.save(user);
 
         // Protector 도메인 객체 생성
         UserDomain protector = setDefaultUser(joinDTO);
+        protector.setProtectorName(protector.getProtectorName());
+        protector.setProtectorNum(protector.getProtectorNum());
+        protector.setProtectorId(user.getUserId());
         protector.setRole("protector");
         userRepository.save(protector);
 

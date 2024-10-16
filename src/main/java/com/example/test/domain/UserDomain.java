@@ -27,6 +27,7 @@ public class UserDomain {
     private String phoneNum;
     private String protectorName;
     private String protectorNum;
+    private String protectorId;
 
     private List<String> alarmTimes = new ArrayList<>();
 

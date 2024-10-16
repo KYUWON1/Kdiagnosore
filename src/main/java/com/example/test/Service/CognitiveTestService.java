@@ -29,8 +29,8 @@ public class CognitiveTestService {
             // 해당 userId로 TestDomain 리스트를 조회
             testList = testRepository.findByUserId(userId);
         }else if(user.getRole().equals("protector")){
-            UserDomain byProtector = userRepository.findByProtectorName(user.getUserName());
-            testList = testRepository.findByUserId(byProtector.getUserId());
+            // 보호자라면, 사용자의 Id로 조회
+            testList = testRepository.findByUserId(user.getProtectorId());
         }
 
 
@@ -54,8 +54,8 @@ public class CognitiveTestService {
         if(user.getRole().equals("user")){
             testList = testRepository.findByUserIdAndDate(userId, date);
         }else if(user.getRole().equals("protector")){
-            UserDomain byProtector = userRepository.findByProtectorName(user.getUserName());
-            testList = testRepository.findByUserIdAndDate(byProtector.getUserId(),date);
+            testList =
+                    testRepository.findByUserIdAndDate(user.getProtectorId(),date);
         }
 
         return testList;

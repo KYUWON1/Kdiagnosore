@@ -145,7 +145,7 @@ public class QuestionService {
     }
 
     // 랜덤으로 섞은 후, 15개만 반환 , SDQ는 32개의 문항지가있음
-    public GetQuestionResultDto getQuestion(QuestionType type, String userId) {
+    public GetQuestionResultDto createQuestion(QuestionType type, String userId) {
         UserDomain user = userRepository.findByUserId(userId);
         if(user.getLastTestDate() != null &&!user.getLastTestDate().isBefore(LocalDate.now().minusDays(30))){
             throw new UserException(ErrorCode.TEST_ALREADY_FINISH);
@@ -196,7 +196,13 @@ public class QuestionService {
     }
 
     public List<GetResultDto> getResultList(String userId) {
-        List<QuestionDomain> results = questionRepository.findAllByUserId(userId);
+        UserDomain user = userRepository.findByUserId(userId);
+        List<QuestionDomain> results = new ArrayList<>();
+        if(user.getRole().equals("user")){
+            results = questionRepository.findAllByUserId(userId);
+        }else if(user.getRole().equals("protector")){
+            results = questionRepository.findAllByUserId(user.getProtectorId());
+        }
 
         return results.stream()
                 .map(GetResultDto::fromEntity)
@@ -205,8 +211,16 @@ public class QuestionService {
     }
 
     public GetResultDetailDto getResultDetail(String userId, LocalDate date) {
-        return GetResultDetailDto.fromEntity(questionRepository.findByUserIdAndTestCreateAt(userId, date)
-                .orElseThrow(()-> new UserException(ErrorCode.INVALID_ARGUMENT)));
+        UserDomain user = userRepository.findByUserId(userId);
+        if(user.getRole().equals("user")){
+            return GetResultDetailDto.fromEntity(questionRepository.findByUserIdAndTestCreateAt(userId, date)
+                    .orElseThrow(()-> new UserException(ErrorCode.INVALID_ARGUMENT)));
+        }else if(user.getRole().equals("protector")){
+            return GetResultDetailDto.fromEntity(questionRepository.findByUserIdAndTestCreateAt(user.getProtectorId(), date)
+                    .orElseThrow(()-> new UserException(ErrorCode.INVALID_ARGUMENT)));
+        }else{
+            throw new UserException(ErrorCode.INVALID_ARGUMENT);
+        }
     }
 
     public GetUserTestStatusDto getUserStatus(String userId) {

@@ -13,6 +13,8 @@ public interface UserRepository extends MongoRepository<UserDomain, String> {
 
     UserDomain findByUserId(String userId);
 
+    UserDomain findByProtectorId(String userId);
+
     UserDomain findByUserNameAndEmail(String userName,String email);
 
     UserDomain findByUserNameAndPhoneNum(String userName,String phoneNumber);
