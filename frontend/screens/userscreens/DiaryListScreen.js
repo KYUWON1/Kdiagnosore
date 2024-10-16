@@ -62,7 +62,7 @@ const DiaryListScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('MainMenu')} />
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('Diary')} />
                 <Text style={{ fontSize: 20, fontWeight: '700', width: '80%', textAlign: 'center' }}>다이어리 목록</Text>
             </View>
 
@@ -81,7 +81,7 @@ const DiaryListScreen = ({ navigation }) => {
                             <View style={styles.listItem}>
                                 <Text style={styles.idtext}>{index + 1}</Text>
                                 <Text style={styles.contenttext} numberOfLines={1}>{item.content}</Text>
-                                <Text style={styles.datetext}>{item.date}</Text>
+                                <Text style={styles.datetext}>{item.date.replace(/-/g, '.')}</Text>
                             </View>
                         </TouchableOpacity>
                     ))}

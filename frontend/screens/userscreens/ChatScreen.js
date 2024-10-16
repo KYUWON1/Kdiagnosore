@@ -111,6 +111,21 @@ const ChatScreen = ({navigation}) => {
     const [messages, setMessages] = useState([]);
     const [userId, setUserId] = useState('');
     const [apiBaseUrl, setApiBaseUrl] = useState('');
+    const [loading, setLoading] = useState(true);
+
+        // 서버로부터 받은 데이터를 GiftedChat 형식으로 변환
+    const formatMessagesForGiftedChat = (messages) => {
+        return messages.map((message, index) => ({
+            _id: `${message.date}-${message.time}-${Math.random().toString(36).substring(7)}`,
+            text: message.message,
+            createdAt: new Date(`${message.date}T${message.time}`), 
+            user: {
+                _id: message.chatFrom === "USER" ? 1 : 2, 
+                name: message.chatFrom === "USER" ? "User" : "ChatBot", 
+                avatar: message.chatFrom === "USER" ? null : Logo, 
+            },
+        }));
+    };
 
     useEffect(() => {
         const loadUserData = async () => {
@@ -118,6 +133,7 @@ const ChatScreen = ({navigation}) => {
             const storedApiBaseUrl = await AsyncStorage.getItem('API_BASE_URL');
             setUserId(storedUserId);
             setApiBaseUrl(storedApiBaseUrl);
+
         };
 
         loadUserData();
@@ -134,7 +150,54 @@ const ChatScreen = ({navigation}) => {
                 },
             },
         ]);
-    }, []);
+
+        const fetchChattingData = async () => {
+            // 현재 날짜를 YYYY-MM-DD 형식으로 설정
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');  // 월을 2자리로 맞춤
+            const day = String(today.getDate()).padStart(2, '0');         // 일을 2자리로 맞춤
+            const date = `${year}-${month}-${day}`;
+    
+            if (apiBaseUrl && date) {
+                try {
+                    const response = await axios.get(`${apiBaseUrl}/chat/getlist/${date}`, {
+                        headers: { 
+                            'Content-Type': 'application/json'
+                        },
+                    });
+
+                    if (response.status === 200) {
+                        // 서버에서 받은 데이터 정렬: 최신 메시지가 하단에 오도록
+                        const sortedData = response.data.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+                        
+                        const reversedData = sortedData.slice().reverse(); // 역순으로 변환
+                        const formattedMessages = formatMessagesForGiftedChat(reversedData);
+                        setMessages((prevMessages) => GiftedChat.append(prevMessages, formattedMessages));
+                        
+    
+                    } else {
+                        Alert.alert('채팅 가져오기 실패', '채팅 기록을 가져오는 중 문제가 발생했습니다.');
+                    }
+                } catch (error) {
+                    if (error.response) {
+                        console.error('Error response:', error.response);
+                        Alert.alert('오류', error.response.data.message || '서버 응답 오류가 발생했습니다.');
+                    } else if (error.request) {
+                        console.error('Error request:', error.request);
+                        Alert.alert('오류', '서버에서 응답을 받지 못했습니다.');
+                    } else {
+                        console.error('Error message:', error.message);
+                        Alert.alert('오류', '네트워크 오류가 발생했습니다.');
+                    }
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        fetchChattingData();
+    }, [apiBaseUrl]);
+    
 
     // 채팅창에 렌더링
     const onSend = useCallback(async (messages = []) => {
