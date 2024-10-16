@@ -207,6 +207,7 @@ public class QuestionService {
     }
 
     public GetResultDetailDto getResultDetail(String userId, LocalDate date) {
-        return GetResultDetailDto.fromEntity(questionRepository.findByUserIdAndTestCreateAt(userId, date));
+        return GetResultDetailDto.fromEntity(questionRepository.findByUserIdAndTestCreateAt(userId, date)
+                .orElseThrow(()-> new UserException(ErrorCode.INVALID_ARGUMENT)));
     }
 }

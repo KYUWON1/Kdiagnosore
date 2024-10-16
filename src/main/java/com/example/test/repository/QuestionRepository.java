@@ -13,7 +13,8 @@ public interface QuestionRepository extends MongoRepository<QuestionDomain,
 
     List<QuestionDomain> findAllByType(QuestionType type);
     List<QuestionDomain> findAllByUserId(String userId);
-    QuestionDomain findByUserIdAndTestCreateAt(String userId, LocalDate date);
+    Optional<QuestionDomain> findByUserIdAndTestCreateAt(String userId,
+                                                  LocalDate date);
     Optional<QuestionDomain> findByUserId(String userId);
 
 }
