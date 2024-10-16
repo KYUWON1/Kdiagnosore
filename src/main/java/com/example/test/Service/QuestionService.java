@@ -164,7 +164,7 @@ public class QuestionService {
         testSet.setTest(savaMap);
         testSet.setTestCreateAt(LocalDate.now());
         user.setLastTestDate(LocalDate.now());
-        //userRepository.save(user);
+        userRepository.save(user);
         QuestionDomain save = questionRepository.save(testSet);
         return new GetQuestionResultDto(save.getQuestionId(),result);
     }
