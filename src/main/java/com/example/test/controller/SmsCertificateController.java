@@ -1,18 +1,13 @@
-package com.example.test.Controller;
+package com.example.test.controller;
 
 import com.example.test.Service.SmsCertificationService;
 import com.example.test.dto.SmsCertificate;
 import com.example.test.dto.SmsSend;
 import com.example.test.dto.SmsVerify;
 import com.example.test.exception.VerifyException;
-import com.example.test.type.CertificateResponse;
 import com.example.test.type.ErrorCode;
-import jakarta.servlet.http.HttpSession;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static com.example.test.type.CertificateResponse.FAIL;
 import static com.example.test.type.CertificateResponse.OK;
 
 @RestController

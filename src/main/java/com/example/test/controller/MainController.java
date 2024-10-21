@@ -1,14 +1,14 @@
-package com.example.test.Controller;
+package com.example.test.controller;
 
 import com.example.test.Service.UserService;
 import com.example.test.dto.*;
 import com.example.test.exception.CertificationException;
 import com.example.test.exception.UserException;
-import com.example.test.type.BaseResponse;
 import com.example.test.type.CertificateResponse;
 import com.example.test.type.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +16,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.swing.text.html.HTML;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @ResponseBody
 public class MainController {
+    @Value("${server.env}")
+    private String env;
+    @Value("${server.port}")
+    private String serverPort;
+    @Value("${server.address}")
+    private String serverAddress;
+
     private final UserService userService;
 
     private final SmsCertificateController smsCertificateController;
@@ -115,6 +123,21 @@ public class MainController {
 
         return ResponseEntity.ok("로그아웃 성공");
 
+    }
+
+    @GetMapping("hc")
+    public ResponseEntity<?> healthCheck(){
+        Map<String,String> responseData = new HashMap<>();
+        responseData.put("env",env);
+        responseData.put("serverAddress",serverAddress);
+        responseData.put("serverPort",serverPort);
+
+        return ResponseEntity.ok(responseData);
+    }
+
+    @GetMapping("/env")
+    public ResponseEntity<?> getEnv() {
+        return ResponseEntity.ok(env);
     }
 
 }

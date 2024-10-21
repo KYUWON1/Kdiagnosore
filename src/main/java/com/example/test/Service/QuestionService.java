@@ -1,6 +1,6 @@
 package com.example.test.Service;
 
-import com.example.test.Controller.GetQuestionResultDto;
+import com.example.test.dto.GetQuestionResultDto;
 import com.example.test.domain.QuestionDomain;
 import com.example.test.domain.UserDomain;
 import com.example.test.dto.*;

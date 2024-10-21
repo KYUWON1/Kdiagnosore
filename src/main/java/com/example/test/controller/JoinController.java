@@ -1,15 +1,13 @@
-package com.example.test.Controller;
+package com.example.test.controller;
 
 import com.example.test.Service.JoinService;
 import com.example.test.dto.JoinDTO;
 import com.example.test.dto.ProtectorJoinDto;
 import com.example.test.dto.UserExist;
-import com.example.test.exception.JoinException;
-import com.example.test.type.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
+
 import java.util.HashMap;
 import java.util.Map;
 

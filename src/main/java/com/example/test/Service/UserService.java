@@ -1,6 +1,6 @@
 package com.example.test.Service;
 
-import com.example.test.Controller.SmsCertificateController;
+import com.example.test.controller.SmsCertificateController;
 import com.example.test.domain.UserDomain;
 import com.example.test.dto.DefaultDTO;
 import com.example.test.dto.ProfileUpdate;

@@ -15,6 +15,7 @@ import com.example.test.type.ChatSaveResponse;
 import com.example.test.type.ChatType;
 import com.example.test.type.ErrorCode;
 import org.apache.commons.text.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -43,10 +44,13 @@ import java.util.stream.Collectors;
 public class ChatService {
     private final ChatRepository chatRepository;
     private final RestTemplate restTemplate;
-    private final String PREDICTION_URL = "http://localhost:5000/api/predict";
+    @Value("${server.address}")
+    private String serverAddress;
+    private String PREDICTION_URL = "http://"+serverAddress+":5000/api" +
+            "/predict";;
     private final TestRepository testRepository;
 
-    public ChatService(ChatRepository chatRepository, RestTemplate chatRestTemplate, TestRepository testRepository, UserRepository userRepository){
+    public ChatService(ChatRepository chatRepository, RestTemplate chatRestTemplate, TestRepository testRepository){
         this.chatRepository = chatRepository;
         this.restTemplate = chatRestTemplate;
         this.testRepository = testRepository;

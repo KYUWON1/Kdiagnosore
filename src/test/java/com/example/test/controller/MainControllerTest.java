@@ -1,4 +1,4 @@
-package com.example.test.Controller;
+package com.example.test.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;

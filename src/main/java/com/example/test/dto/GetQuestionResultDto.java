@@ -1,6 +1,5 @@
-package com.example.test.Controller;
+package com.example.test.dto;
 
-import com.example.test.dto.GetQuestionDto;
 import lombok.*;
 
 import java.util.List;

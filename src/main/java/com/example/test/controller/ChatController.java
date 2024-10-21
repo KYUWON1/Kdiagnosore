@@ -1,4 +1,4 @@
-package com.example.test.Controller;
+package com.example.test.controller;
 
 import com.example.test.Service.ChatService;
 import com.example.test.Service.UserService;
@@ -7,7 +7,6 @@ import com.example.test.dto.ChatForUserDto;
 import com.example.test.dto.CustomUserDetails;
 import com.example.test.type.ChatFrom;
 import com.example.test.type.ChatSaveResponse;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

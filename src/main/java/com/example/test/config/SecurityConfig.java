@@ -89,6 +89,9 @@ public class SecurityConfig {
 
         // filter 등록
         http
+                .authorizeRequests()
+                        .requestMatchers("/hc","/env").permitAll();
+        http
                 .addFilterBefore(new JWTFilter(jwtUtil),LoginFilter.class);
 
         http

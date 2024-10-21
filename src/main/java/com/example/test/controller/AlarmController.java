@@ -1,11 +1,10 @@
-package com.example.test.Controller;
+package com.example.test.controller;
 
 import com.example.test.Service.AlarmService;
 import com.example.test.dto.Alarm;
 import com.example.test.dto.AlarmDto;
 import com.example.test.dto.AlarmListResponse;
 import com.example.test.dto.CustomUserDetails;
-import com.example.test.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

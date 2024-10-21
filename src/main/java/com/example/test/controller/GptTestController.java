@@ -1,4 +1,4 @@
-package com.example.test.Controller;
+package com.example.test.controller;
 
 import com.example.test.Service.ChatService;
 import com.example.test.Service.CognitiveTestService;

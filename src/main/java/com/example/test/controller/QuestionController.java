@@ -1,4 +1,4 @@
-package com.example.test.Controller;
+package com.example.test.controller;
 
 import com.example.test.Service.QuestionService;
 import com.example.test.dto.*;
