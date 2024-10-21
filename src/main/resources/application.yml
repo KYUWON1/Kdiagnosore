@@ -15,6 +15,7 @@ spring:
   config:
     activate:
       on-profile: local
+
 server:
   port: 8080
   address: localhost
@@ -38,8 +39,9 @@ spring:
     activate:
       on-profile: green
 server:
-  port: 8080
+  port: 8081
   address: 54.180.172.128
+
 serverName: green_server
 
 ---
