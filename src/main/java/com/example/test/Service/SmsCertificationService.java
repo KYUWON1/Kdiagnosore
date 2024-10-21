@@ -7,6 +7,7 @@ import net.nurigo.sdk.message.model.MessageStatusType;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.Random;
 public class SmsCertificationService {
     private final Dotenv dotenv = Dotenv.load();
 
+    @Value("${}")
     private String smsApiKey = dotenv.get("SMS_API_KEY");
     private String smsApiSecret = dotenv.get("SMS_API_SECRET");
     private String numFrom = dotenv.get("SMS_PHONE_NUMBER");
