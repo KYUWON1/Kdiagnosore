@@ -103,5 +103,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
           script: |
-            sudo docker stop ${{env.CURRENT_UPSTREAM}}
-            sudo docker rm ${{env.CURRENT_UPSTREAM}}
+            if sudo docker ps -a --format '{{.Names}}' | grep -Eq "^${{env.CURRENT_UPSTREAM}}$"; then
+              echo "Stopping and removing container ${{env.CURRENT_UPSTREAM}}"
+              sudo docker stop ${{env.CURRENT_UPSTREAM}}
+              sudo docker rm ${{env.CURRENT_UPSTREAM}}
+            else
+              echo "Container ${{env.CURRENT_UPSTREAM}} does not exist. Skipping stop and remove."
+            fi
