@@ -44,10 +44,10 @@ jobs:
     steps:
       - name: Set target IP
         run: |
-          STATUS=$(curl -o /dev/null -w "%{http_code}" "http://${{ secrets.LIVE_SERVER_IP }}/env")
+          STATUS=$(curl -o /dev/null -w "%{http_code}" "http://${{ secrets.LIVE_SERVER_IP }}:80/env")
           echo $STATUS
           if [ $STATUS = 200 ]; then
-            CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.LIVE_SERVER_IP }}/env")
+            CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.LIVE_SERVER_IP }}:80/env")
           else
             CURRENT_UPSTREAM=green
           fi
@@ -103,10 +103,5 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
           script: |
-            if sudo docker ps -a --format '{{.Names}}' | grep -Eq "^${{env.CURRENT_UPSTREAM}}$"; then
-              echo "Stopping and removing container ${{env.CURRENT_UPSTREAM}}"
-              sudo docker stop ${{env.CURRENT_UPSTREAM}}
-              sudo docker rm ${{env.CURRENT_UPSTREAM}}
-            else
-              echo "Container ${{env.CURRENT_UPSTREAM}} does not exist. Skipping stop and remove."
-            fi
+            sudo docker stop ${{env.CURRENT_UPSTREAM}}
+            sudo docker rm ${{env.CURRENT_UPSTREAM}}
