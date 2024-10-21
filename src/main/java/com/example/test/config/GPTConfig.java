@@ -6,13 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.client.RestTemplate;
-import io.github.cdimascio.dotenv.Dotenv;
 
 @Configuration
 public class GPTConfig {
-    private final Dotenv dotenv = Dotenv.load();
-
-    private String apiKey = dotenv.get("API_KEY");
+    @Value("${gpt.api.key}")
+    private String apiKey;
 
     @Bean
     @Primary
