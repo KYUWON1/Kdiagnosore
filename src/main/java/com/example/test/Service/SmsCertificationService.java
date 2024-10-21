@@ -1,6 +1,7 @@
 package com.example.test.Service;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.annotation.PostConstruct;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.model.MessageStatusType;
@@ -15,16 +16,19 @@ import java.util.Random;
 
 @Service
 public class SmsCertificationService {
-    private final Dotenv dotenv = Dotenv.load();
+    @Value("${coolsms.key}")
+    private String smsApiKey;
+    @Value("${coolsms.secret}")
+    private String smsApiSecret;
+    @Value("${coolsms.number}")
+    private String numFrom;
 
-    @Value("${}")
-    private String smsApiKey = dotenv.get("SMS_API_KEY");
-    private String smsApiSecret = dotenv.get("SMS_API_SECRET");
-    private String numFrom = dotenv.get("SMS_PHONE_NUMBER");
+    DefaultMessageService messageService;
 
-    DefaultMessageService messageService =  NurigoApp.INSTANCE.initialize(smsApiKey, smsApiSecret, "https://api.coolsms.co.kr");
-
-
+    @PostConstruct  // Spring에서 빈이 초기화된 후 실행
+    public void init() {
+        this.messageService = NurigoApp.INSTANCE.initialize(smsApiKey, smsApiSecret, "https://api.coolsms.co.kr");
+    }
 
     public void sendMessage(String toNumber, String randomNumber) {
         // Message 패키지가 중복될 경우 net.nurigo.sdk.message.model.Message로 치환하여 주세요

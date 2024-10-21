@@ -12,10 +12,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class TestApplication {
 
 	public static void main(String[] args) {
-//		final Dotenv dotenv = Dotenv.load();
-//
-//		String apiKey = dotenv.get("API_KEY");
-//		System.out.println(apiKey);
 		SpringApplication.run(TestApplication.class, args);
 	}
 
