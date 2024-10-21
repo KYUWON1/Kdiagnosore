@@ -20,18 +20,22 @@ public class SmsCertificationService {
     private String smsApiKey;
     @Value("${coolsms.secret}")
     private String smsApiSecret;
-    @Value("${coolsms.number}")
-    private String numFrom;
+    private String numFrom = "01053305064";
 
     DefaultMessageService messageService;
 
-    @PostConstruct  // Spring에서 빈이 초기화된 후 실행
+    @PostConstruct
     public void init() {
         this.messageService = NurigoApp.INSTANCE.initialize(smsApiKey, smsApiSecret, "https://api.coolsms.co.kr");
+        System.out.println("smsApiKey: " + smsApiKey);
+        System.out.println("smsApiSecret: " + smsApiSecret);
+        System.out.println("numFrom: " + numFrom);
     }
+
 
     public void sendMessage(String toNumber, String randomNumber) {
         // Message 패키지가 중복될 경우 net.nurigo.sdk.message.model.Message로 치환하여 주세요
+        System.out.println(numFrom);
         Message message = new Message();
         message.setFrom(numFrom);
         message.setTo(toNumber);
