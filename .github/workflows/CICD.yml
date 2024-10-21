@@ -22,29 +22,21 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          echo "==> Decoding application-secret.yml"
           echo ${{secrets.APPLICATION_SECRET}} | base64 --decode > ./src/main/resources/application-secret.yml
+          cat ./src/main/resources/application-secret.yml
           chmod 777 ./gradlew
-          echo "==> Building project with Gradle"
           ./gradlew clean build -x test
 
       - name: Login to DockerHub
-        run: |
-          echo "==> Logging in to DockerHub"
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker
-        run: |
-          echo "==> Building Docker image"
-          docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/remember_me .
-
+        run: docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/remember_me .
       - name: Push Docker
-        run: |
-          echo "==> Pushing Docker image to DockerHub"
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/remember_me:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/remember_me:latest
 
   deploy:
     needs: build
@@ -52,15 +44,12 @@ jobs:
     steps:
       - name: Set target IP
         run: |
-          echo "==> Checking current upstream from ${ { secrets.LIVE_SERVER_IP }}"
           STATUS=$(curl -o /dev/null -w "%{http_code}" "http://${{ secrets.LIVE_SERVER_IP }}/env")
-          echo "Status Code: $STATUS"
+          echo $STATUS
           if [ $STATUS = 200 ]; then
             CURRENT_UPSTREAM=$(curl -s "http://${{ secrets.LIVE_SERVER_IP }}/env")
-            echo "Current upstream is: $CURRENT_UPSTREAM"
           else
             CURRENT_UPSTREAM=green
-            echo "Defaulting to upstream: $CURRENT_UPSTREAM"
           fi
           echo CURRENT_UPSTREAM=$CURRENT_UPSTREAM >> $GITHUB_ENV
           if [ $CURRENT_UPSTREAM = blue ]; then
@@ -74,13 +63,11 @@ jobs:
             echo "STOPPED_PORT=8080" >> $GITHUB_ENV
             echo "TARGET_UPSTREAM=blue" >> $GITHUB_ENV
           else
-            echo "==> Error: Invalid upstream"
+            echo "error"
             exit 1
           fi
 
       - name: Docker compose
-        run: |
-          echo "==> Deploying new version to ${ { secrets.LIVE_SERVER_IP }}"
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
@@ -92,8 +79,6 @@ jobs:
             sudo docker-compose -f docker-compose-${{env.TARGET_UPSTREAM}}.yml up -d
 
       - name: Check deploy server URL
-        run: |
-          echo "==> Checking if the target server is up"
         uses: jtalk/url-health-check-action@v3
         with:
           url: http://${{ secrets.LIVE_SERVER_IP }}:${{env.STOPPED_PORT}}/env
@@ -101,8 +86,6 @@ jobs:
           retry-delay: 10s
 
       - name: Change nginx upstream
-        run: |
-          echo "==> Changing nginx upstream to ${{ env.TARGET_UPSTREAM }}"
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
@@ -113,8 +96,6 @@ jobs:
             sudo docker exec -i nginxserver bash -c 'echo "set \$service_url ${{ env.TARGET_UPSTREAM }};" > /etc/nginx/conf.d/service-env.inc && nginx -s reload' 
 
       - name: Stop current server
-        run: |
-          echo "==> Stopping current server ${{ env.CURRENT_UPSTREAM }}"
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
