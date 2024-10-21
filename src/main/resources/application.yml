@@ -50,3 +50,6 @@ spring:
   config:
     activate:
       on-profile: common
+logging:
+  file:
+    name: /logs
