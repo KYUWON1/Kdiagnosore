@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 public class ChatService {
     private final ChatRepository chatRepository;
     private final RestTemplate restTemplate;
-    @Value("${server.address}")
+    @Value("${server.address.flask}")
     private String serverAddress;
     private String PREDICTION_URL;
     private final TestRepository testRepository;
