@@ -64,15 +64,13 @@ const LoginScreen = ({ navigation }) => {
     }, [navigation]);
 
     const handleLogin = async () => {
-
-
-        const data = {
-            userId: ID,
-            password: Password,
-            pushToken: expoPushToken // Expo Push Token을 함께 전송
-        };
-
         try {
+            const data = {
+                userId: ID,
+                password: Password,
+                pushToken: expoPushToken || "" // pushToken이 없으면 빈 문자열로 전송
+            };
+
             const response = await axios.post(`${apiBaseUrl}/login`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
@@ -80,10 +78,11 @@ const LoginScreen = ({ navigation }) => {
             });
 
             if (response.status === 200) {
-                const token = response.headers.authorization; // 서버로부터 토큰을 받아옵니다.
-                axios.defaults.headers.common['Authorization'] = token;
-                await AsyncStorage.setItem('userID', ID);
-                const authType = response.data.role;  // role을 통해 페이지 구분
+                const token = response.headers.authorization; // 서버로부터 JWT 토큰 받음
+                axios.defaults.headers.common['Authorization'] = token; // 요청에 기본 헤더 설정
+                await AsyncStorage.setItem('userID', ID); // 사용자 ID 저장
+
+                const authType = response.data.role;  // role 확인
                 if (authType === 'user') {
                     navigation.replace('UserNavigator');  // 사용자 화면으로 이동
                 } else if (authType === 'protector') {
@@ -93,6 +92,7 @@ const LoginScreen = ({ navigation }) => {
                 Alert.alert('로그인 실패', response.data.message || '로그인 중 오류가 발생했습니다.');
             }
         } catch (error) {
+            // 에러에 대한 추가 처리
             if (error.response) {
                 Alert.alert('로그인 실패', error.response.data.message || '로그인 중 오류가 발생했습니다.');
             } else if (error.request) {

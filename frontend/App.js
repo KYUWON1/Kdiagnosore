@@ -9,7 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializePushNotifications } from './services/notificationService';
 
 const Stack = createStackNavigator();
-const URL = 'http://192.168.46.26:8080';
+const URL = 'http://54.180.172.128:80';
+// 54.180.172.128:80   서버 주소
 // 10.0.2.2:8080
 
 function App() {
