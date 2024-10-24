@@ -1,13 +1,19 @@
 from flask import Flask, request, jsonify
 import requests as req
+import os
 import json
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
-# API 설정
-api_key = ""
-chat_gpt_url = ""
+load_dotenv()
+
+# .env 파일로부터 API KEY 설정
+api_key = os.getenv('API_KEY')
+chat_gpt_url = os.getenv('API_URL')
+print(api_key + " : " + chat_gpt_url)
+
 headers = {
     "Authorization": f"Bearer {api_key}",
     "Content-Type": "application/json"

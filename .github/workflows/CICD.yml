@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker
-        run: docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/remember_me .
+        run: docker build -f Dockerfile-spring --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/remember_me .
       - name: Push Docker
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/remember_me:latest
 

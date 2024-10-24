@@ -14,6 +14,7 @@ import com.example.test.type.ChatFrom;
 import com.example.test.type.ChatSaveResponse;
 import com.example.test.type.ChatType;
 import com.example.test.type.ErrorCode;
+import jakarta.annotation.PostConstruct;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -46,14 +47,19 @@ public class ChatService {
     private final RestTemplate restTemplate;
     @Value("${server.address}")
     private String serverAddress;
-    private String PREDICTION_URL = "http://"+serverAddress+":5000/api" +
-            "/predict";;
+    private String PREDICTION_URL;
     private final TestRepository testRepository;
 
     public ChatService(ChatRepository chatRepository, RestTemplate chatRestTemplate, TestRepository testRepository){
         this.chatRepository = chatRepository;
         this.restTemplate = chatRestTemplate;
         this.testRepository = testRepository;
+    }
+
+    @PostConstruct
+    public void init() {
+        // PREDICTION_URL을 @PostConstruct로 초기화
+        PREDICTION_URL = "http://" + serverAddress + ":5000/api/predict";
     }
 
     public PredictResponse sendRequest(String url,String jsonBody){
@@ -68,7 +74,6 @@ public class ChatService {
 
     public ChatDTO getPrediction(ChatDTO chatDTO) {
         validateMessage(chatDTO.getMessage());
-
         String jsonBody = "{\"question\": \"" + chatDTO.getMessage() + "\"}";
         PredictResponse response = sendRequest(PREDICTION_URL,jsonBody); // JSON 응답에서 "answer" 필드 추출
         String decodedResponse = StringEscapeUtils.unescapeJava(response.getAnswer());
