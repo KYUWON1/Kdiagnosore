@@ -46,7 +46,7 @@ const ExamListScreen = ({ navigation }) => {
                             if (response1.status === 200) {
                                 setTestAble(response1.data.canTest);
                                 setDday(response1.data.dday);
-                                console.log(testable, dday);
+
                             } else {
                                 Alert.alert('테스트 여부 가져오기 실패', '테스트 여부를 가져오는 중 문제가 발생했습니다.');
                             }
