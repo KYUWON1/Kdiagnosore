@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import MainMenuScreen from "../screens/protectorscreens/MainMenuScreen";
 import TestListScreen from '../screens/protectorscreens/TestListScreen';
 import TestResultScreen from '../screens/protectorscreens/TestResultScreen';
 import SettingScreen from '../screens/protectorscreens/SettingScreen';
@@ -10,6 +11,8 @@ import MyPageModScreen from "../screens/protectorscreens/MyPageModScreen";
 import MyPageScreen from "../screens/protectorscreens/MyPageScreen";
 import PasswordModScreen from "../screens/userscreens/PasswordModScreen";
 import InfoScreen from "../screens/protectorscreens/InfoScreen";
+import ExamListScreen from "../screens/protectorscreens/ExamListScreen";
+import ExamDateScreen from "../screens/protectorscreens/ExamDateScreen";
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -21,8 +24,11 @@ const Drawer = createDrawerNavigator();
 const ProtectorNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="MainMenu" component={MainMenuScreen} />
             <Stack.Screen name="TestList" component={TestListScreen} />
             <Stack.Screen name="TestResult" component={TestResultScreen} />
+            <Stack.Screen name="ExamList" component={ExamListScreen} />
+            <Stack.Screen name="ExamDate" component={ExamDateScreen} />
             <Stack.Screen name="SettingDrawer" component={SettingDrawer} />
         </Stack.Navigator>
     );

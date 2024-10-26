@@ -5,12 +5,8 @@ import Checkbox from "expo-checkbox";
 import axios from 'axios';
 
 const MainMenuScreen = ({ navigation }) => {
+    useEffect(() => {}, []);
 
-    useEffect(() => {
-    
-    }, []);
-
-    
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.rightHeader}>
@@ -21,36 +17,22 @@ const MainMenuScreen = ({ navigation }) => {
             <Image source={require('../../assets/image/Logo.png')} style={{ width: 80, height: 80, marginVertical: 30 }} />
             <View style={styles.boxContainer}>
                 <View style={styles.row}>
-                    <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('ChatMain')}>
-                        <View style={styles.imageContainer}>
-                            <Image source={require('../../assets/image/Chat.png')} style={styles.image} resizeMode="contain" />
-                        </View>
-                        <Text style={styles.boxText}>대화 시작</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('Diary')}>
-                        <View style={styles.imageContainer}>
-                            <Image source={require('../../assets/image/Diary.png')} style={styles.image} resizeMode="contain" />
-                        </View>
-                        <Text style={styles.boxText}>오늘의 기록</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.row}>
-                    <TouchableOpacity style={styles.box} onPress={() =>  navigation.navigate('Test')}>
+                    <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('TestList')}>
                         <View style={styles.imageContainer2}>
                             <Image source={require('../../assets/image/Memory_check.png')} style={styles.image} resizeMode="contain" />
                         </View>
                         <Text style={styles.boxText}>기억력 테스트</Text>
+                        <Text style={styles.boxText}>결과 보기</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('ExamList')}>
                         <View style={styles.imageContainer2}>
                             <Image source={require('../../assets/image/Test.png')} style={styles.image} resizeMode="contain" />
                         </View>
                         <Text style={styles.boxText}>인지 기능 검사</Text>
+                        <Text style={styles.boxText}>결과 보기</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-
-
         </SafeAreaView>
     );
 };
@@ -67,7 +49,7 @@ const styles = StyleSheet.create({
         right: 20,
     },
     boxContainer: {
-        marginTop:20,
+        marginTop: 60,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
@@ -83,21 +65,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        borderWidth:2,
-        borderColor:"#a9a9a9",
+        borderWidth: 2,
+        borderColor: "#a9a9a9",
         marginHorizontal: 15, 
-    },
-    imageContainer: {
-        width: 50,  
-        height: 50,  
-        marginBottom:20,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     imageContainer2: {
         width: 65,  
         height: 65,  
-        marginBottom:15,
+        marginBottom: 10, // 이미지와 텍스트 간의 간격 조정
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -108,11 +83,7 @@ const styles = StyleSheet.create({
     boxText: {
         fontSize: 16,
         color: '#000',
-    },
-    textborder: {
-        fontSize: 17,
-        color: '#828282',
-        marginHorizontal: 10,
+        textAlign: 'center', // 텍스트 정렬을 중앙으로 설정
     },
 });
 

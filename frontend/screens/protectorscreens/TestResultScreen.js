@@ -76,7 +76,6 @@ const TestResultScreen = ({ navigation, route }) => {
             if (apiBaseUrl && selectdate) {
                 try {
                     const date = encodeURIComponent(selectdate);
-                    console.log(date);
                     const response = await axios.get(`${apiBaseUrl}/test/getlist/${date}`, { 
                         headers: { 
                             'Content-Type': 'application/json'
@@ -84,7 +83,6 @@ const TestResultScreen = ({ navigation, route }) => {
                     });
 
                     if (response.status === 200) {
-                        // 서버에서 받은 데이터 저장
                         setData(response.data); // data 상태에 저장
                     } else {
                         Alert.alert('채팅 가져오기 실패', '채팅 기록을 가져오는 중 문제가 발생했습니다.');
@@ -117,10 +115,23 @@ const TestResultScreen = ({ navigation, route }) => {
         );
     }
 
-    const upperMessages = [
+    const upperMessages = data[currentIndex]?.gaggwan // gaggwan을 통해 객관식인지 주관식인지 확인
+    ? [ // 객관식 질문인 경우
         {
             _id: currentIndex * 2 + 1,
-            text: data[currentIndex]?.question || "질문 없음",
+            text: data[currentIndex]?.question.replace(/^Q\s*/, '')  || "질문 없음",
+            createdAt: new Date(`${data[currentIndex]?.date}T${data[currentIndex]?.time}`),
+            user: {
+                _id: 2,
+                name: "ChatBot",
+                avatar: Logo,
+            },
+        }
+    ]
+    : [ // 주관식 질문인 경우 질문과 답변 모두 표시
+        {
+            _id: currentIndex * 2 + 1,
+            text: data[currentIndex]?.question.replace(/^Q\s*/, '')  || "질문 없음",
             createdAt: new Date(`${data[currentIndex]?.date}T${data[currentIndex]?.time}`),
             user: {
                 _id: 2,
@@ -136,8 +147,27 @@ const TestResultScreen = ({ navigation, route }) => {
                 _id: 1,
                 name: "User",
             },
-        },
+        }
     ];
+
+    const renderMultipleChoiceOptions = () => {
+        if (data[currentIndex]?.gaggwan && data[currentIndex]?.gaggawnList) {
+            const options = Object.entries(data[currentIndex].gaggawnList);
+            return (
+                <View style={styles.optionsContainer}>
+                    {options.map(([key, value], index) => (
+                        <View key={key} style={[
+                            styles.optionButton,
+                            data[currentIndex]?.answer === key && styles.selectedOption // 선택된 옵션 강조
+                        ]}>
+                            <Text style={styles.optionText}>{value.split(' ').slice(1).join(' ')}</Text>
+                        </View>
+                    ))}
+                </View>
+            );
+        }
+        return null;
+    };
 
     const handleSwipe = (direction) => {
         if (direction === 'next' && currentIndex < data.length - 1) {
@@ -162,28 +192,56 @@ const TestResultScreen = ({ navigation, route }) => {
                     user={{ _id: 1 }}
                     scrollToBottom={false}
                     inverted={false}
-                    style={{ flex: 0 }} // flex 설정
+                    style={{ flex: 0 }}
+                    listViewProps={{
+                        scrollEnabled: false, // 스크롤 비활성화
+                      }}
                 />
+                {renderMultipleChoiceOptions()} 
             </View>
-            <View style={styles.lowerContainer}>
+            <ScrollView style={styles.lowerContainer}>
                 <Text style={styles.lowerMessageText}>
-                    <Text style={styles.boldText}>1. 테스트 질문</Text>{'\n'}
-                    <Text style={styles.normalText}>{data[currentIndex]?.question}</Text>{'\n\n'}
+                    <Text style={styles.boldText}>1. 테스트 질문</Text>
+                    {'\n'}
+                    <Text style={styles.normalText}>
+                        {data[currentIndex]?.question.replace(/^\s*Q\.\s*/, '')}
+                    </Text>
+                    {'\n\n'}
                     <Text style={styles.boldText}>2. 사용자 답변</Text>{'\n'}
-                    <Text style={styles.normalText}>{data[currentIndex]?.answer || "답변 없음"}</Text>{'\n\n'}
+                    <Text style={styles.normalText}>
+                        {data[currentIndex]?.gaggwan ? 
+                            data[currentIndex]?.gaggawnList[data[currentIndex]?.answer]?.replace(/^\d+\s/, '') || "답변 없음" 
+                            : data[currentIndex]?.answer || "답변 없음"}
+                    </Text>{'\n\n'}
                     <Text style={styles.boldText}>3. 예상 답변</Text>{'\n'}
-                    <Text style={styles.normalText}>{data[currentIndex]?.predictAnswer}</Text>{'\n\n'}
+                    <Text style={styles.normalText}>
+                        {data[currentIndex]?.gaggwan ? 
+                            data[currentIndex]?.gaggawnList[data[currentIndex]?.gaggawnAnswer]?.replace(/^\d+\s/, '') || "예상 답변 없음" 
+                            : data[currentIndex]?.predictAnswer}
+                    </Text>{'\n\n'}
                     <Text style={styles.boldText}>4. 예상 이유</Text>{'\n'}
-                    <Text style={styles.normalText}>{data[currentIndex]?.reason}</Text>
+                    <Text style={styles.normalText}>
+                        {data[currentIndex]?.gaggwan ? 
+                            data[currentIndex]?.gaggawnReason || "예상 이유 없음" 
+                            : data[currentIndex]?.reason}
+                    </Text>
                 </Text>
-            </View>
+            </ScrollView>
             <View style={styles.navigationContainer}>
-                <TouchableOpacity onPress={() => handleSwipe('prev')} disabled={currentIndex === 0}>
-                    <Text style={[styles.swipeButton, { opacity: currentIndex === 0 ? 0.5 : 1 }]}>{"<"}</Text>
+                <TouchableOpacity 
+                    onPress={() => handleSwipe('prev')} 
+                    disabled={currentIndex === 0}
+                    style={[styles.navButton, currentIndex === 0 && styles.disabledButton]} // 스타일 적용
+                >
+                    <Text style={styles.navButtonText}>{"<"}</Text>
                 </TouchableOpacity>
                 <Text style={styles.pageIndicator}>{currentIndex + 1} / {data.length}</Text>
-                <TouchableOpacity onPress={() => handleSwipe('next')} disabled={currentIndex === data.length - 1}>
-                    <Text style={[styles.swipeButton, { opacity: currentIndex === data.length - 1 ? 0.5 : 1 }]}>{">"}</Text>
+                <TouchableOpacity 
+                    onPress={() => handleSwipe('next')} 
+                    disabled={currentIndex === data.length - 1}
+                    style={[styles.navButton, currentIndex === data.length - 1 && styles.disabledButton]} // 스타일 적용
+                >
+                    <Text style={styles.navButtonText}>{">"}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -214,7 +272,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 1,
         padding: 10,
-        flexGrow: 2, 
+        flexGrow: 1.5, 
     },
     lowerContainer: {
         flexGrow: 1, 
@@ -239,11 +297,54 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginHorizontal: 10,
     },
+    optionsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems:'center',
+        marginHorizontal:50,
+        marginTop:5,
+    },
+    optionButton: {
+        width: '48%', // 2개를 나란히 배치
+        height:60,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom:10,
+    },
+    optionText: {
+        fontSize: 16,
+    },
+    selectedOption: {
+        borderColor: '#4b5563',
+        backgroundColor: '#d1e7dd'
+    },
     navigationContainer: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
+        marginHorizontal:20,
+    },
+    navButton: {
+        width:50,
+        height:35,
+        paddingVertical: 5, // 세로 패딩을 줄여서 텍스트가 중앙에 위치하게 함
+        paddingHorizontal: 10, // 가로 패딩은 유지
+        backgroundColor: '#000',
+        borderRadius: 5,
+        justifyContent:'center',
+    },
+    disabledButton: {
+        backgroundColor: '#ccc',
+    },
+    navButtonText: {
+        textAlign:'center',
+        fontSize: 16,
+        color: '#fff',
     },
     swipeButton: {
         fontSize: 20,

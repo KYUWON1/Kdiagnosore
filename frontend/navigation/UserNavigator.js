@@ -20,6 +20,11 @@ import DiaryContentScreen from "../screens/userscreens/DiaryContentScreen";
 import TestScreen from "../screens/userscreens/TestScreen";
 import TestListScreen from "../screens/userscreens/TestListScreen"
 import TestDateScreen from "../screens/userscreens/TestDateScreen"
+import ExamListScreen from "../screens/userscreens/ExamListScreen"
+import ExamStartScreen from "../screens/userscreens/ExamStartScreen";
+import ExamDateScreen from "../screens/userscreens/ExamDateScreen";
+import ExamScreen from "../screens/userscreens/ExamScreen";
+import ExamResultScreen from "../screens/userscreens/ExamResultScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -34,6 +39,11 @@ const UserNavigator = () => {
             <Stack.Screen name="DiaryList" component={DiaryListScreen} />
             <Stack.Screen name="DiaryContent" component={DiaryContentScreen} />
             <Stack.Screen name="Test" component={TestScreen} />
+            <Stack.Screen name="ExamList" component={ExamListScreen} />
+            <Stack.Screen name="ExamStart" component={ExamStartScreen} />
+            <Stack.Screen name="ExamDate" component={ExamDateScreen} />
+            <Stack.Screen name="Exam" component={ExamScreen} />
+            <Stack.Screen name="ExamResult" component={ExamResultScreen} />
             <Stack.Screen name="TestDrawer" component={TestRecordStack} 
                 options={{ animation: 'slide_from_right' }} // 왼쪽에서 오른쪽으로 슬라이드
             />
