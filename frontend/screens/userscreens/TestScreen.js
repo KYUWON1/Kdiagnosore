@@ -37,7 +37,7 @@ const TestScreen = ({ navigation }) => {
 
             // 하루 전 날짜 계산
             const yesterday = new Date(today);
-            yesterday.setDate(today.getDate() - 1);
+            yesterday.setDate(today.getDate());
 
             // 날짜 형식화 함수
             const formatDate = (date) => {
@@ -50,10 +50,11 @@ const TestScreen = ({ navigation }) => {
             const date = formatDate(yesterday);
             if (apiBaseUrl) {
                 try {
+                    console.log(date);
                     const response = await axios.get(`${apiBaseUrl}/test/getlist/${date}`, {
                         headers: { 'Content-Type': 'application/json' },
                     });
-                    
+                    console.log(response);
                     if (response.status === 200) {
                         setQuestions(response.data);
                         const allAnswered = response.data.every(question => question.answer !== null);

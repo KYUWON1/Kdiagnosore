@@ -85,7 +85,7 @@ def call_gpt_api(request_list, temperature=0.4, max_tokens=100):
         response.raise_for_status()  # 상태 코드가 200이 아닐 경우 예외 발생
         return response.json()
     except req.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
+        print(f"HTTP error occurred: {http_err}, Response: {response.text}")
     except Exception as err:
         print(f"An error occurred: {err}")
     return None
@@ -110,6 +110,10 @@ def predict():
     question = data['question']
     print("Received question : ", question)
 
+    # 빈 질문을 받지 않도록 예외 처리
+    if not question:
+        return jsonify({'error': 'Invalid question'}), 400
+
     # 사용자 입력 추가
     request_list.append({
         "role": "user",
@@ -118,6 +122,9 @@ def predict():
 
     # GPT API 호출
     response = call_gpt_api(request_list)
+    if response is None:
+        return jsonify({'error': 'Failed to get a valid response from GPT'}), 50
+
     bot_response = handle_bot_response(response)
 
 
