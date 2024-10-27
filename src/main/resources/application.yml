@@ -56,7 +56,6 @@ spring:
 logging:
   file:
     name: /logs
-
 server:
   address:
     flask: 54.180.172.128

@@ -4,6 +4,7 @@ import com.example.test.Service.UserService;
 import com.example.test.dto.*;
 import com.example.test.exception.CertificationException;
 import com.example.test.exception.UserException;
+import com.example.test.repository.UserRepository;
 import com.example.test.type.CertificateResponse;
 import com.example.test.type.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import java.util.Map;
 @Controller
 @ResponseBody
 public class MainController {
+    private final UserRepository userRepository;
     @Value("${server.env}")
     private String env;
     @Value("${server.port}")
@@ -34,10 +36,11 @@ public class MainController {
     private final SmsCertificateController smsCertificateController;
     private final HttpSession httpSession;
 
-    public MainController(UserService userService, SmsCertificateController smsCertificateController, HttpSession httpSession) {
+    public MainController(UserService userService, SmsCertificateController smsCertificateController, HttpSession httpSession, UserRepository userRepository) {
         this.userService = userService;
         this.smsCertificateController = smsCertificateController;
         this.httpSession = httpSession;
+        this.userRepository = userRepository;
     }
 
     // 사용자 이름, 이메일주소로 찾기
@@ -125,12 +128,13 @@ public class MainController {
 
     }
 
-    @GetMapping("hc")
+    @GetMapping("/hc")
     public ResponseEntity<?> healthCheck(){
         Map<String,String> responseData = new HashMap<>();
         responseData.put("env",env);
         responseData.put("serverAddress",serverAddress);
         responseData.put("serverPort",serverPort);
+        userRepository.findAll();
 
         return ResponseEntity.ok(responseData);
     }

@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 35
+    namespace "com.Kdiagnosore.RememberMe"
+    sourceSets {
+        main.java.srcDirs = ['src/main/java']
+    }
+    signingConfigs {
+        release {
+            storeFile file('../rememberMe.keystore')
+            storePassword 'tlarb3011'
+            keyAlias 'rememberMe'
+            keyPassword 'tlarb3011'
+        }
+    }
+    defaultConfig {
+        applicationId "com.Kdiagnosore.RememberMe"
+        minSdkVersion 21
+        targetSdkVersion 35
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+}

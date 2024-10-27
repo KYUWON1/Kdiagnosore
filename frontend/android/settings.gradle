@@ -1,0 +1,2 @@
+rootProject.name = 'Remember_Me' // 프로젝트 이름
+include ':app' // 앱 모듈 포함
