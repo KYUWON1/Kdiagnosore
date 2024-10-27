@@ -76,15 +76,15 @@ const DiaryListScreen = ({ navigation }) => {
                 <ActivityIndicator size="large" color="#000" style={styles.loader} />
             ) : (
                 <ScrollView>
-                    {diaryData.map((item, index) => (
+                    {diaryData.slice().reverse().map((item, index)  => (
                         <TouchableOpacity key={index} onPress={() => handleItemPress(item.date)}>
                             <View style={styles.listItem}>
-                                <Text style={styles.idtext}>{index + 1}</Text>
-                                <Text style={styles.contenttext} numberOfLines={1}>{item.content}</Text>
-                                <Text style={styles.datetext}>{item.date.replace(/-/g, '.')}</Text>
+                                <Text style={styles.idtext1}>{index + 1}</Text>
+                                <Text style={styles.contenttext1} numberOfLines={1}>{item.content}</Text>
+                                <Text style={styles.datetext1}>{item.date.replace(/-/g, '.')}</Text>
                             </View>
                         </TouchableOpacity>
-                    ))}
+                    )).reverse()}
                 </ScrollView>
             )}
         </SafeAreaView>
@@ -139,6 +139,22 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
         color: '#B6B6B6',
+    },
+    idtext1: {
+        width: 70,
+        textAlign: 'center',
+        fontSize: 18,
+        
+    },
+    contenttext1: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize:18,
+    },
+    datetext1: {
+        width: 100,
+        textAlign: 'center',
+        fontSize: 18,
     },
     listItem: {
         flexDirection: 'row',
