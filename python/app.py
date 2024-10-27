@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests as req
 import os
 import json
+from datetime import datetime
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -18,6 +19,12 @@ headers = {
     "Authorization": f"Bearer {api_key}",
     "Content-Type": "application/json"
 }
+
+# 현재 시간 가져오기
+now = datetime.now()
+
+# "21시 30분" 형식으로 시간 포맷팅
+formatted_time = now.strftime("%H시 %M분")
 
 # 초기 메시지 설정
 request_list = [

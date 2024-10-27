@@ -220,6 +220,10 @@ const ChatScreen = ({navigation}) => {
 
     // 채팅창에 렌더링
     const onSend = useCallback(async (messages = []) => {
+        const sendTime = Date.now();  // 채팅 입력 시각 기록
+        console.log('User sent a message at:', new Date(sendTime));  // 사용자 입력 시간 로그
+
+
         setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
         const userMessage = messages[0].text;
 
@@ -240,6 +244,13 @@ const ChatScreen = ({navigation}) => {
                         avatar: Logo,
                     },
                 };
+                const receiveTime = Date.now();  // 서버 응답 시각 기록
+                console.log('ChatBot responded at:', new Date(receiveTime));  // 서버 응답 시간 로그
+
+                const responseTime = (receiveTime - sendTime) / 1000;
+                console.log(`userId: ${userId}`);  // 응답 시간 로그
+                console.log(`Response time: ${responseTime} seconds`);  // 응답 시간 로그
+
                 setMessages(previousMessages => GiftedChat.append(previousMessages, chatbotMessage));
             }
         } catch (error) {
