@@ -44,6 +44,14 @@ public class GptTestController {
 
     @Autowired
     private RestTemplate template;
+
+    @GetMapping("/createTest/total")
+    public void createTestTotal(){
+        createTestJugwanByChat();
+        createTestGaggwanByChat();
+        createTestGaggwanByDiary();
+        createTestJugwanByDiary();
+    }
                   
     @GetMapping("/createTest/jugwan")
     @Scheduled(cron = "0 0 1 * * ?")

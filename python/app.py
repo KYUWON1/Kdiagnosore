@@ -15,6 +15,11 @@ api_key = os.getenv('API_KEY')
 chat_gpt_url = os.getenv('API_URL')
 print(api_key + " : " + chat_gpt_url)
 
+# 환경 변수 확인
+if not api_key or not chat_gpt_url:
+    print("Error: API_KEY or API_URL is not set.")
+    exit(1)  # 필수 설정이 없으면 서버 실행 중단
+
 headers = {
     "Authorization": f"Bearer {api_key}",
     "Content-Type": "application/json"
@@ -31,7 +36,7 @@ request_list = [
     {
         "role": "system",
         "content":
-            """현재 시간은 {formatted_time}입니다. 대화 종료 조건을 판단할 때 이 시간 정보를 사용합니다.
+            f"""현재 시간은 {formatted_time}입니다. 대화 종료 조건을 판단할 때 이 시간 정보를 사용합니다.
 
                            역할 설정:
                            당신은 일상생활에서 어떤 일이 있었는지 물어보는 챗봇입니다. 대화 상대는 성별을 알 수 없는 노인입니다. "어르신"이라는 호칭을 사용합니다.
@@ -69,6 +74,7 @@ request_list = [
     }
 ]
 
+print(request_list)
 # GPT 요청 함수
 def call_gpt_api(request_list, temperature=0.4, max_tokens=100):
     data = {
@@ -123,7 +129,7 @@ def predict():
     # GPT API 호출
     response = call_gpt_api(request_list)
     if response is None:
-        return jsonify({'error': 'Failed to get a valid response from GPT'}), 50
+        return jsonify({'error': 'Failed to get a valid response from GPT'}), 500
 
     bot_response = handle_bot_response(response)
 

@@ -50,6 +50,7 @@ public class DiaryService {
     @Transactional
     public String getYesterdayDiaryData(String userId) {
         // UTC 기준으로 오늘 날짜 가져오기
+        System.out.println(userId);
         LocalDate utcDate = LocalDate.now(ZoneOffset.UTC);
 
         // 날짜의 시작 (00:00:00)과 끝 (23:59:59)을 설정
