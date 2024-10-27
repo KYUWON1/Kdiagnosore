@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, StyleSheet, SafeAreaView, Image, View, Text, TextInput, Alert } from 'react-native';
+import { TouchableOpacity, StyleSheet, SafeAreaView, Image, View, Text, TextInput, Alert, ActivityIndicator } from 'react-native';
 import Checkbox from "expo-checkbox";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,6 +12,7 @@ const LoginScreen = ({ navigation }) => {
     const [isLoginChecked, setIsLoginChecked] = useState(false);
     const [expoPushToken, setExpoPushToken] = useState("");
     const [apiBaseUrl, setApiBaseUrl] = useState("");
+    const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
     useEffect(() => {
         const getApiBaseUrl = async () => {
@@ -26,51 +27,38 @@ const LoginScreen = ({ navigation }) => {
         };
 
         getApiBaseUrl();
-    }, []);
-
-    // Expo Push Token 등록
-//    useEffect(() => {
-//        const registerForPushNotificationsAsync = async () => {
-//            let token;
-//            if (Device.isDevice) {
-//                const { status: existingStatus } = await Notifications.getPermissionsAsync();
-//                let finalStatus = existingStatus;
-//                if (existingStatus !== 'granted') {
-//                    const { status } = await Notifications.requestPermissionsAsync();
-//                    finalStatus = status;
-//                }
-//                if (finalStatus !== 'granted') {
-//                    Alert.alert('Failed to get push token for push notification!');
-//                    return;
-//                }
-//                token = (await Notifications.getExpoPushTokenAsync()).data;
-//                console.log('Expo Push Token:', token);
-//                setExpoPushToken(token);  // Expo Push Token 저장
-//            } else {
-//                Alert.alert('Must use physical device for Push Notifications');
-//            }
-//        };
-//
-//        registerForPushNotificationsAsync();
-//    }, []);
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            setID("");
-            setPassword("");
-        });
-
-        return unsubscribe;
     }, [navigation]);
 
-    const handleLogin = async () => {
+    useEffect(() => {
+        if (apiBaseUrl) { 
+            autoLogin(apiBaseUrl);
+        }
+    }, [apiBaseUrl]);
+
+    const autoLogin = async (url) => {
+        try {
+            const storedID = await AsyncStorage.getItem('userID');
+            const storedChecked = JSON.parse(await AsyncStorage.getItem('isLoginChecked'));
+            const storedPassword = await AsyncStorage.getItem('Password');
+            
+            if (storedChecked && storedID && storedPassword) {
+                const success = await handleLogin(storedID, storedPassword, storedChecked, true); // 자동 로그인 시도
+                if (success) return; // 성공 시 바로 리턴하여 로그인 화면을 건너뜁니다.
+            }
+            setIsLoading(false); // 자동 로그인이 실패하면 로딩 종료
+        } catch (e) {
+            console.error('Failed to load login data:', e);
+            setIsLoading(false); // 에러 발생 시 로딩 종료
+        }
+    };
+
+    const handleLogin = async (userId, password, ischeck, isAutoLogin = false) => {
         try {
             const data = {
-                userId: ID,
-                password: Password,
-                pushToken: expoPushToken || "" // pushToken이 없으면 빈 문자열로 전송
+                userId: userId,
+                password: password,
+                pushToken: expoPushToken || ""
             };
-
             const response = await axios.post(`${apiBaseUrl}/login`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
@@ -78,21 +66,27 @@ const LoginScreen = ({ navigation }) => {
             });
 
             if (response.status === 200) {
-                const token = response.headers.authorization; // 서버로부터 JWT 토큰 받음
-                axios.defaults.headers.common['Authorization'] = token; // 요청에 기본 헤더 설정
-                await AsyncStorage.setItem('userID', ID); // 사용자 ID 저장
-
-                const authType = response.data.role;  // role 확인
-                if (authType === 'user') {
-                    navigation.replace('UserNavigator');  // 사용자 화면으로 이동
-                } else if (authType === 'protector') {
-                    navigation.replace('ProtectorNavigator');  // 보호자 화면으로 이동
+                const token = response.headers.authorization; 
+                axios.defaults.headers.common['Authorization'] = token;
+                if(ischeck && !isAutoLogin){
+                    await AsyncStorage.setItem('userID', userId);
+                    await AsyncStorage.setItem('Password', password); 
+                    await AsyncStorage.setItem('isLoginChecked', JSON.stringify(ischeck));
                 }
+                const authType = response.data.role;
+                if (authType === 'user') {
+                    navigation.replace('UserNavigator');
+                } else if (authType === 'protector') {
+                    navigation.replace('ProtectorNavigator');
+                }
+                return true; // 로그인 성공 시 true 반환
             } else {
                 Alert.alert('로그인 실패', response.data.message || '로그인 중 오류가 발생했습니다.');
+                setIsLoading(false);
+                return false;
             }
         } catch (error) {
-            // 에러에 대한 추가 처리
+            setIsLoading(false);
             if (error.response) {
                 Alert.alert('로그인 실패', error.response.data.message || '로그인 중 오류가 발생했습니다.');
             } else if (error.request) {
@@ -100,8 +94,13 @@ const LoginScreen = ({ navigation }) => {
             } else {
                 Alert.alert('로그인 실패', '네트워크 오류가 발생했습니다.');
             }
+            return false;
         }
     };
+
+    if (isLoading) {
+        return <ActivityIndicator size="large" color="#000" style={{ flex: 1, justifyContent: 'center' }} />;
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -130,7 +129,7 @@ const LoginScreen = ({ navigation }) => {
                 />
                 <Text style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>로그인 상태 유지</Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <TouchableOpacity style={styles.button} onPress={() => handleLogin(ID, Password, isLoginChecked)}>
                 <Text style={{ fontSize: 20, color: '#fff' }}>로그인</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>

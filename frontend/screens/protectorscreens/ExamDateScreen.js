@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, StyleSheet, Modal, Image, TouchableOpacity, S
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import axios from 'axios';
 
 const ExamDateScreen = ({ route, navigation }) => {
@@ -52,41 +53,51 @@ const ExamDateScreen = ({ route, navigation }) => {
 
     const renderIcon = (score) => {
         if (score <= 3) {
-            return <Image source={require('../../assets/image/Best.png')} />;
+            return <Image source={require('../../assets/image/Best.png')}/>;
         } else if (score <= 5) {
             return <Image source={require('../../assets/image/Good.png')} />;
         } else if (score <= 7) {
             return <Image source={require('../../assets/image/Danger.png')} />;
         } else {
-            return <Image source={require('../../assets/image/Hospital.png')} />;
+            return <Image source={require('../../assets/image/Hospital.png')} style={{ width: 100, height: 100}} />;
         }
     };
 
     const renderDetail = () => {
         return Object.entries(TestData).map(([question, answer]) => {
             let answerText;
+            let icon;
+            let answerBackgroundColor;
+    
             switch (answer) {
                 case 0:
                     answerText = '아니다';
+                    icon = <FontAwesome6 name="xmark" size={20} color="#dc3545"/>;
+                    answerBackgroundColor = '#F8D7DA'; // 연한 빨간색
                     break;
                 case 1:
                     answerText = '그렇다';
+                    icon = <FontAwesome6 name="check" size={20} color="#28a745" />;
+                    answerBackgroundColor = '#D4EDDA'; // 연한 초록색
                     break;
                 case 2:
                     answerText = '매우 그렇다';
+                    icon = <AntDesign name="checkcircle" size={18} color="#0074d9" />;
+                    answerBackgroundColor = '#D1E8F6'; // 연한 파란색
                     break;
                 default:
                     answerText = '알 수 없음';
+                    icon = '❓';
+                    answerBackgroundColor = '#E2E3E5'; // 연한 회색
             }
-
+    
             return (
-                <View key={question} style={styles.detailContainer}>
+                <View key={question} style={styles.detailCard}>
                     <Text style={styles.detailQuestion}>{question}</Text>
-                    <View style={styles.answerContainer}>
-                            <Entypo name="arrow-right" size={25} color="#7B6EAB" />
+                    <View style={[styles.answerContainer, { backgroundColor: answerBackgroundColor }]}>
                         <Text style={styles.detailAnswer}>{answerText}</Text>
+                        <Text style={styles.answerIcon}>{icon}</Text>
                     </View>
-                    <View style={styles.separator} />
                 </View>
             );
         });
@@ -181,6 +192,8 @@ const styles = StyleSheet.create({
     },
     noticeview: {
         marginVertical: 40,
+        width: '80%', // 너비를 줄여서 더 집중된 느낌을 줍니다.
+        alignItems: 'center', // 수평 중앙 정렬
     },
     noticeText: {
         fontSize: 30,
@@ -227,7 +240,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     scrollView: {
-        maxHeight: '70%', // 스크롤뷰의 최대 높이 늘리기
+        maxHeight: '75%', // 스크롤뷰의 최대 높이 늘리기
         width: '100%',
     },
     detailContainer: {
@@ -238,21 +251,33 @@ const styles = StyleSheet.create({
     detailQuestion: {
         fontSize:18,
     },
+    detailCard: {
+        backgroundColor: '#FFFFFF', // 카드 배경색
+        padding: 20, // 패딩 추가
+        borderRadius: 12,
+        marginBottom: 20,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1, // 그림자 투명도 증가
+        shadowRadius: 4,
+        elevation: 5,
+        borderColor: '#E0E0E0',
+        borderWidth: 1,
+    },
+    answerIcon: {
+        fontSize: 18
+    },
     answerContainer: {
         flexDirection: 'row',
         justifyContent: 'center', // 가로 중앙 정렬
         alignItems: 'center',
-        marginTop:10, // 질문과 답변 사이 여백 추가
+        marginTop:12, // 질문과 답변 사이 여백 추가
+        padding:7,
     },
     detailAnswer: {
         fontSize:18,
-        marginLeft:5,
+        marginRight:5,
         fontWeight: '600',
-    },
-    arrowBackground: {
-        backgroundColor: '#7B6EAB', // 보라색 배경
-        padding: 2, // 약간의 패딩 추가
-        borderRadius: 5, // 모서리 둥글게
     },
     separator: {
         height: 1, // 선의 높이
@@ -270,5 +295,4 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
 });
-
 export default ExamDateScreen;

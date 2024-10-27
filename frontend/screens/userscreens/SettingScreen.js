@@ -30,6 +30,9 @@ const SettingScreen = ({ navigation }) => {
             if (response.status === 200) {
                 Alert.alert('로그아웃 성공', '성공적으로 로그아웃 되었습니다.');
                 delete axios.defaults.headers.common['Authorization'];
+                await AsyncStorage.setItem('isLoginChecked', 'false');
+                await AsyncStorage.removeItem('userID');
+                await AsyncStorage.removeItem('Password');
                 navigation.replace('Auth'); // 로그인 화면으로 네비게이트
             } else {
                 Alert.alert('로그아웃 실패', '로그아웃 중 문제가 발생했습니다.');
