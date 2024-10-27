@@ -57,8 +57,8 @@ const TestListScreen = ({navigation}) => {
     return(
         <SafeAreaView style={styles.container}>
              <View style={styles.header}>
-             <Text style={styles.headerText}>Remember Me</Text>
-             <FontAwesome name="cog" size={25} style={styles.icon} onPress={() => navigation.navigate('SettingDrawer')} />
+                <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('MainMenu')} />
+                <Text style={styles.headerText}>Remember Me</Text>
             </View>
             <View style={styles.listtitle}>
                 <Text style={styles.idtext}>번호</Text>
@@ -91,24 +91,20 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
     },
     header: {
-        flexDirection: 'row',
+        flexDirection:'row',
         alignItems: 'center',
-        justifyContent: 'center',
         width: '100%',
         height: 50,
         borderBottomWidth: 1,
         borderStyle: "solid",
         borderBottomColor: "#E0E0E0",
         overflow: "hidden",
-        position: 'relative', // relative로 position 설정
     },
     headerText: {
         fontSize: 20,
         fontWeight: '700',
-        textAlign: 'center',
-        position: 'absolute', // absolute로 중앙에 고정
-        left: 0,
-        right: 0,
+        width:'80%',
+        textAlign:'center',
     },
     icon: {
         position: 'absolute', // absolute로 오른쪽 끝에 고정

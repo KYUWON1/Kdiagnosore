@@ -53,6 +53,7 @@ const TestScreen = ({ navigation }) => {
                     const response = await axios.get(`${apiBaseUrl}/test/getlist/${date}`, {
                         headers: { 'Content-Type': 'application/json' },
                     });
+                    
                     if (response.status === 200) {
                         setQuestions(response.data);
                         const allAnswered = response.data.every(question => question.answer !== null);
