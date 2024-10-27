@@ -125,7 +125,7 @@ public class MainController {
 
     }
 
-    @GetMapping("hc")
+    @GetMapping("/hc")
     public ResponseEntity<?> healthCheck(){
         Map<String,String> responseData = new HashMap<>();
         responseData.put("env",env);

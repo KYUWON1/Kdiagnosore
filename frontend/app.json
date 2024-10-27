@@ -1,36 +1,13 @@
 {
+  "name": "Remember_Me",
+  "displayName": "Remember Me",
   "expo": {
-    "name": "sample",
-    "slug": "kdiagnosore",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.Kdiagnosore.RememberMe"
-    },
-    "android": {
-      "package": "com.Kdiagnosore.RememberMe",
-      "googleServicesFile": "./google-services.json",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
     "extra": {
       "eas": {
-        "projectId": "d8d2fc57-2923-4901-984a-b5ab1134e0d3"
+        "projectId": "844bb286-8846-4904-939d-037d293d3937"
       }
     },
-    "owner": "shimkyuwon"
+    "owner": "shimkyuwon",
+    "slug": "k-diagnosore"
   }
 }
