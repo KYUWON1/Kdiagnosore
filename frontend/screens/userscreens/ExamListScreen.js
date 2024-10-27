@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, StyleSheet, ScrollView, Alert, ActivityIndica
 import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native'; 
 
 const ExamListScreen = ({ navigation }) => {
     const [TestData, setTestData] = useState([]);
@@ -26,45 +27,47 @@ const ExamListScreen = ({ navigation }) => {
         getApiBaseUrl();
     }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (apiBaseUrl) {
-                try {
-                    const response = await axios.get(`${apiBaseUrl}/question/result`, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-                    if (response.status === 200) {
-                        setTestData(response.data);
-                        try {
-                            const response1 = await axios.get(`${apiBaseUrl}/question/status`, {
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                            });
-                            if (response1.status === 200) {
-                                setTestAble(response1.data.canTest);
-                                setDday(response1.data.dday);
-
-                            } else {
+    // 화면이 포커스될 때마다 데이터를 가져옴
+    useFocusEffect(
+        React.useCallback(() => {
+            const fetchData = async () => {
+                if (apiBaseUrl) {
+                    try {
+                        const response = await axios.get(`${apiBaseUrl}/question/result`, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                        if (response.status === 200) {
+                            setTestData(response.data);
+                            try {
+                                const response1 = await axios.get(`${apiBaseUrl}/question/status`, {
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                });
+                                if (response1.status === 200) {
+                                    setTestAble(response1.data.canTest);
+                                    setDday(response1.data.dday);
+                                } else {
+                                    Alert.alert('테스트 여부 가져오기 실패', '테스트 여부를 가져오는 중 문제가 발생했습니다.');
+                                }
+                            } catch (error) {
                                 Alert.alert('테스트 여부 가져오기 실패', '테스트 여부를 가져오는 중 문제가 발생했습니다.');
                             }
-                        } catch (error) {
-                            Alert.alert('테스트 여부 가져오기 실패', '테스트 여부를 가져오는 중 문제가 발생했습니다.');
+                        } else {
+                            Alert.alert('결과 가져오기 실패', '테스트 결과 목록을 가져오는 중 문제가 발생했습니다.');
                         }
-                    } else {
+                    } catch (error) {
                         Alert.alert('결과 가져오기 실패', '테스트 결과 목록을 가져오는 중 문제가 발생했습니다.');
+                    } finally {
+                        setLoading(false);
                     }
-                } catch (error) {
-                    Alert.alert('결과 가져오기 실패', '테스트 결과 목록을 가져오는 중 문제가 발생했습니다.');
-                } finally {
-                    setLoading(false);
                 }
-            }
-        };
-        fetchData();
-    }, [apiBaseUrl]);
+            };
+            fetchData();
+        }, [apiBaseUrl]) // apiBaseUrl에 의존
+    );
 
     const handleItemPress = (selectdate) => {
         navigation.navigate('ExamDate', { selectdate });

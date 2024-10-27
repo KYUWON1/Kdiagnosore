@@ -50,12 +50,6 @@ const SettingScreen = ({ navigation }) => {
             </View>
             <View style={styles.setting}>
                 <View style={styles.setting1}>
-                    <Text style={styles.settingcontent}>치매에 도움 되는 정보</Text>
-                </View>
-                <AntDesign name='right' size={25} style={{ marginHorizontal: 10, }} onPress={() => navigation.navigate('Info')} />
-            </View>
-            <View style={styles.setting}>
-                <View style={styles.setting1}>
                     <MaterialCommunityIcons name="account" size={25} style={{ marginLeft: 15 }}/>
                     <Text style={styles.settingcontent}>내 정보</Text>
                 </View>

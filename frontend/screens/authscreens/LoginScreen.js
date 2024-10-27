@@ -111,12 +111,14 @@ const LoginScreen = ({ navigation }) => {
                 style={styles.input}
                 value={ID}
                 placeholder='아이디'
+                placeholderTextColor="#A9A9A9"
                 onChangeText={setID}
             />
             <TextInput
                 style={styles.input}
                 value={Password}
                 placeholder='비밀번호'
+                placeholderTextColor="#A9A9A9"
                 secureTextEntry
                 onChangeText={setPassword}
             />
