@@ -9,6 +9,7 @@ import com.example.test.dto.GPTResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,13 +48,12 @@ public class GptTestController {
     // todo : 다른 ID에 대해서도 테스트가 생김
                   
     @GetMapping("/createTest/jugwan")
+    @Scheduled(cron = "0 0 1 * * ?")
     public String createTestJugwanByChat(){
         List<String> allUserId = userService.findAllUserId();
         for(String userId : allUserId){
             String chatMessages = chatService.getChatMessage(userId,
                     LocalDate.now().minusDays(0).format(DateTimeFormatter.ISO_LOCAL_DATE));
-//            String chatMessages = chatService.getChatMessage(userId,
-//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
             if(chatMessages.equals("No Data")){
                 continue;
             }
@@ -119,14 +119,13 @@ public class GptTestController {
     }
 
     @GetMapping("/createTest/gaggwan")
+    @Scheduled(cron = "0 0 1 * * ?")
     public String createTestGaggwanByChat(){
         List<String> allUserId = userService.findAllUserId();
         for(String userId : allUserId) {
 
             String chatMessages = chatService.getChatMessage(userId,
-                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
-//            String chatMessages = chatService.getChatMessage(userId,
-//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                    LocalDate.now().minusDays(0).format(DateTimeFormatter.ISO_LOCAL_DATE));
             if (chatMessages.equals("No Data")) {
                 continue;
             }
@@ -186,6 +185,7 @@ public class GptTestController {
     }
 
     @GetMapping("/createTestFromDiary/jugwan")
+    @Scheduled(cron = "0 0 1 * * ?")
     public String createTestJugwanByDiary(){
         List<String> allUserId = userService.findAllUserId();
         for(String userId : allUserId){
@@ -234,16 +234,9 @@ public class GptTestController {
                 줄바꿈은 하지 말아줘.
                 """;
             String diaryMessages = diaryService.getYesterdayDiaryData(userId);
-//            String chatMessages = chatService.getChatMessage(userId,
-//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
             if(diaryMessages.equals("No Data")){
                 continue;
             }
-//            String chatMessages = """
-//                    오늘 아침에는 일어나서 혼자 밥을 먹었다. 조금 외로웠던거 같다. 설거지를 마치고 점심에는 강아지 초코와 함께 산책을 나갔다.
-//                    옆집 할머니가 마침 나와계셔서 수다를 떨다가 들어왔다. 저녁에는 나물을 넣어서 비빔밥을 만들어 먹었다. 고추장을 너무 많이 넣어서 맵더라.
-//                    밤에는 아들내미가 웬일로 먼저 전화를 했다. 목소리 들으니까 좋더라. 곧 추석때 온다고 하니까 명절음식 많이 해놓아야겠다.
-//                    """;
             prompt += diaryMessages + add;
             System.out.println("userId: "+ userId);
             System.out.println(prompt);
@@ -251,12 +244,7 @@ public class GptTestController {
             GPTResponseDTO response = template.postForObject(apiURL, request, GPTResponseDTO.class);
             String createdTest = response.getChoices().get(0).getMessage().getContent();
             System.out.println(createdTest);
-            // 저장을 시도하고 실패하면 재시도
-            boolean saveSuccess = chatService.saveTestChat(userId, createdTest);
-            if(!saveSuccess){
-                log.info("Test Created Fail..retry {}",userId);
-
-            }
+            chatService.saveTestChat(userId,createdTest);
             log.info("Test Created {}.",userId);
         }
 
@@ -264,6 +252,7 @@ public class GptTestController {
     }
 
     @GetMapping("/createTestFromDiary/gaggwan")
+    @Scheduled(cron = "0 0 1 * * ?")
     public String createTestGaggwanByDiary(){
         List<String> allUserId = userService.findAllUserId();
         for(String userId : allUserId){
@@ -305,16 +294,9 @@ public class GptTestController {
                     데이터를 파싱해서 저장할 수 있도록 예시 형태를 잘 유지해줘.
                 """;
             String diaryMessages = diaryService.getYesterdayDiaryData(userId);
-//            String chatMessages = chatService.getChatMessage(userId,
-//                    LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
             if(diaryMessages.equals("No Data")){
                 continue;
             }
-//            String chatMessages = """
-//                    오늘 아침에는 일어나서 혼자 밥을 먹었다. 조금 외로웠던거 같다. 설거지를 마치고 점심에는 강아지 초코와 함께 산책을 나갔다.
-//                    옆집 할머니가 마침 나와계셔서 수다를 떨다가 들어왔다. 저녁에는 나물을 넣어서 비빔밥을 만들어 먹었다. 고추장을 너무 많이 넣어서 맵더라.
-//                    밤에는 아들내미가 웬일로 먼저 전화를 했다. 목소리 들으니까 좋더라. 곧 추석때 온다고 하니까 명절음식 많이 해놓아야겠다.
-//                    """;
             prompt += diaryMessages + add;
             System.out.println("userId: "+ userId);
             System.out.println(prompt);
