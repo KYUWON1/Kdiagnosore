@@ -50,13 +50,6 @@ const SettingScreen = ({ navigation }) => {
             </View>
             <View style={styles.setting}>
                 <View style={styles.setting1}>
-                    <MaterialCommunityIcons name='alarm' size={25} style={{ marginLeft: 15 }} />
-                    <Text style={styles.settingcontent}>알람 설정</Text>
-                </View>
-                <AntDesign name='right' size={25} style={{ marginHorizontal: 10, }} onPress={() => navigation.navigate('SetAlarm')} />
-            </View>
-            <View style={styles.setting}>
-                <View style={styles.setting1}>
                     <MaterialCommunityIcons name="account" size={25} style={{ marginLeft: 15 }}/>
                     <Text style={styles.settingcontent}>내 정보</Text>
                 </View>
