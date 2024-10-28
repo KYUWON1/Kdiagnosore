@@ -72,9 +72,60 @@ public class CognitiveTestService {
     }
 
     @Transactional
-    public boolean saveTestGaggwan(String userId, String createdTest) {
+    public void saveTestGaggwan(String userId, String createdTest) {
         String[] questions = createdTest.split("\n\n");
-        boolean atLeastOneSaved = false;
+
+//        for (int i = 0; i < questions.length; i++) {
+//            System.out.println("블록" + i +"\n"+ questions[i]);
+//        }
+
+        for (String questionBlock : questions) {
+            String[] parts = questionBlock.split("@");
+            System.out.println(parts[0]);
+            System.out.println(parts[1]);
+            System.out.println(parts[2]);
+            System.out.println(parts[3]);
+
+
+            TestDomain newTest = new TestDomain();
+            newTest.setUserId(userId);
+
+            // 질문 텍스트
+            String question = parts[0].replace("질문입니다! ", "").trim();
+            System.out.println("question = " + question);
+            newTest.setQuestion(question);
+
+            // 보기 텍스트들
+            Map<Integer, String> map = new HashMap<>();
+            String[] answers = parts[1].split("[0-9]+\\.\\s*");
+            for (int i = 1; i < answers.length; i++) {
+                String option = answers[i].trim();  // 앞뒤 공백 제거
+                System.out.println("option " + i + " = " + option);
+                map.put(i, option);
+            }
+            newTest.setGaggawnList(map);
+
+            // 정답
+            String answer = parts[2].replace("정답:", "").trim();
+            System.out.println("answer = " + answer);
+            newTest.setGaggawnAnswer(Integer.parseInt(answer));
+
+            // 이유
+            String reason = parts[3].replace("R ", "").trim();
+            System.out.println("reason = " + reason);
+            newTest.setGaggawnReason(reason);
+            newTest.setGaggwan(true);
+            newTest.setDate(LocalDate.now());
+            newTest.setTime(LocalTime.now());
+            testRepository.save(newTest);
+            System.out.println(userId + "gaggwan save");
+        }
+
+    }
+
+    @Transactional
+    public void saveTestGaggwanByChat(String userId, String createdTest) {
+        String[] questions = createdTest.split("\n\n");
 
         for (int i = 0; i < questions.length; i++) {
             System.out.println("블록" + i + questions[i]);
@@ -118,18 +169,10 @@ public class CognitiveTestService {
             newTest.setGaggwan(true);
             newTest.setDate(LocalDate.now());
             newTest.setTime(LocalTime.now());
-
-            try {
-                testRepository.save(newTest);
-                atLeastOneSaved = true;  // 하나라도 성공적으로 저장되면 true로 변경
-                System.out.println("---------------");
-            } catch (Exception e) {
-                e.printStackTrace();
-                // 예외 발생 시 계속 진행하고 다음 블록으로 넘어감
-            }
+            testRepository.save(newTest);
         }
 
-        return atLeastOneSaved;  // 하나라도 저장되었으면 true, 아니면 false
+        System.out.println(userId + "save gaggwan");
     }
 
 

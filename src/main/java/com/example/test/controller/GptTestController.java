@@ -72,6 +72,7 @@ public class GptTestController {
                 """;
             String add = """
                 
+                
                 위에 대화 내용을 바탕으로 질문과 예상 답변과 근거을 생성해줘.
                 질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄께.
                 
@@ -115,7 +116,7 @@ public class GptTestController {
             GPTRequestDTO request = new GPTRequestDTO(model, prompt);
             GPTResponseDTO response =  template.postForObject(apiURL, request, GPTResponseDTO.class);
             String createdTest = response.getChoices().get(0).getMessage().getContent();
-            System.out.println(createdTest);
+            System.out.println("채팅 주관" + createdTest);
             chatService.saveTestChat(userId,createdTest);
             log.info("Test Created {}.",userId);
         }
@@ -144,6 +145,7 @@ public class GptTestController {
                                     
                     """;
             String add = """
+                              
                                     
                     위에 대화 내용을 바탕으로 객관식 문제를 생성해줘.
                     객관식은 사용자가 어제의 일을 잘 기억하고있나 체크하기위한 객관식이야.
@@ -183,8 +185,8 @@ public class GptTestController {
             GPTRequestDTO request = new GPTRequestDTO(model, prompt);
             GPTResponseDTO response = template.postForObject(apiURL, request, GPTResponseDTO.class);
             String createdTest = response.getChoices().get(0).getMessage().getContent();
-            System.out.println(createdTest);
-            cognitiveTestService.saveTestGaggwan(userId,createdTest);
+            System.out.println("채팅 객관" + createdTest);
+            cognitiveTestService.saveTestGaggwanByChat(userId,createdTest);
         }
         log.info("Test Created End.");
         return "Create Test Question!";
@@ -199,20 +201,22 @@ public class GptTestController {
                 너는 이제부터 일상 정보 기반 질문 생성 AI야.
                 모든 문장의 끝에는 @ 를 항상 붙여주고, 줄 바꿈은 하지 말아줘.
                 아래는 사용자가 하루동안 있었던 일들을 기록한 텍스트야.
-                위의 내용을 바탕으로 질문과 예상 답변과 근거를 생성해줘.
-                질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄게.
-                Date와 Time은 해당 채팅을 입력한 날짜와 시간이야.
+                
                 
                 """;
 
             String add = """
+                
+                
+                위의 내용을 바탕으로 질문과 예상 답변과 근거를 생성해줘.
+                질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄게.
                 
                 질문은 사용자가 자신이 했던 일을 잘 기억하고 있는지 확인하는 목적이어야해.
                 질문은 반드시 제공해준 어제 기록 내용에 관한 질문이여야해.
                 질문은 정확한 단어로 대답할 수 있는 형태인 질문이여야해.
                 질문에서 "오늘은 어떤가요?" 같은 현재에 대해 묻는 질문은 없어야해.
                 질문은 사용자가 답변할 수 있는 형태의 질문이여야해.
-                질문은 반드시 과거 있었던 일에 대한 질문이여야해.
+                질문은 반드시 해당 기록에 대한 질문이여야해.
                 질문에 느꼈던 감정에 대해서는 묻는 질문은 제외해.
                 질문은 존댓말을 사용해줘.
                 ex)"어제 점심엔 무엇을 하셨나요?"
@@ -249,8 +253,8 @@ public class GptTestController {
             GPTRequestDTO request = new GPTRequestDTO(model, prompt);
             GPTResponseDTO response = template.postForObject(apiURL, request, GPTResponseDTO.class);
             String createdTest = response.getChoices().get(0).getMessage().getContent();
-            System.out.println(createdTest);
-            chatService.saveTestChat(userId,createdTest);
+            System.out.println("주관 응답 : " + createdTest);
+            chatService.saveTestChatByDiary(userId,createdTest);
             log.info("Test Created {}.",userId);
         }
 
@@ -266,20 +270,19 @@ public class GptTestController {
                 너는 이제부터 일상 정보 기반 질문 생성 AI야.
                 모든 문장의 끝에는 @ 를 항상 붙여주고, 줄 바꿈은 하지 말아줘.
                 아래는 사용자가 하루동안 있었던 일들을 기록한 텍스트야.
-                위의 내용을 바탕으로 질문과 예상 답변과 근거를 생성해줘.
-                질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄께.
-                Date와 Time은 해당 채팅을 입력한 날짜와 시간이야.
+                
                 
                 """;
 
             String add = """
                 
-                위에 대화 내용을 바탕으로 객관식 문제를 생성해줘.
+                
+                위에 일기 내용을 바탕으로 객관식 문제를 생성해줘.
                     객관식은 사용자가 어제의 일을 잘 기억하고있나 체크하기위한 객관식이야.
                     객관식 문항은 총 4가지로 되어있고, 정답은 오직 하나야.
                     객관식의 문항은 단어로 구성되어야만해.
                     문제가 너무 쉽지 않도록, 정답과 유사성이 있는 단어로 문항을 구성해줘.
-                    질문은 반드시 제공해준 어제 대화 내용에 관한 질문이여야해.
+                    질문은 반드시 제공해준 어제 기록에 관한 질문이여야해.
                     질문은 반드시 과거에 대한 질문이여야해.
                     사용자가 라는 단어는 사용하지말고, 질문해줘.
                     질문을 제공할때 존댓말을 사용해줘.
@@ -288,7 +291,7 @@ public class GptTestController {
                     내가 제공해준 내용을 바탕으로 3개의 객관식 문제를 제공해줘.
                     문제와 문항, 정답 총 3가지를 제공해줘.
                     정답의 이유도 제공해줘.
-                    정답의 이유는 제공해준 대화내용에 근거해야해.
+                    정답의 이유는 제공해준 제공해준 기록에 근거해야해.
                     추측성 근거는 제시하지말아줘.
                                     
                     예시 형태를 제공해줄게.
@@ -309,7 +312,7 @@ public class GptTestController {
             GPTRequestDTO request = new GPTRequestDTO(model, prompt);
             GPTResponseDTO response = template.postForObject(apiURL, request, GPTResponseDTO.class);
             String createdTest = response.getChoices().get(0).getMessage().getContent();
-            System.out.println(createdTest);
+            System.out.println("객관 응답 :" + createdTest);
             cognitiveTestService.saveTestGaggwan(userId,createdTest);
             log.info("Test Created {}.",userId);
         }

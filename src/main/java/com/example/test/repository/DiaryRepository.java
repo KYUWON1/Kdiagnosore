@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface DiaryRepository extends MongoRepository<DiaryDomain,String> {
     List<DiaryDomain> findByUserIdOrderByDateDesc(String userId);
-    DiaryDomain findByUserIdAndDate(String userId, LocalDate date);
+    DiaryDomain findByUserIdAndDate(String userId, String date);
 
     DiaryDomain findByUserIdAndDateBetween(String userId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

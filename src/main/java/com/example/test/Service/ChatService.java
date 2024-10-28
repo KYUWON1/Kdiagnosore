@@ -217,22 +217,22 @@ public class ChatService {
         return chatMessages;
     }
 
-    public boolean saveTestChat(String userId, String test) {
-        try {
-            boolean allSavedSuccessfully = parsingCreatedTestAndSave(userId, test);
-            return allSavedSuccessfully;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public void saveTestChat(String userId, String test) {
+        parsingCreatedTestAndSave(userId, test);
     }
 
-    private boolean parsingCreatedTestAndSave(String userId, String test) {
-        Pattern pattern = Pattern.compile("Q (.*?)@\\nA (.*?)@\\nR (.*?) (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+?)@");
+    public void saveTestChatByDiary(String userId, String test) {
+        parsingCreatedTestAndSaveByDiary(userId, test);
+    }
+
+
+    private void parsingCreatedTestAndSave(String userId, String test) {
+        // 패턴에서 timeStamp를 따로 그룹화하여 추출
+        Pattern pattern = Pattern.compile("Q (.*?)@\\s*A (.*?)@\\s*R (.*?)\\s*(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+)@");
         Matcher matcher = pattern.matcher(test);
-        boolean allSavedSuccessfully = true;
 
         while (matcher.find()) {
+            System.out.println("매칭성공");
             String question = matcher.group(1);
             System.out.println("question = " + question);
             String predictAnswer = matcher.group(2);
@@ -247,14 +247,39 @@ public class ChatService {
             newTest.setTime(LocalTime.now());
             newTest.setGaggwan(false);
 
-            try {
-                testRepository.save(newTest);
-            } catch (Exception e) {
-                e.printStackTrace();
-                allSavedSuccessfully = false;  // 저장 실패 시 false로 변경
-            }
+            testRepository.save(newTest);
+            System.out.println(userId + " jugwan save");
         }
-        return allSavedSuccessfully;
+    }
+
+    private void parsingCreatedTestAndSaveByDiary(String userId, String test) {
+        Pattern pattern = Pattern.compile("Q (.*?)@\\s*A (.*?)@\\s*R (.*?)" +
+                "@\\s*");
+        Matcher matcher = pattern.matcher(test);
+
+        while (matcher.find()) {
+            System.out.println("매칭성공");
+            String question = matcher.group(1).trim();
+            System.out.println("question = " + question);
+            String predictAnswer = matcher.group(2).trim();
+            System.out.println("predictAnswer = " + predictAnswer);
+            String reason = matcher.group(3).trim();
+            System.out.println("reason = " + reason);
+
+            TestDomain newTest = setTestContent(userId, question, predictAnswer, reason);
+            newTest.setDate(LocalDate.now());
+            newTest.setTime(LocalTime.now());
+            newTest.setGaggwan(false);
+
+
+            testRepository.save(newTest);
+            System.out.println(userId + "jugwan save");
+        }
+
+        // 파싱이 완료되었으나 매칭되지 않을 경우 로그 출력
+        if (!matcher.find()) {
+            System.out.println("매칭되지 않았습니다. 입력된 데이터 형식을 확인해주세요.");
+        }
     }
 
     public TestDomain setTestContent(String userId,String question,
@@ -266,6 +291,18 @@ public class ChatService {
         testDomain.setPredictAnswer(predictAnswer);
         testDomain.setReason(reason);
         testDomain.setReasonAt(timeStamp);
+        testDomain.setDate(LocalDate.now());
+        testDomain.setTime(LocalTime.now());
+        return testDomain;
+    }
+
+    public TestDomain setTestContent(String userId,String question,
+                                     String predictAnswer,String reason){
+        TestDomain testDomain = new TestDomain();
+        testDomain.setUserId(userId);
+        testDomain.setQuestion(question);
+        testDomain.setPredictAnswer(predictAnswer);
+        testDomain.setReason(reason);
         testDomain.setDate(LocalDate.now());
         testDomain.setTime(LocalTime.now());
         return testDomain;

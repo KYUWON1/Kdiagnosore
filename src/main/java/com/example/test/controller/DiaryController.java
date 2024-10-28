@@ -30,7 +30,7 @@ public class DiaryController {
 
     @GetMapping("/{date}")
     public GetDiaryListDto getDiaryDetail(
-            @PathVariable LocalDate date
+            @PathVariable String date
             ){
         String userId = getUserIdFromToken();
         return diaryService.getDiaryDetail(userId,date);
@@ -38,7 +38,7 @@ public class DiaryController {
 
     @PatchMapping("/{date}")
     public UpdateDiaryResponse updateDiary(
-            @PathVariable LocalDate date,
+            @PathVariable String date,
             @RequestBody UpdateDiaryRequest request
     ){
         String userId = getUserIdFromToken();

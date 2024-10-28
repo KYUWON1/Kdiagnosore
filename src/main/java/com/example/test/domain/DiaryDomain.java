@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Document(collection = "diary")
@@ -17,5 +18,14 @@ public class DiaryDomain {
 
     private String userId;
     private String content;
-    private LocalDate date;
+    private String date;
+
+    public void setDate(LocalDate date) {
+        this.date = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+    public LocalDate getDate() {
+        return LocalDate.parse(this.date, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    //private LocalDate date;
 }

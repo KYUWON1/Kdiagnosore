@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -30,9 +31,10 @@ public class DiaryService {
 
     @Transactional
     public UpdateDiaryResponse updateDiary(String userId,
-                                     LocalDate date,
+                                     String date,
                             UpdateDiaryRequest request) {
-        DiaryDomain diary = diaryRepository.findByUserIdAndDate(userId, date);
+        DiaryDomain diary = diaryRepository.findByUserIdAndDate(userId,
+                date);
         diary.setContent(request.getContent());
         return UpdateDiaryResponse.fromEntity(diaryRepository.save(diary));
     }
@@ -43,7 +45,7 @@ public class DiaryService {
     }
 
     @Transactional
-    public GetDiaryListDto getDiaryDetail(String userId, LocalDate date) {
+    public GetDiaryListDto getDiaryDetail(String userId, String date) {
         return GetDiaryListDto.fromEntityAllContent(diaryRepository.findByUserIdAndDate(userId, date));
     }
 
@@ -51,23 +53,27 @@ public class DiaryService {
     public String getYesterdayDiaryData(String userId) {
         // UTC 기준으로 오늘 날짜 가져오기
         System.out.println(userId);
-        LocalDate utcDate = LocalDate.now(ZoneOffset.UTC);
 
-        // 날짜의 시작 (00:00:00)과 끝 (23:59:59)을 설정
-        LocalDateTime startOfDay = utcDate.atStartOfDay();  // 2024-10-27 00:00:00
-        LocalDateTime endOfDay = utcDate.atTime(23, 59, 59);  // 2024-10-27 23:59:59
+        // yyyy-MM-dd 형식으로 날짜를 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = LocalDate.now().format(formatter);
 
-        // 날짜 범위 쿼리 수행
-        DiaryDomain data = diaryRepository.findByUserIdAndDateBetween(userId, startOfDay, endOfDay);
+        System.out.println("Formatted Date: " + formattedDate);
+
+        // DiaryDomain에서 yyyy-MM-dd로 저장된 날짜를 기반으로 쿼리 수행
+        // 이 부분은 날짜 형식에 따라 다를 수 있음
+        DiaryDomain data = diaryRepository.findByUserIdAndDate(userId, formattedDate);
+
         System.out.println(data);
 
         if (data == null) {
             return "No Data";
         } else {
-            if (!data.getContent().isEmpty())
+            if (!data.getContent().isEmpty()) {
                 return data.getContent();
-            else
+            } else {
                 return "No Data";
+            }
         }
     }
 }
