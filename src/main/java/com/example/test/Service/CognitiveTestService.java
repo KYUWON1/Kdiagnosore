@@ -75,9 +75,6 @@ public class CognitiveTestService {
     public void saveTestGaggwan(String userId, String createdTest) {
         String[] questions = createdTest.split("\n\n");
 
-//        for (int i = 0; i < questions.length; i++) {
-//            System.out.println("블록" + i +"\n"+ questions[i]);
-//        }
 
         for (String questionBlock : questions) {
             String[] parts = questionBlock.split("@");
@@ -99,7 +96,8 @@ public class CognitiveTestService {
             Map<Integer, String> map = new HashMap<>();
             String[] answers = parts[1].split("[0-9]+\\.\\s*");
             for (int i = 1; i < answers.length; i++) {
-                String option = answers[i].trim();  // 앞뒤 공백 제거
+                String option = i + " " + answers[i].trim();  // 앞뒤 공백 제거, 1
+                // xx 형태
                 System.out.println("option " + i + " = " + option);
                 map.put(i, option);
             }
@@ -144,14 +142,15 @@ public class CognitiveTestService {
             newTest.setUserId(userId);
 
             // 질문 텍스트
-            String question = parts[0].replace("Q 질문입니다! ", "").trim();
+            String question = parts[0].replace("Q ", "").trim();
             System.out.println("question = " + question);
             newTest.setQuestion(question);
 
             // 보기 텍스트들
             Map<Integer, String> map = new HashMap<>();
             for (int i = 1; i <= 4; i++) {
-                String answer = parts[i].replaceAll("^[0-9]+ ", "").trim();
+                String answer =
+                        i + " " + parts[i].replaceAll("^[0-9]+ ", "").trim();
                 System.out.println("option " + i + " = " + answer);
                 map.put(i, answer);
             }
