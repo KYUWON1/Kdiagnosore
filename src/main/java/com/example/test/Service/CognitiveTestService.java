@@ -103,7 +103,7 @@ public class CognitiveTestService {
             }
             newTest.setGaggawnList(map);
 
-            // 정답
+            // c
             String answer = parts[2].replace("정답:", "").trim();
             System.out.println("answer = " + answer);
             newTest.setGaggawnAnswer(Integer.parseInt(answer));

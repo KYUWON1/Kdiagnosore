@@ -65,6 +65,8 @@ public class JoinService {
     }
 
     public boolean findUser(String userName,String phoneNumber) {
+        System.out.println(userName);
+        System.out.println(phoneNumber);
         UserDomain user = userRepository.findByUserNameAndPhoneNum(userName,
                 phoneNumber);
         if(user == null){
