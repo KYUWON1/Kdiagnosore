@@ -160,7 +160,7 @@ const TestDateScreen = ({ navigation, route }) => {
                             styles.optionButton,
                             data[currentIndex]?.answer === key && styles.selectedOption // 선택된 옵션 강조
                         ]}>
-                            <Text style={styles.optionText}>{value.split(' ').slice(1).join(' ')}</Text>
+                            <Text style={styles.optionText} adjustsFontSizeToFit minimumFontScale={0.5} numberOfLines={1}>{value.split(' ').slice(1).join(' ')}</Text>
                         </View>
                     ))}
                 </View>
@@ -272,11 +272,13 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 1,
         padding: 10,
-        flexGrow: 1.5, 
+        flexGrow: 1, 
     },
     lowerContainer: {
-        flexGrow: 1, 
-        margin: 20,
+        height:200, 
+        marginHorizontal: 20,
+        marginTop:5,
+        marginBottom:25,
         borderRadius: 15,
         borderWidth: 1,
         borderColor: '#E0E0E0',
@@ -303,7 +305,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems:'center',
         marginHorizontal:50,
-        marginTop:5,
+        //marginTop:5,
     },
     optionButton: {
         width: '48%', // 2개를 나란히 배치
