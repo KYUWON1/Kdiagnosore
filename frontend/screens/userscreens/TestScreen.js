@@ -132,6 +132,7 @@ const TestScreen = ({ navigation }) => {
             // 에러 없이 모든 API 호출이 완료된 경우에만 테스트 완료 알림
             if (results.every(response => response.status === 200)) {
                 Alert.alert("테스트 완료", "답변이 제출되었습니다.");
+                setIsTestEnded(true);
             }
     
         } catch (error) {
@@ -169,7 +170,7 @@ const TestScreen = ({ navigation }) => {
                                 ]}
                                 onPress={() => handleSelectOption(key)}
                             >
-                                <Text style={styles.answerText}>
+                                <Text style={styles.answerText} adjustsFontSizeToFit minimumFontScale={0.5} numberOfLines={1}>
                                     {currentQuestion.gaggawnList[key].replace(/^\d+\s*/, '')} 
                                 </Text>
                             </TouchableOpacity>
@@ -182,6 +183,7 @@ const TestScreen = ({ navigation }) => {
                             multiline={true} // Enable multiline input
                             numberOfLines={5}
                             placeholder="답변을 입력하세요"
+                            placeholderTextColor="#A9A9A9"
                             value={userInput}
                             onChangeText={handleInputChange} // 변경된 부분
                         />
@@ -330,7 +332,7 @@ const styles = StyleSheet.create({
     answerButton: {
         borderColor: '#ccc',
         borderRadius: 10,
-        padding: 15,
+        padding: 10,
         borderWidth: 1,
         marginVertical: 10,
         width: '40%', 
@@ -345,6 +347,7 @@ const styles = StyleSheet.create({
     },
     answerText: {
         fontSize: 20,
+        textAlign: 'center',
     },
     answerInputContainer: {
         marginVertical: 10,
