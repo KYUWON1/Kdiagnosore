@@ -186,7 +186,7 @@ public class ChatService {
         List<ChatDomain> chatList = chatRepository.findByUserIdAndDate(userId
                 ,date);
         if(chatList.isEmpty()){
-            throw new UserException(ErrorCode.INTERNAL_SERVER_ERROR);
+            return null;
         }
 
         return chatList.stream()

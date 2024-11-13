@@ -3,16 +3,15 @@ package com.example.test.controller;
 import com.example.test.Service.DiaryService;
 import com.example.test.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
+
+import static com.example.test.jwt.UserIdHolder.getUserIdFromToken;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/diary")
+@RequestMapping("/api/v1/diary")
 public class DiaryController {
     private final DiaryService diaryService;
 
@@ -22,13 +21,13 @@ public class DiaryController {
         return diaryService.createDiary(userId,request);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public List<GetDiaryListDto> getDiaryList(){
         String userId = getUserIdFromToken();
         return diaryService.getDiaryList(userId);
     }
 
-    @GetMapping("/{date}")
+    @GetMapping("/list/{date}")
     public GetDiaryListDto getDiaryDetail(
             @PathVariable String date
             ){
@@ -45,11 +44,4 @@ public class DiaryController {
         return diaryService.updateDiary(userId,date,request);
     }
 
-    private String getUserIdFromToken(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        // 토큰으로부터 유저 아이디 가져옴
-        String userId = userDetails.getUsername();
-        return userId;
-    }
 }

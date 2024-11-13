@@ -14,17 +14,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static com.example.test.jwt.UserIdHolder.getUserIdFromToken;
+
 
 @Controller
 @ResponseBody
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     private final UserService userService;
@@ -35,7 +36,7 @@ public class UserController {
         this.smsCertificationService = smsCertificationService;
     }
 
-    @GetMapping("/user/profile")
+    @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -51,7 +52,7 @@ public class UserController {
         return ResponseEntity.ok(uDto);
     }
 
-    @PostMapping("/user/profile/update")
+    @PostMapping("/profile/update")
     public ProfileUpdate.Response updateProfile(
             @RequestBody ProfileUpdate.Request request
             ) {
@@ -65,7 +66,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/user/profile/update/phoneNumber/request")
+    @PostMapping("/profile/update/phoneNumber/request")
     public ProfileUpdate.Response updatePhoneNumberRequest(
             HttpSession session,
             @RequestBody ProfileUpdate.Request request
@@ -84,7 +85,7 @@ public class UserController {
                 .description("send SMS success.")
                 .build();
     }
-    @PostMapping("/user/profile/update/phoneNumber/verify")
+    @PostMapping("/profile/update/phoneNumber/verify")
     public ProfileUpdate.Response updatePhoneNumber(
             HttpSession session,
             @RequestBody ProfileUpdate.Request request
@@ -107,7 +108,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/user/profile/update/password")
+    @PostMapping("/profile/update/password")
     public ProfileUpdate.Response updatePassword(
             @RequestBody ProfileUpdate.Request request
     ) {
@@ -121,13 +122,6 @@ public class UserController {
                 .build();
     }
 
-    private String getUserIdFromToken(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        // 토큰으로부터 유저 아이디 가져옴
-        String userId = userDetails.getUsername();
-        return userId;
-    }
     private static String getNumStr() {
         Random rand = new Random();
         String numStr = "";

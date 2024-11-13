@@ -20,7 +20,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-@RequestMapping("/gpt")
 @Slf4j
 public class GptTestController {
 
@@ -46,13 +45,252 @@ public class GptTestController {
     private RestTemplate template;
 
     @GetMapping("/createTest/total")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void createTestTotal(){
-        createTestJugwanByChat();
-        createTestGaggwanByChat();
-        createTestGaggwanByDiary();
-        createTestJugwanByDiary();
+        log.info("Start Create CognitiveTest");
+        List<String> allUserId = userService.findAllUserId();
+        for(String userId : allUserId){
+            log.info("User : {} start",userId);
+            getChatDataAndCreateTest(userId);
+            getDiaryDataAndCreateTest(userId);
+            log.info("User : {} end",userId);
+        }
     }
-                  
+
+    public void getChatDataAndCreateTest(String userId){
+        String chatMessages = chatService.getChatMessage(userId,
+                LocalDate.now().minusDays(0).format(DateTimeFormatter.ISO_LOCAL_DATE));
+        if(chatMessages.equals("No Data")){
+            log.info("{} has no chat data",userId);
+            return;
+        }
+        log.info("{} start create chat test",userId);
+        // 채팅 주관식 테스트 생성
+        String prompt = makeJugwanPromptByChat(chatMessages);
+        String createdTest = sendPromptToGPT(prompt);
+        chatService.saveTestChat(userId,createdTest);
+        // 채팅 객관식 테스트 생성
+        prompt = makeGaggwanPromptByChat(chatMessages);
+        createdTest = sendPromptToGPT(prompt);
+        cognitiveTestService.saveTestGaggwan(userId,createdTest);
+
+        log.info("Chat Test Created {}.",userId);
+    }
+
+    public void getDiaryDataAndCreateTest(String userId){
+        String diaryMessages = diaryService.getYesterdayDiaryData(userId);
+        if(diaryMessages.equals("No Data")){
+            log.info("{} has no diary data",userId);
+            return;
+        }
+        log.info("{} start create diary test",userId);
+        // 일기 주관식 테스트 생성
+        String prompt = makeJugwanPromptByDiary(diaryMessages);
+        String createdTest = sendPromptToGPT(prompt);
+        chatService.saveTestChatByDiary(userId,createdTest);
+        // 일기 객관식 테스트 생성
+        prompt = makeGaggwanPromptByDiary(diaryMessages);
+        createdTest = sendPromptToGPT(prompt);
+        cognitiveTestService.saveTestGaggwan(userId,createdTest);
+        log.info("create diary Test {}" , userId);
+    }
+
+    public String sendPromptToGPT(String prompt){
+        GPTRequestDTO request = new GPTRequestDTO(model, prompt);
+        GPTResponseDTO response =  template.postForObject(apiURL, request, GPTResponseDTO.class);
+        return response.getChoices().get(0).getMessage().getContent();
+    }
+
+    public String makeJugwanPromptByChat(String chatList){
+        String prompt = """
+                너는 이제부터 일상 정보 기반 질문 생성 AI야.
+                모든 문장의 끝에는 @ 를 항상 붙여주고, 줄 바꿈은 하지 말아줘.
+                아래는 사용자와 챗봇이 어제 나눈 대화내용이야.
+                Date와 Time은 해당 채팅을 입력한 날짜와 시간이야.
+                
+                """;
+        String add = """
+                
+                
+                위에 대화 내용을 바탕으로 질문과 예상 답변과 근거을 생성해줘.
+                질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄께.
+                
+                질문은 사용자가 자신이 했던 일을 잘 기억하고 있는지 확인하는 목적이어야해.
+                질문은 반드시 제공해준 어제 대화 내용에 관한 질문이여야해.
+                질문은 어떤 단어를 대답할 수 있는 형태인 질문이여야해.
+                질문에서 "오늘은 어떤가요?" 같은 현재에 대해 묻는 질문은 없어야해.
+                질문은 "정답"을 말할 수 있는 질문이야해.
+                질문은 "응 맞아" 같은 대답을 하는 질문이 아니야. 
+                질문은 사용자가 답변할 수 있는 형태의 질문이여야해.
+                질문은 반드시 과거에 대한 질문이여야해.
+                질문은 존댓말을 사용해줘.
+                ex)"어제 점심엔 무엇을 하셨나요?"
+                
+                예상 답변은 해당 질문에 대한 예상 답변이야.
+                예상 답변은 제공해준 대화 내용을 기반으로 만들어줘.
+                예상 답변은 중요한 단어는 들어가되, 가능한 간단하게 만들어줘.
+                예상 답변은 사용자가 대답하는 듯한 말투를 사용해줘.
+                예상 답변은 전부 반말을 사용해줘.
+                ex)"어제 점심엔 머리가 아파서 집에서 쉬었어."
+                
+                근거는 예상 답변을 생성하게 된 근거가 되는 채팅이야.
+                근거는 사용자가 입력한 채팅을 함께 제공해줘.
+                근거에는 근거가 발생한 시간을 함께 제공해줘.
+                근거가 발생한 시간은 가장 마지막에 작성해줘.
+                근거에는 존댓말을 사용하는 친절한 말투로 제공해줘.
+                ex)"사용자가 날씨가 더워서 머리가 좀 아프네 라고 언급했습니다. 2024-09-10 17:32:33.673532400"
+                
+                지금부터는 데이터 제공 방식에 대해서 설명해줄께.
+                질문,예상답변,근거의 순으로 총 2개의 세트를 제공해줘.
+                Q 질문@
+                A 예상답변@
+                R 근거@
+                데이터 파싱을 위해서 반드시 위에 제공해준 예시처럼 데이터를 전달해줘.
+                근거에도 마지막에 @를 붙여줘.
+                줄바꿈은 하지 말아줘.
+                """;
+        return prompt + chatList + add;
+    }
+
+    public String makeJugwanPromptByDiary(String diary){
+        String prompt = """
+                너는 이제부터 일상 정보 기반 질문 생성 AI야.
+                모든 문장의 끝에는 @ 를 항상 붙여주고, 줄 바꿈은 하지 말아줘.
+                아래는 사용자가 하루동안 있었던 일들을 기록한 텍스트야.
+                
+                
+                """;
+
+        String add = """
+                
+                
+                위의 내용을 바탕으로 질문과 예상 답변과 근거를 생성해줘.
+                질문과 예상 답변 그리고 근거를 생성하는 방법을 차례대로 설명해줄게.
+                
+                질문은 사용자가 자신이 했던 일을 잘 기억하고 있는지 확인하는 목적이어야해.
+                질문은 반드시 제공해준 어제 기록 내용에 관한 질문이여야해.
+                질문은 정확한 단어로 대답할 수 있는 형태인 질문이여야해.
+                질문에서 "오늘은 어떤가요?" 같은 현재에 대해 묻는 질문은 없어야해.
+                질문은 사용자가 답변할 수 있는 형태의 질문이여야해.
+                질문은 반드시 해당 기록에 대한 질문이여야해.
+                질문에 느꼈던 감정에 대해서는 묻는 질문은 제외해.
+                질문은 존댓말을 사용해줘.
+                ex)"어제 점심엔 무엇을 하셨나요?"
+                
+                예상 답변은 해당 질문에 대한 예상 답변이야.
+                예상 답변은 제공해준 기록 내용을 기반으로 만들어줘.
+                예상 답변은 중요한 단어는 들어가되, 가능한 간단하게 만들어줘.
+                예상 답변은 사용자가 대답하는 듯한 말투를 사용해줘.
+                예상 답변은 전부 반말을 사용해줘.
+                ex)"어제 점심엔 머리가 아파서 집에서 쉬었어."
+                
+                근거는 예상 답변을 생성하게 된 근거가 되는 기록 안에 포함된 문장이야.
+                근거는 사용자가 이전 기록에 입력한 문장을 함께 제공해줘.
+                근거에 몇월 몇일 기록인지 포함시켜 제공해줘.
+                근거에는 존댓말을 사용하는 친절한 말투로 제공해줘.
+                ex)"사용자가 9월 30일 일기 기록에 "날씨가 더워서 머리가 좀 아프네" 라고 작성했습니다.
+                
+                지금부터는 데이터 제공 방식에 대해서 설명해줄께.
+                질문,예상답변,근거의 순으로 총 2개의 세트를 제공해줘.
+                Q 질문@
+                A 예상답변@
+                R 근거@
+                데이터 파싱을 위해서 반드시 위에 제공해준 예시처럼 데이터를 전달해줘.
+                근거에도 마지막에 @를 붙여줘.
+                줄바꿈은 하지 말아줘.
+                """;
+
+        return prompt + diary + add;
+    }
+
+    private String makeGaggwanPromptByDiary(String diaryMessages) {
+        String prompt = """
+                너는 이제부터 일상 정보 기반 질문 생성 AI야.
+                모든 문장의 끝에는 @ 를 항상 붙여주고, 줄 바꿈은 하지 말아줘.
+                아래는 사용자가 하루동안 있었던 일들을 기록한 텍스트야.
+                
+                
+                """;
+
+        String add = """
+                
+                
+                위에 일기 내용을 바탕으로 객관식 문제를 생성해줘.
+                    객관식은 사용자가 어제의 일을 잘 기억하고있나 체크하기위한 객관식이야.
+                    객관식 문항은 총 4가지로 되어있고, 정답은 오직 하나야.
+                    객관식의 문항은 단어로 구성되어야만해.
+                    문제가 너무 쉽지 않도록, 정답과 유사성이 있는 단어로 문항을 구성해줘.
+                    질문은 반드시 제공해준 어제 기록에 관한 질문이여야해.
+                    질문은 반드시 과거에 대한 질문이여야해.
+                    사용자가 라는 단어는 사용하지말고, 질문해줘.
+                    질문을 제공할때 존댓말을 사용해줘.
+                    질문의 형태는 공손한 대화형 질문체를 사용해줘.
+                                    
+                    내가 제공해준 내용을 바탕으로 3개의 객관식 문제를 제공해줘.
+                    문제와 문항, 정답 총 3가지를 제공해줘.
+                    정답의 이유도 제공해줘.
+                    정답의 이유는 제공해준 제공해준 기록에 근거해야해.
+                    추측성 근거는 제시하지말아줘.
+                                    
+                    예시 형태를 제공해줄게.
+                    ex)질문: 질문입니다! 어제 점심에 무었을 드셨나요?@
+                    1. 삼겹살 2. 라면 3. 비빔밥 4. 소고기@
+                    정답 : 4@
+                    이유 : 어제 점심에 라면을 드시러 간다고 하셨습니다.@
+                                    
+                    데이터를 파싱해서 저장할 수 있도록 예시 형태를 잘 유지해줘.
+                """;
+
+        return prompt + diaryMessages + add;
+    }
+
+    public String makeGaggwanPromptByChat(String chatList){
+        String prompt = """
+                    너는 이제부터 일상 정보 기반 질문 생성 AI야.
+                    줄 바꿈은 하지 말아줘.
+                    아래는 사용자와 챗봇이 어제 나눈 대화내용이야.
+
+                    Date와 Time은 해당 채팅을 입력한 날짜와 시간이야.
+                                    
+                    """;
+        String add = """
+                              
+                                    
+                    위에 대화 내용을 바탕으로 객관식 문제를 생성해줘.
+                    객관식은 사용자가 어제의 일을 잘 기억하고있나 체크하기위한 객관식이야.
+                    객관식 문항은 총 4가지로 되어있고, 정답은 오직 하나야.
+                    객관식의 문항은 단어로 구성되어야만해.
+                    문제가 너무 쉽지 않도록, 정답과 유사성이 있는 단어로 문항을 구성해줘.
+                    질문은 반드시 제공해준 어제 대화 내용에 관한 질문이여야해.
+                    질문은 반드시 과거에 대한 질문이여야해.
+                    사용자가 라는 단어는 사용하지말고 질문해줘.
+                    질문을 제공할때 존댓말을 사용해줘.
+                    질문의 형태는 공손한 대화형 질문체를 사용해줘.
+                                    
+                    내가 제공해준 내용을 바탕으로 3개의 객관식 문제를 제공해줘.
+                    문제와 문항, 정답 총 3가지를 제공해줘.
+                    정답의 이유도 제공해줘.
+                    정답의 이유는 제공해준 대화 내용에 근거해야해.
+                    추측성 근거는 제시하지말아줘.
+                    추측성 문제는 제시하지말아줘.
+                                    
+                    예시 형태를 제공해줄게.
+                    ex)Q 질문입니다! 어제 점심에 무었을 드셨나요?@
+                    1 삼겹살@
+                    2 라면@
+                    3 비빔밥@ 
+                    4 소고기@
+                    A 4@
+                    R 어제 점심에 라면을 드시러 간다고 하셨습니다.@
+                                    
+                    줄바꿈은 하지 말아줘.
+                    Q1,A1 같은 번호는 따로 지정해주지않아도되.
+                    데이터를 파싱해서 저장할 수 있도록 예시 형태를 잘 유지해줘.
+                                   
+                    """;
+        return prompt + chatList + add;
+    }
+
     @GetMapping("/createTest/jugwan")
     @Scheduled(cron = "0 0 1 * * ?")
     public String createTestJugwanByChat(){

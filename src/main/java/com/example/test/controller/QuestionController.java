@@ -12,16 +12,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.test.jwt.UserIdHolder.getUserIdFromToken;
+
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/api/v1/question")
 @RequiredArgsConstructor
 public class QuestionController {
-    private final QuestionService questionService;
 
-//    @PostMapping("/testtest")
-//    public void createQuestion(){
-//        questionService.createTest();
-//    }
+    private final QuestionService questionService;
 
     @GetMapping
     public GetQuestionResultDto createQuestion(
@@ -38,12 +36,12 @@ public class QuestionController {
         return questionService.setQuestionAnswer(testId,result);
     }
 
-    @GetMapping("/result")
+    @GetMapping("/list")
     public List<GetResultDto> getResultList(){
         return questionService.getResultList(getUserIdFromToken());
     }
 
-    @GetMapping("/result/{date}")
+    @GetMapping("/list/{date}")
     public GetResultDetailDto getResultDetail(
             @PathVariable LocalDate date
             ){
@@ -55,12 +53,4 @@ public class QuestionController {
         return questionService.getUserStatus(getUserIdFromToken());
     }
 
-
-    private String getUserIdFromToken(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        // 토큰으로부터 유저 아이디 가져옴
-        String userId = userDetails.getUsername();
-        return userId;
-    }
 }

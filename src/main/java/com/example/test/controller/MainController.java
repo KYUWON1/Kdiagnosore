@@ -12,16 +12,14 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @ResponseBody
+@RequestMapping("/api/v1/user")
 public class MainController {
     private final UserRepository userRepository;
     @Value("${server.env}")
@@ -45,7 +43,7 @@ public class MainController {
 
     // 사용자 이름, 이메일주소로 찾기
     // -> 아이디 제공
-    @PostMapping("/getId/request")
+    @PostMapping("/id/request")
     public SmsSend.Response findIdRequest(
             HttpSession session,
         @RequestBody FindUserInfo.Request request
@@ -59,7 +57,7 @@ public class MainController {
     }
 
     // 비밀번호 찾기 -> 인증번호 확인
-    @PostMapping("/getId/verify")
+    @PostMapping("/id/verify")
     public FindUserInfo.Response findIdVerify(
             @RequestBody FindUserInfo.Request request
     ){
@@ -81,7 +79,7 @@ public class MainController {
     }
 
     // 비밀번호 찾기 -> 인증메세지 전송
-    @PostMapping("/getPassword/request")
+    @PostMapping("/password/request")
     public SmsSend.Response findPasswordRequest(
             HttpSession session,
             @RequestBody FindUserInfo.Request request
@@ -94,7 +92,7 @@ public class MainController {
     }
 
     // 비밀번호 찾기 -> 인증번호 확인
-    @PostMapping("/getPassword/verify")
+    @PostMapping("/password/verify")
     public FindUserInfo.Response findPasswordVerify(
             HttpSession session,
             @RequestBody FindUserInfo.Request request
@@ -110,7 +108,7 @@ public class MainController {
     }
 
     // 비밀번호 찾기 -> 비밀번호 수정
-    @PostMapping("/getPassword/reset")
+    @PostMapping("/password/reset")
     public ResetPassword.Response passwordReset(
             HttpSession session,
             @RequestBody ResetPassword.Request request
@@ -119,7 +117,7 @@ public class MainController {
     }
 
     /* 메인페이지 로그아웃 */
-    @GetMapping("/logout.do")
+    @GetMapping("/logout")
     public ResponseEntity<?> logoutMainGET(HttpServletRequest request) throws Exception{
         HttpSession session = request.getSession();
         session.invalidate();

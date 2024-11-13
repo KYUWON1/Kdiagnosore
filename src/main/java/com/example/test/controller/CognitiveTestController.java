@@ -12,20 +12,23 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.test.jwt.UserIdHolder.getUserIdFromToken;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/test")
 public class CognitiveTestController {
     private final CognitiveTestService cognitiveTestService;
 
-    @GetMapping("/test/getlist")
+    @GetMapping("/list")
     public List<TestDomain> getCognitiveTest(){
         String userId = getUserIdFromToken();
         List<TestDomain> test = cognitiveTestService.getTestList(userId);
         return test;
     }
 
-    @GetMapping("/test/getlist/{date}")
+    @GetMapping("/list/{date}")
     public List<TestDomain> getCognitiveTestByDate(
             @PathVariable String date
     ){
@@ -35,7 +38,7 @@ public class CognitiveTestController {
         return test;
     }
 
-    @PostMapping("/test/answer")
+    @PostMapping("/answer")
     public TestDomain answerCognitiveTest(
             @RequestBody CognitiveAnswerRequest request
     ){
@@ -44,11 +47,4 @@ public class CognitiveTestController {
                 request.getTestId(), userId);
     }
 
-    private String getUserIdFromToken(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        // 토큰으로부터 유저 아이디 가져옴
-        String userId = userDetails.getUsername();
-        return userId;
-    }
 }

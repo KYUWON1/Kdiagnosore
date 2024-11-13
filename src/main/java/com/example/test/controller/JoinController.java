@@ -13,6 +13,7 @@ import java.util.Map;
 
 @Controller
 @ResponseBody
+@RequestMapping("/api/v1/join")
 public class JoinController {
 
     private final JoinService joinService;
@@ -22,7 +23,7 @@ public class JoinController {
         this.joinService = joinService;
     }
 
-    @PostMapping("/join/user")
+    @PostMapping("/user")
     public ResponseEntity<?> userJoinProcess(@RequestBody JoinDTO joinDTO){
         try{
             JoinDTO data = joinService.userJoinProcess(joinDTO);
@@ -40,7 +41,7 @@ public class JoinController {
         }
     }
 
-    @PostMapping("/join/protector")
+    @PostMapping("/protector")
     public ResponseEntity<?> protectorJoinProcess(
             @RequestBody ProtectorJoinDto protectorJoinDto
     ){
@@ -60,7 +61,7 @@ public class JoinController {
         }
     }
 
-    @GetMapping("/join/check-user")
+    @GetMapping("/check-user")
     public UserExist.Response checkUserExist(
             @RequestParam String userName,
             @RequestParam String phoneNumber

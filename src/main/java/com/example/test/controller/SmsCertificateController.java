@@ -6,10 +6,12 @@ import com.example.test.dto.SmsSend;
 import com.example.test.dto.SmsVerify;
 import com.example.test.exception.VerifyException;
 import com.example.test.type.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
@@ -21,6 +23,8 @@ import java.util.Random;
 import static com.example.test.type.CertificateResponse.OK;
 
 @RestController
+@Slf4j
+@RequestMapping("/api/v1/sms")
 public class SmsCertificateController {
 
     @Autowired
@@ -31,7 +35,7 @@ public class SmsCertificateController {
         this.smsCertificationService = smsCertificationService;
     }
 
-    @PostMapping("/check/sendSMS")
+    @PostMapping("/send")
     public SmsSend.Response sendSMS(
          @RequestBody SmsSend.Request request
     ){
@@ -46,7 +50,7 @@ public class SmsCertificateController {
                 .build();
     }
 
-    @PostMapping("/check/verify")
+    @PostMapping("/verify")
     public SmsCertificate.Response verifySMS(
             @RequestBody SmsCertificate.Request request
     ){
