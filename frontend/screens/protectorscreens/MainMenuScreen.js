@@ -3,28 +3,69 @@ import { TouchableOpacity, StyleSheet, SafeAreaView, Image, View, Text, TextInpu
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Checkbox from "expo-checkbox";
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MainMenuScreen = ({ navigation }) => {
-    useEffect(() => {}, []);
+    const [apiBaseUrl, setApiBaseUrl] = useState('');
+    const [userName, setUserName] = useState('');
+    useEffect(() => {
+        const getApiBaseUrl = async () => {
+            try {
+                const url = await AsyncStorage.getItem('API_BASE_URL');
+                if (url) {
+                    setApiBaseUrl(url);
+                }
+            } catch (e) {
+                console.error('Failed to load API base URL:', e);
+            }
+        };
+
+        getApiBaseUrl();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (apiBaseUrl) {
+                try {
+                    const response = await axios.get(`${apiBaseUrl}/user/profile`, {
+                        headers: { 'Content-Type': 'application/json' },
+                    });
+                    if (response.status === 200) {
+                        setUserName(response.data.userName);
+                    } else {
+                        Alert.alert('사용자 이름 가져오기 실패', '사용자 이름을 가져오는 중 문제가 발생했습니다.');
+                    }
+                } catch (error) {
+                    Alert.alert('사용자 이름 가져오기 실패', '사용자 이름을 가져오는 중 문제가 발생했습니다.');
+                } 
+                   
+            }
+        };
+        fetchData();
+    }, [apiBaseUrl]);
+
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.rightHeader}>
-                <FontAwesome name="cog" size={30} onPress={() => navigation.navigate('SettingDrawer')} />
+            <View style={styles.header}>
+                <Text style={styles.rememberMeText}>Remember Me</Text>
+                <FontAwesome name="cog" size={30} onPress={() => navigation.navigate('SettingDrawer')} style={styles.settingsIcon} />
             </View>
-            <Text style={{ marginTop: 100, fontSize: 15, color: '#828282' }}>인지기능 훈련 챗봇</Text>
-            <Text style={{ justifyContent: 'center', fontSize: 30, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Remember Me</Text>
-            <Image source={require('../../assets/image/Logo.png')} style={{ width: 80, height: 80, marginVertical: 30 }} />
+            <View style={styles.upContainer}>
+                <Text style={styles.uptext}>{userName}님</Text>
+                <Text style={styles.uptext}>환영합니다!</Text>
+                <Text style={styles.updetailtext}>테스트 결과를 확인해 보세요!</Text>
+            </View>
             <View style={styles.boxContainer}>
                 <View style={styles.row}>
-                    <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('TestList')}>
+                    <TouchableOpacity style={[styles.box, styles.box3]} onPress={() => navigation.navigate('TestList')}>
                         <View style={styles.imageContainer2}>
                             <Image source={require('../../assets/image/Memory_check.png')} style={styles.image} resizeMode="contain" />
                         </View>
                         <Text style={styles.boxText}>기억력 테스트</Text>
                         <Text style={styles.boxText}>결과 보기</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('ExamList')}>
+                    <TouchableOpacity style={[styles.box, styles.box4]} onPress={() => navigation.navigate('ExamList')}>
                         <View style={styles.imageContainer2}>
                             <Image source={require('../../assets/image/Test.png')} style={styles.image} resizeMode="contain" />
                         </View>
@@ -43,10 +84,47 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
     },
-    rightHeader: {
+    header:{
+        width:'100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderStyle: "solid",
+        borderBottomColor: "#E0E0E0",
+    },
+    rememberMeText: {
+        fontSize: 20,
+        fontWeight: '700',
+        fontStyle: 'italic',
+        color: '#000',
+        textAlign: 'center',
+        flex: 1,
+    },
+    settingsIcon: {
+        color: '#000',
         position: 'absolute',
-        top: 50,
         right: 20,
+    },
+    upContainer:{
+        backgroundColor: '#FFFFFF', 
+        height: 200,
+        width: '80%',
+        borderRadius: 10,
+        justifyContent: 'center',
+        marginHorizontal: 15,
+        marginTop:100,
+    },uptext:{
+        fontSize:40,
+        marginTop:5,
+        fontWeight:'700'
+    },
+    updetailtext:{
+        marginTop:10,
+        fontSize:18,
+        fontWeight:'500'
     },
     boxContainer: {
         marginTop: 60,
@@ -65,9 +143,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        borderWidth: 2,
-        borderColor: "#a9a9a9",
-        marginHorizontal: 15, 
+        marginHorizontal: 15,
+        shadowColor: '#000', 
+        shadowOffset: { width: 0, height: 6 }, 
+        shadowOpacity: 0.2, 
+        shadowRadius: 6, 
+        elevation: 5, 
+    },
+    box3: {
+        backgroundColor: '#9A67D9',
+    },
+    box4: {
+        backgroundColor: '#63BDD8', 
     },
     imageContainer2: {
         width: 65,  
@@ -79,10 +166,12 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',  
         height: '100%', 
+        tintColor:'#fff',
     },
     boxText: {
         fontSize: 16,
-        color: '#000',
+        color: '#fff',
+         fontWeight:'700',
         textAlign: 'center', // 텍스트 정렬을 중앙으로 설정
     },
 });

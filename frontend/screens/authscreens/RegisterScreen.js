@@ -46,7 +46,7 @@ const RegisterScreen = ({ navigation })  => {
                 </TouchableOpacity>
             
                 <TouchableOpacity style={styles.button} onPress={handleNext}>
-                    <Text style={{ fontSize: 20, color: '#fff' }}>다음 단계</Text>
+                    <Text style={{ fontSize: 20, color: '#fff', fontWeight:'600' }}>다음 단계</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 10,
     },
     button1: {
@@ -103,17 +103,22 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     selectedButton: {
-        backgroundColor: '#6A5B92',  // 선택된 버튼의 배경색 (녹색)
+        borderWidth:2,
+        borderColor:'#0C9C57',
+        backgroundColor: '#fff',  
       },
     unselectedButton: {
-        backgroundColor: '#f0f0f0',  
+        borderWidth:1,
+        borderColor:'#AEAEAE',
+        backgroundColor: '#fff',  
     },
     selectedtext: {
-        fontSize: 21,
-        color: '#fff',
+        fontSize: 25,
+        color: '#0C9C57',
+        fontWeight:'600',
       },
     unselectedtext: {
-        fontSize: 21,
+        fontSize: 25,
         color: '#000',
       },
 });

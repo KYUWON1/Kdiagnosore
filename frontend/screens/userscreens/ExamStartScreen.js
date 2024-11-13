@@ -106,12 +106,13 @@ const styles = StyleSheet.create({
         height:50,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#000',
+        backgroundColor:'#0C9C57',
         borderRadius:10,
     },
     buttonText: {
         fontSize: 20, 
-        color: '#fff' 
+        color: '#fff',
+        fontWeight:'600',
     },
 });
 

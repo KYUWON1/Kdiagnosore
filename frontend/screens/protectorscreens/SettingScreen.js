@@ -69,9 +69,6 @@ const SettingScreen = ({ navigation }) => {
                 </View>
                 <AntDesign name='right' size={25} style={{ marginHorizontal: 10 }} onPress={handleLogout}/>
             </View>
-            <View style={styles.settingout}>
-                <Text style={{ color: '#B6B6B6', fontSize: 15, textAlign: 'right' }}>회원탈퇴</Text>
-            </View>
         </SafeAreaView>
     );
 }

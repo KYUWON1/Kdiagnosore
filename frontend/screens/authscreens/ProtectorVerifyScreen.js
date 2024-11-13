@@ -129,7 +129,7 @@ const ProtectorVerifyScreen = ({ route, navigation }) => {
                             keyboardType="number-pad"
                         />
                         <TouchableOpacity style={styles.button} onPress={verifyCode}>
-                            <Text style={{ fontSize: 20, color: '#fff' }}>다음 단계</Text>
+                            <Text style={{ fontSize: 20, color: '#fff', fontWeight:'600' }}>다음 단계</Text>
                         </TouchableOpacity>
                     </View>
                 ):(
@@ -145,10 +145,11 @@ const ProtectorVerifyScreen = ({ route, navigation }) => {
                                 style={styles.input}
                                 value={WardNum}
                                 placeholder='-없이 번호 입력'
+                                placeholderTextColor="#A9A9A9"
                                 onChangeText={setWardNum}
                                 keyboardType="number-pad"/>
                         <TouchableOpacity style={styles.button} onPress={handleUserVefiry}>
-                            <Text style={{ fontSize: 20, color: '#fff' }}>인증번호 발송</Text>
+                            <Text style={{ fontSize: 20, color: '#fff', fontWeight:'600' }}>인증번호 발송</Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -191,6 +192,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginTop: 20,
         fontSize: 18,
+        fontWeight:'500',
     },
     fixlabel: {
         flexDirection: "row",
@@ -210,34 +212,13 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         fontSize: 18,
     },
-    input1: {
-        width: '70%',
-        height: 50,
-        borderColor: "#E0E0E0",
-        borderWidth: 1,
-        borderRadius: 10,
-        backgroundColor: "white",
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-        marginVertical: 10,
-        fontSize: 18,
-    },
     button: {
         marginVertical: 50,
         width: '90%',
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
-        borderRadius: 10,
-    },
-    button1: {
-        marginVertical: 15,
-        width: 80,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 10,
     },
 

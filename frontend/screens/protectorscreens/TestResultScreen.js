@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
         height:35,
         paddingVertical: 5, // 세로 패딩을 줄여서 텍스트가 중앙에 위치하게 함
         paddingHorizontal: 10, // 가로 패딩은 유지
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 5,
         justifyContent:'center',
     },
@@ -347,6 +347,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         fontSize: 16,
         color: '#fff',
+        fontWeight:'600',
     },
     swipeButton: {
         fontSize: 20,

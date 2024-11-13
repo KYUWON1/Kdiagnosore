@@ -200,7 +200,7 @@ const TestScreen = ({ navigation }) => {
                     <AntDesign name='left' size={25} onPress={() => navigation.navigate('MainMenu')} />
                 </View>
                 <View style={styles.centerHeader}>
-                    <Text style={{ fontSize: 20, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Remember Me</Text>
+                    <Text style={{ fontSize: 20, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Today's Test</Text>
                 </View>
                 <View style={styles.rightHeader}>
                     <Text style={{ fontSize: 18, color: '#7C95EF' }} onPress={() => navigation.navigate('TestDrawer')}>목록</Text>
@@ -266,6 +266,9 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         paddingHorizontal: 10,
+        borderBottomWidth: 1,
+        borderStyle: "solid",
+        borderBottomColor: "#E0E0E0",
     },
     leftHeader: {
         flex: 1,
@@ -378,7 +381,7 @@ const styles = StyleSheet.create({
         height:35,
         paddingVertical: 5, // 세로 패딩을 줄여서 텍스트가 중앙에 위치하게 함
         paddingHorizontal: 10, // 가로 패딩은 유지
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 5,
         justifyContent:'center',
     },
@@ -389,6 +392,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         fontSize: 18,
         color: '#fff',
+        fontWeight:'600',
     },
     pageIndicator: {
         fontSize: 18,

@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, StyleSheet, TextInput, Alert, ActivityIndicat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Svg, { Line } from 'react-native-svg';
 
 const DiaryContentScreen = ({ route, navigation }) => {
     const [date, setDate] = useState(''); // 선택한 날짜를 저장
@@ -72,6 +73,7 @@ const DiaryContentScreen = ({ route, navigation }) => {
                 <View style={styles.rightHeader}>
                 </View>
             </View>
+                    
 
             {/* 날짜 표시 */}
             <View style={styles.dateContainer}>
@@ -103,14 +105,16 @@ const DiaryContentScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     // 스타일은 기존과 동일
     container: { flex: 1, backgroundColor: '#fff' },
-    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: 50, paddingHorizontal: 10 },
-    leftHeader: { flex: 1, marginLeft: 10, alignItems: 'flex-start' },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: 50, paddingHorizontal: 10,  borderBottomWidth: 1,
+        borderStyle: "solid",
+        borderBottomColor: "#E0E0E0", },
+    leftHeader: { flex: 1,  alignItems: 'flex-start' },
     centerHeader: { flex: 2, alignItems: 'center' },
     rightHeader: { flex: 1, marginRight: 10, alignItems: 'flex-end' },
     dateContainer: { alignItems: 'center', marginTop: 20 },
     dateText: { fontSize: 25, fontWeight: '400' },
     divider: { borderBottomColor: '#D3D3D3', borderBottomWidth: 1, marginVertical: 10, marginHorizontal: 40, paddingTop: 5 },
-    inputContainer: { paddingHorizontal: 20, paddingTop: 5 },
+    inputContainer: { paddingHorizontal: 40, paddingTop: 5 },
     textInput: { fontSize: 16, color: '#000', borderColor: 'transparent', borderBottomWidth: 0 },
 });
 

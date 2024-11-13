@@ -84,7 +84,7 @@ const ProtectorModScreen = ({ navigation }) => {
                         keyboardType="number-pad"
                     />
                     <TouchableOpacity style={styles.button1} onPress={requestVerification}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>인증</Text>
+                        <Text style={{ fontSize: 20, color: '#0C9C57', fontWeight:'700' }}>인증</Text>
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.label}>인증번호</Text>
@@ -95,7 +95,7 @@ const ProtectorModScreen = ({ navigation }) => {
                     keyboardType="number-pad"
                 />
                 <TouchableOpacity style={styles.button} onPress={verifyAndChangeProtectorNumber}>
-                    <Text style={{ fontSize: 20, color: '#fff' }}>변경하기</Text>
+                    <Text style={{ fontSize: 20, color: '#fff', fontWeight:'600' }}>변경하기</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 10,
     },
     button1: {
@@ -182,7 +182,8 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        borderWidth:2,
+        borderColor:'#0C9C57',
         borderRadius: 10,
     },
 });

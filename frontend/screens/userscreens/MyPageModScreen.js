@@ -112,14 +112,14 @@ const MyPageModScreen = ({navigation}) => {
                     <View style={styles.fixlabel1}>
                         <Text style={styles.label1}>비밀번호</Text>
                         <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('PasswordMod')}>
-                            <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
+                            <Text style={{ fontSize: 18, color: '#0C9C57', fontWeight:'500' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.label}>전화번호</Text>
                     <View style={styles.fixlabel}>
                         <Text style={styles.idcontent}>{PhoneNum}</Text>
                         <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('UserPhoneMod')}>
-                                <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
+                                <Text style={{ fontSize: 18, color: '#0C9C57', fontWeight:'500' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.label}>보호자 이름</Text>
@@ -132,11 +132,11 @@ const MyPageModScreen = ({navigation}) => {
                     <View style={styles.fixlabel}>
                         <Text style={styles.idcontent}>{ProtectorNum}</Text>
                         <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('ProtectorPhoneMod')}>
-                                <Text style={{ fontSize: 18, color: '#fff' }}>수정</Text>
+                                <Text style={{ fontSize: 18, color: '#0C9C57', fontWeight:'600' }}>수정</Text>
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.button} onPress={handlerModify}>
-                        <Text style={{ fontSize: 18, color: '#fff' }}>변경하기</Text>
+                        <Text style={{ fontSize: 18, color: '#fff', fontWeight:'600' }}>변경하기</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAwareScrollView>
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         height:50,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#000',
+        backgroundColor:'#0C9C57',
         borderRadius:10,
     },
     button1:{
@@ -220,8 +220,9 @@ const styles = StyleSheet.create({
         height:28,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#000',
-        borderRadius:10,
+        borderWidth:2,
+        borderColor:'#0C9C57',
+        borderRadius:5,
     },
     idcontent: {
         width: '80%',

@@ -274,7 +274,7 @@ const ChatScreen = ({navigation}) => {
                 <AntDesign name='left' size={25} onPress={() => navigation.navigate('MainMenu')} />
             </View>
             <View style={styles.centerHeader}>
-                <Text style={{ fontSize: 20, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Remember Me</Text>
+                <Text style={{ fontSize: 20, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Today's Chat</Text>
             </View>
             <View style={styles.rightHeader}>
                 <TouchableOpacity onPress={() => navigation.navigate('ChatRecordDrawer')}>
@@ -314,6 +314,9 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         paddingHorizontal: 10, // 필요한 경우 패딩 추가
+        borderBottomWidth: 1,
+        borderStyle: "solid",
+        borderBottomColor: "#E0E0E0",
     },
     leftHeader: {
         flex: 1,

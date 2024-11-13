@@ -134,11 +134,12 @@ const ProtectorPhone1Screen = ({ route, navigation }) => {
                         style={styles.input1}
                         value={ProtectorNum}
                         placeholder='-없이 번호 입력'
+                        placeholderTextColor="#A9A9A9"
                         onChangeText={setProtectorNum}
                         keyboardType="number-pad"
                     />
                     <TouchableOpacity style={styles.button1} onPress={sendSMS}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>인증</Text>
+                        <Text style={{ fontSize: 20, color: '#0C9C57', fontWeight:'700'  }}>인증</Text>
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.label}>인증번호</Text>
@@ -190,6 +191,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginTop: 20,
         fontSize: 18,
+        fontWeight:'500',
     },
     fixlabel: {
         flexDirection: "row",
@@ -227,7 +229,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 10,
     },
     button1: {
@@ -236,7 +238,9 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#fff',
+        borderWidth:2,
+        borderColor:'#0C9C57',
         borderRadius: 10,
     },
 

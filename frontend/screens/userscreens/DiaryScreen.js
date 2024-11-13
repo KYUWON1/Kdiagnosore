@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, StyleSheet, TextInput, Alert } from 'react-na
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Svg, { Path } from 'react-native-svg';
 
 const DiaryScreen = ({ navigation }) => {
     const [apiBaseUrl, setApiBaseUrl] = useState('');
@@ -127,13 +128,13 @@ const DiaryScreen = ({ navigation }) => {
                     />
                 </View>
                 <View style={styles.centerHeader}>
-                    <Text style={{ fontSize: 20, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Remember Me</Text>
+                    <Text style={{ fontSize: 20, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Today's Diary</Text>
                 </View>
                 <View style={styles.rightHeader}>
                     <Text style={{ fontSize: 18, color: '#7C95EF' }} onPress={() => navigation.navigate('DiaryList')}>목록</Text>
                 </View>
             </View>
-
+       
             {/* 날짜 표시 */}
             <View style={styles.dateContainer}>
                 <Text style={styles.dateText}>{todayDate}</Text>
@@ -172,10 +173,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         paddingHorizontal: 10,
+        borderBottomWidth: 1,
+        borderStyle: "solid",
+        borderBottomColor: "#E0E0E0",
     },
     leftHeader: {
         flex: 1,
-        marginLeft: 10,
         alignItems: 'flex-start',
     },
     centerHeader: {
@@ -203,7 +206,7 @@ const styles = StyleSheet.create({
         paddingTop: 5,
     },
     inputContainer: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 40,
         paddingTop: 5,
     },
     textInput: {

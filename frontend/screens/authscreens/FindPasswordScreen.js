@@ -72,6 +72,7 @@ const FindPasswordScreen = ({ navigation }) => {
                     style={styles.input}
                     value={Password}
                     placeholder='대소문자, 특수문자, 숫자~~'
+                    placeholderTextColor="#A9A9A9"
                     onChangeText={setPassword}
                     secureTextEntry
                 />
@@ -80,11 +81,12 @@ const FindPasswordScreen = ({ navigation }) => {
                     style={styles.input}
                     value={ConfirmPassword}
                     placeholder='대소문자, 특수문자, 숫자~~'
+                    placeholderTextColor="#A9A9A9"
                     onChangeText={setConfirmPassword}
                     secureTextEntry
                 />
                 <TouchableOpacity style={styles.button} onPress={passwordreset}>
-                    <Text style={{ fontSize: 20, color: '#fff' }}>완료</Text>
+                    <Text style={{ fontSize: 20, color: '#fff', fontWeight:'600' }}>비밀번호 변경</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -111,6 +113,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginLeft: 10,
         fontSize: 18,
+        fontWeight:'500',
     },
     input: {
         width: '90%',
@@ -130,7 +133,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 10,
     }
 });
