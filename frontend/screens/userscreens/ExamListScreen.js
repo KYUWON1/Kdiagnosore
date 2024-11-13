@@ -86,8 +86,8 @@ const ExamListScreen = ({ navigation }) => {
                     onPress={testable ? () => navigation.navigate('ExamStart') : null}
                     disabled={!testable} // Disable button if testable is false
                 >
-                    <Text style={{ fontSize: 24, color: '#fff' }}>
-                        {testable ? '테스트 시작' : `D-${dday}`} {/* Change button text based on testable state */}
+                     <Text style={[styles.buttonText, !testable && styles.disabledButtonText]}>
+                        {testable ? '테스트 시작' : `D-${dday}`}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -156,8 +156,19 @@ const styles = StyleSheet.create({
         height:60,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#000',
+        backgroundColor:'#0C9C57',
         borderRadius:10,
+    },
+    buttonText: {
+        fontSize: 24,
+        color: '#fff',
+        fontWeight: '600',
+    },
+    disabledButton: {
+        backgroundColor: '#A9A9A9', // 비활성화 상태에서의 배경색
+    },
+    disabledButtonText: {
+        color: '#fff', // 비활성화 상태에서의 텍스트 색상
     },
     idtext: {
         width: 70,

@@ -9,8 +9,7 @@ import UserModScreen from '../screens/protectorscreens/UserModScreen';
 import ProtectorModScreen from "../screens/protectorscreens/ProtectorModScreen";
 import MyPageModScreen from "../screens/protectorscreens/MyPageModScreen";
 import MyPageScreen from "../screens/protectorscreens/MyPageScreen";
-import PasswordModScreen from "../screens/userscreens/PasswordModScreen";
-import InfoScreen from "../screens/protectorscreens/InfoScreen";
+import PasswordModScreen from "../screens/protectorscreens/PasswordModScreen";
 import ExamListScreen from "../screens/protectorscreens/ExamListScreen";
 import ExamDateScreen from "../screens/protectorscreens/ExamDateScreen";
 
@@ -54,7 +53,6 @@ const SettingStack = () => {
             <Stack.Screen name="Setting" component={SettingScreen}/>
             <Stack.Screen name="MyPage" component={MyPageScreen}/>
             <Stack.Screen name="MyPageMod" component={MyPageModScreen}/>
-            <Stack.Screen name="Info" component={InfoScreen}/>
             <Stack.Screen name="PasswordMod" component={PasswordModScreen}/>
             <Stack.Screen name="UserMod" component={UserModScreen}/>
             <Stack.Screen name="ProtectorMod" component={ProtectorModScreen}/>

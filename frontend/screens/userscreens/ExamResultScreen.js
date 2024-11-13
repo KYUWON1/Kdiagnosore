@@ -25,13 +25,13 @@ const ExamResultScreen = ({ route,navigation }) => {
 
     const renderIcon = (score) => {
         if (score <= 3) {
-            return <Image source={require('../../assets/image/Best.png')}/>;
+            return <Image source={require('../../assets/image/Best.png')} style={{ width: 100, height: 100, resizeMode: 'contain' }}/>;
         } else if (score <= 5) {
-            return <Image source={require('../../assets/image/Good.png')} />;
+            return <Image source={require('../../assets/image/Good.png')} style={{ width: 100, height: 100, resizeMode: 'contain' }}/>;
         } else if (score <= 7) {
-            return <Image source={require('../../assets/image/Danger.png')} />;
+            return <Image source={require('../../assets/image/Danger.png')} style={{ width: 100, height: 100, resizeMode: 'contain' }}/>;
         } else {
-            return <Image source={require('../../assets/image/Hospital.png')} />;
+            return <Image source={require('../../assets/image/Hospital.png')} style={{ width: 100, height: 100, resizeMode: 'contain' }} />;
         }
     };
 
@@ -123,12 +123,13 @@ const styles = StyleSheet.create({
         height:50,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#000',
+        backgroundColor:'#0C9C57',
         borderRadius:10,
     },
     buttonText: {
         fontSize: 20, 
-        color: '#fff' 
+        color: '#fff', 
+        fontWeight:'600'
     },
 });
 

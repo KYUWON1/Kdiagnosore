@@ -12,7 +12,6 @@ import ProtectorPhone1Screen from "../screens/authscreens/ProtectorPhone1Screen"
 import ProtectorFormScreen from "../screens/authscreens/ProtectorFormScreen"
 import ProtectorPhone2Screen from "../screens/authscreens/ProtectorPhone2Screen";
 import ProtectorVerifyScreen from "../screens/authscreens/ProtectorVerifyScreen";
-import AlarmScreen from "../screens/authscreens/AlarmScreen";
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -33,7 +32,6 @@ const AuthNavigator = ({setAuthType}) => {
         <Stack.Screen name="ProtectorForm" component={ProtectorFormScreen}/>
         <Stack.Screen name="ProtectorPhone2" component={ProtectorPhone2Screen}/>
         <Stack.Screen name="ProtectorVerify" component={ProtectorVerifyScreen}/>
-        <Stack.Screen name="Alarm" component={AlarmScreen}/>
     </Stack.Navigator>
     );
 };

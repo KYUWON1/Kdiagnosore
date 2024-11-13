@@ -60,7 +60,7 @@ const UserPhoneScreen = ({ route, navigation }) => {
             });
 
             if (response.status === 200 && response.data.certificateResponse === 'OK') {
-                Alert.alert('인증 성공', '전화번호 인증이 성공적으로 완료되었습니다.');
+                Alert.alert('인증 성공', '전화번호 인증이 완료되었습니다.');
                 navigation.navigate('ProtectorPhone1', { UserId, UserName, Email, Password, ConfirmPassword, ProtectorName, PhoneNum });
             } else {
                 Alert.alert('인증 실패', '인증번호가 올바르지 않습니다.');
@@ -88,11 +88,12 @@ const UserPhoneScreen = ({ route, navigation }) => {
                         style={styles.input1}
                         value={PhoneNum}
                         placeholder='-없이 번호 입력'
+                        placeholderTextColor="#A9A9A9"
                         onChangeText={setPhoneNum}
                         keyboardType="number-pad"
                     />
                     <TouchableOpacity style={styles.button1} onPress={sendSMS}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>인증</Text>
+                        <Text style={{ fontSize: 20, color: '#0C9C57', fontWeight:'700' }}>인증</Text>
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.label}>인증번호</Text>
@@ -103,7 +104,7 @@ const UserPhoneScreen = ({ route, navigation }) => {
                     keyboardType="number-pad"
                 />
                 <TouchableOpacity style={styles.button} onPress={verifyCode}>
-                    <Text style={{ fontSize: 20, color: '#fff' }}>다음 단계</Text>
+                    <Text style={{ fontSize: 20, color: '#fff', fontWeight:'600' }}>다음 단계</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -144,6 +145,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginTop: 20,
         fontSize: 18,
+        fontWeight:'500',
     },
     fixlabel: {
         flexDirection: "row",
@@ -181,7 +183,7 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 10,
     },
     button1: {
@@ -190,7 +192,9 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        //backgroundColor: '#000',
+        borderWidth:2,
+        borderColor:'#0C9C57',
         borderRadius: 10,
     },
 });

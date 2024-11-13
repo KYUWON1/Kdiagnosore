@@ -35,7 +35,7 @@ const TestListScreen = ({navigation}) => {
                         headers: { 'Content-Type': 'application/json' },
                     });
                     if (response.status === 200) {
-                        setRecordingData(response.data.reverse());
+                        setRecordingData(response.data);
                     } else {
                         Alert.alert('테스트 결과 가져오기 실패', '테스트 목록을 가져오는 중 문제가 발생했습니다.');
                     }

@@ -104,48 +104,52 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={{ marginTop: 100, fontSize: 15, color: '#828282' }}>인지기능 훈련 챗봇</Text>
-            <Text style={{ justifyContent: 'center', fontSize: 30, fontWeight: '700', fontStyle: 'italic', color: '#000' }}>Remember Me</Text>
-            <Image source={require('../../assets/image/Logo.png')} style={{ width: 80, height: 80, marginVertical: 30 }} />
-            <TextInput
-                style={styles.input}
-                value={ID}
-                placeholder='아이디'
-                placeholderTextColor="#A9A9A9"
-                onChangeText={setID}
-            />
-            <TextInput
-                style={styles.input}
-                value={Password}
-                placeholder='비밀번호'
-                placeholderTextColor="#A9A9A9"
-                secureTextEntry
-                onChangeText={setPassword}
-            />
-            <View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', marginLeft: 5, marginTop: 10 }}>
-                <Checkbox
-                    value={isLoginChecked}
-                    onValueChange={setIsLoginChecked}
-                    style={{ marginRight: 10, borderColor: 'gray' }}
-                    color={isLoginChecked ? 'black' : undefined}
-                />
-                <Text style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>로그인 상태 유지</Text>
+            <View style={styles.upperHalf}>
+                <Image source={require('../../assets/image/Logo.png')} style={styles.logo} />
+                <Text style={styles.title}>인지기능 훈련 챗봇</Text>
+                <Text style={styles.subtitle}>Remember Me</Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={() => handleLogin(ID, Password, isLoginChecked)}>
-                <Text style={{ fontSize: 20, color: '#fff' }}>로그인</Text>
-            </TouchableOpacity>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity>
-                    <Text onPress={() => navigation.navigate('FindIdVerify')} style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>아이디 찾기</Text>
+            <View style={styles.loginBox}>
+                <TextInput
+                    style={styles.input}
+                    value={ID}
+                    placeholder='아이디'
+                    placeholderTextColor="#A9A9A9"
+                    onChangeText={setID}
+                />
+                <TextInput
+                    style={styles.input}
+                    value={Password}
+                    placeholder='비밀번호'
+                    placeholderTextColor="#A9A9A9"
+                    secureTextEntry
+                    onChangeText={setPassword}
+                />
+                <View style={styles.checkboxContainer}>
+                    <Checkbox
+                        value={isLoginChecked}
+                        onValueChange={setIsLoginChecked}
+                        style={styles.checkbox}
+                        color={isLoginChecked ? '#27A96C' : undefined}
+                    />
+                    <Text style={styles.checkboxText}>로그인 상태 유지</Text>
+                </View>
+                <TouchableOpacity style={styles.button} onPress={() => handleLogin(ID,Password,isLoginChecked)}>
+                    <Text style={styles.buttonText}>로그인</Text>
                 </TouchableOpacity>
-                <Text style={styles.textborder}>|</Text>
-                <TouchableOpacity>
-                    <Text onPress={() => navigation.navigate('FindPasswordVerify')} style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>비밀번호 찾기</Text>
-                </TouchableOpacity>
-                <Text style={styles.textborder}>|</Text>
-                <TouchableOpacity>
-                    <Text onPress={() => navigation.navigate('Register')} style={{ textAlign: 'center', fontSize: 17, color: '#828282' }}>회원가입</Text>
-                </TouchableOpacity>
+                <View style={styles.linksContainer}>
+                    <TouchableOpacity>
+                        <Text onPress={() => navigation.navigate('FindIdVerify')} style={styles.linkText}>아이디 찾기</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.separator}>|</Text>
+                    <TouchableOpacity>
+                        <Text onPress={() => navigation.navigate('FindPasswordVerify')} style={styles.linkText}>비밀번호 찾기</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.separator}>|</Text>
+                    <TouchableOpacity>
+                        <Text onPress={() => navigation.navigate('Register')} style={styles.linkText}>회원가입</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </SafeAreaView>
     );
@@ -155,10 +159,55 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+    },
+    upperHalf: {
         alignItems: 'center',
+        //justifyContent: 'center',
+        width: '100%',
+        height: '50%',
+        backgroundColor: '#27A96C',
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+    },
+    logo: {
+        width: 80,
+        height: 80,
+        marginBottom: 10,
+        top:'25%',
+        tintColor:'#fff',
+    },
+    title: {
+        fontSize: 16,
+        color: '#fff',
+        marginBottom: 5,
+        fontWeight:'600',
+        top:'26%',
+    },
+    subtitle: {
+        fontSize: 30,
+        fontWeight: '700',
+        fontStyle: 'italic',
+        color: '#fff',
+        top:'27%',
+    },
+    loginBox: {
+        paddingVertical:30,
+        position: 'absolute',
+        top: '42%',
+        width: '90%',
+        alignSelf: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     input: {
-        width: '90%',
+        width: '100%',
         height: 50,
         borderColor: "#E0E0E0",
         borderWidth: 1,
@@ -169,16 +218,43 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         fontSize: 18,
     },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 10,
+    },
+    checkbox: {
+        marginRight: 10,
+        borderColor: 'gray',
+    },
+    checkboxText: {
+        fontSize: 17,
+        color: '#828282',
+    },
     button: {
-        marginVertical: 15,
-        width: '90%',
+        width: '100%',
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#0C9C57',
         borderRadius: 10,
+        marginVertical: 15,
     },
-    textborder: {
+    buttonText: {
+        fontSize: 20,
+        color: '#fff',
+        fontWeight:'600',
+    },
+    linksContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    linkText: {
+        fontSize: 17,
+        color: '#828282',
+    },
+    separator: {
         fontSize: 17,
         color: '#828282',
         marginHorizontal: 10,

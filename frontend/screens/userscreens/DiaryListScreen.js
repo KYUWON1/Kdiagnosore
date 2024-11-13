@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderBottomColor: "#E0E0E0",
         overflow: "hidden",
+        
     },
     headerText: {
         fontSize: 20,

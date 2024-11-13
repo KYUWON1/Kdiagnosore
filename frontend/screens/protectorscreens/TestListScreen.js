@@ -58,7 +58,7 @@ const TestListScreen = ({navigation}) => {
         <SafeAreaView style={styles.container}>
              <View style={styles.header}>
                 <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('MainMenu')} />
-                <Text style={styles.headerText}>Remember Me</Text>
+                <Text style={styles.headerText}>대화 기록</Text>
             </View>
             <View style={styles.listtitle}>
                 <Text style={styles.idtext}>번호</Text>

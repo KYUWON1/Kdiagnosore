@@ -49,6 +49,7 @@ const UserFormScreen = ({ navigation }) => {
                         style={styles.input}
                         value={Password}
                         placeholder='대소문자, 특수문자, 숫자~~'
+                        placeholderTextColor="#A9A9A9"
                         onChangeText={setPassword}
                         secureTextEntry
                     />
@@ -57,6 +58,7 @@ const UserFormScreen = ({ navigation }) => {
                         style={styles.input}
                         value={ConfirmPassword}
                         placeholder='대소문자, 특수문자, 숫자~~'
+                        placeholderTextColor="#A9A9A9"
                         onChangeText={setConfirmPassword}
                         secureTextEntry
                     />
@@ -67,7 +69,7 @@ const UserFormScreen = ({ navigation }) => {
                         onChangeText={setProtectorName}
                     />
                     <TouchableOpacity style={styles.button} onPress={nextRegister}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>다음 단계</Text>
+                        <Text style={{ fontSize: 20, color: '#fff', fontWeight:'600' }}>다음 단계</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAwareScrollView>
@@ -94,6 +96,7 @@ const styles = StyleSheet.create({
         width:'90%',
         marginLeft:10,
         fontSize:18,
+        fontWeight:'500',
     },
     input:{
       width:'90%',
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
         height:50,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#000',
+        backgroundColor:'#0C9C57',
         borderRadius:10,
     },
 });

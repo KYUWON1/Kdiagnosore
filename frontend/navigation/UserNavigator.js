@@ -9,7 +9,6 @@ import ChatRecordingScreen from "../screens/userscreens/ChatRecordingScreen";
 import ChatDateScreen from "../screens/userscreens/ChatDateScreen";
 import MyPageScreen from "../screens/userscreens/MyPageScreen";
 import SettingScreen from "../screens/userscreens/SettingScreen";
-import SetAlarmScreen from "../screens/userscreens/SetAlarmScreen";
 import MyPageModScreen from "../screens/userscreens/MyPageModScreen";
 import PasswordModScreen from "../screens/userscreens/PasswordModScreen";
 import UserPhoneModScreen from "../screens/userscreens/UserPhoneModScreen";
@@ -109,7 +108,6 @@ const SettingStack = () => {
             <Stack.Screen name="Setting" component={SettingScreen} />
             <Stack.Screen name="MyPage" component={MyPageScreen} />
             <Stack.Screen name="MyPageMod" component={MyPageModScreen} />
-            <Stack.Screen name="SetAlarm" component={SetAlarmScreen} />
             <Stack.Screen name="PasswordMod" component={PasswordModScreen} />
             <Stack.Screen name="UserPhoneMod" component={UserPhoneModScreen} />
             <Stack.Screen name="ProtectorPhoneMod" component={ProtectorPhoneModScreen} />

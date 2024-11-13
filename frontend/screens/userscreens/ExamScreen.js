@@ -178,7 +178,7 @@ const ExamScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        //backgroundColor: '#000',
     },
     header: {
         flexDirection: 'row',
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     },
     progressFill: {
         height: '100%',
-        backgroundColor: '#A6A6A6',
+        backgroundColor: '#0C9C57',
         borderRadius:10,
     },
     questionBox: {
@@ -254,12 +254,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     questionBoxActive: {
-        backgroundColor: '#F0F0F0', // 회색 배경색 추가
+        backgroundColor: '#E4E4E4', // 회색 배경색 추가
     },
     storyButton: {
         //marginTop: 10,
         padding: 10,
-        backgroundColor: '#7B6EAB',
+        backgroundColor: '#27A96C',
         borderRadius: 8,
         alignItems: 'center',
         position: 'absolute',
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     },
     storyContent: {
         marginTop: 10,
-        backgroundColor: '#F0F0F0',
+        backgroundColor: '#E4E4E4',
         borderRadius: 5,
         padding: 10,
     },
@@ -316,8 +316,8 @@ const styles = StyleSheet.create({
     },
     prevButton: {
         flex: 1,
-        borderWidth: 1,
-        borderColor: '#ccc',
+        borderWidth: 2,
+        borderColor: '#0C9C57',
         borderRadius:5,
         backgroundColor: 'transparent',
         padding: 15,
@@ -327,17 +327,19 @@ const styles = StyleSheet.create({
     nextButton: {
         flex: 1,
         borderRadius:5,
-        backgroundColor: 'black',
+        backgroundColor: '#0C9C57',
         padding: 15,
         alignItems: 'center',
         marginLeft:10,
     },
     prevButtonText: {
        fontSize:18,
+       fontWeight:'600',
     },
     nextButtonText: {
         color: 'white',
         fontSize:18,
+        fontWeight:'600',
     },
     loader: {
         flex: 1,

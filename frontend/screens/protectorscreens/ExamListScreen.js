@@ -59,12 +59,13 @@ const ExamListScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <AntDesign name='left' size={25} style={{ marginHorizontal: 10 }} onPress={() => navigation.navigate('MainMenu')} />
-                <Text style={{ fontSize: 20, fontWeight: '700', width: '80%', textAlign: 'center' }}>Remember Me</Text>
+                <Text style={{ fontSize: 20, fontWeight: '700', width: '80%', textAlign: 'center' }}>인지기능 검사 기록</Text>
             </View>
 
             <View style={styles.listtitle}>
-                <Text style={styles.datetext}>날짜</Text>
+                <Text style={styles.idtext}>번호</Text>
                 <Text style={styles.contenttext}>점수</Text>
+                <Text style={styles.datetext}>날짜</Text>
             </View>
 
             {loading ? (
@@ -73,11 +74,12 @@ const ExamListScreen = ({ navigation }) => {
                 <ScrollView>
                     {TestData.map((item, index) => (
                         <TouchableOpacity key={index} onPress={() => handleItemPress(item.date)}>
-                            <View style={styles.listItem}>
-                                <Text style={styles.datetext1}>{item.date.replace(/-/g, '.')}</Text>
-                                <Text style={styles.contenttext1} numberOfLines={1}>{item.totalScore}점</Text>
-                            </View>
-                        </TouchableOpacity>
+                        <View style={styles.listItem}>
+                            <Text style={styles.idtext1}>{index + 1}</Text>
+                            <Text style={styles.contenttext1} numberOfLines={1}>{item.totalScore}점</Text>
+                            <Text style={styles.datetext1}>{item.date.replace(/-/g, '.')}</Text>
+                        </View>
+                    </TouchableOpacity>
                     ))}
                 </ScrollView>
             )}
@@ -112,6 +114,19 @@ const styles = StyleSheet.create({
         borderBottomColor: '#B6B6B6',
         borderBottomWidth: 1,
         paddingVertical: 10,
+    },
+    idtext: {
+        width: 70,
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#B6B6B6',
+    },
+    idtext1: {
+        width: 70,
+        textAlign: 'center',
+        fontSize: 18,
+        
     },
     buttonbox:{
         marginTop:20,

@@ -20,10 +20,10 @@ const FindIdScreen = ({ route, navigation }) => {
                 </View>
                 <View style={styles.buttonlayout}>
                     <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Login')}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>로그인 하기</Text>
+                        <Text style={{ fontSize: 20, color: '#fff', fontWeight:'500' }}>로그인 하기</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('FindPasswordVerify')}>
-                        <Text style={{ fontSize: 20, color: '#fff' }}>비밀번호 찾기</Text>
+                    <TouchableOpacity style={styles.button1} onPress={()=>navigation.navigate('FindPasswordVerify')}>
+                        <Text style={{ fontSize: 20, color: '#0C9C57', fontWeight:'600' }}>비밀번호 찾기</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         fontSize:18,
     },
     idcontent:{
-      width:'90%',
+      width:'85%',
       height:150,
       justifyContent:'center',
       borderColor:"#E0E0E0",
@@ -63,14 +63,18 @@ const styles = StyleSheet.create({
       paddingHorizontal:10,
       marginVertical:20,
       fontSize:18,
+      shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
     buttonlayout:{
         flexDirection:'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        width:'90%',
+        width:'85%',
         marginVertical:20,
-        paddingHorizontal:10,
     },
     button:{
         marginVertical:15,
@@ -78,8 +82,18 @@ const styles = StyleSheet.create({
         height:50,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'#000',
+        backgroundColor:'#0C9C57',
         borderRadius:10,
+    },
+    button1:{
+        marginVertical:15,
+        width:'45%',
+        height:50,
+        alignItems:'center',
+        justifyContent:'center',
+        borderRadius:10,
+        borderWidth:2,
+        borderColor:'#0C9C57',
     },
 });
 
