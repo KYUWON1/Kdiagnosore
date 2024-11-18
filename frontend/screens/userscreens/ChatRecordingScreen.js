@@ -30,7 +30,7 @@ const ChatRecordingScreen = ({navigation}) => {
         const fetchChatData = async () => {
             if (apiBaseUrl) {
                 try {
-                    const response = await axios.get(`${apiBaseUrl}/chat/getlist`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/chat/list`, {
                         headers: { 'Content-Type': 'application/json' },
                     });
                     if (response.status === 200) {

@@ -34,7 +34,7 @@ const MyPageModScreen = ({navigation}) => {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get(`${apiBaseUrl}/user/profile`);
+                const response = await axios.get(`${apiBaseUrl}/api/v1/user/profile`);
                 setUserInfo(response.data);
                 if (response.data) {
                     setUserName(response.data.userName);
@@ -62,7 +62,7 @@ const MyPageModScreen = ({navigation}) => {
         };
 
         try {
-            const response = await axios.post(`${apiBaseUrl}/user/profile/update`, JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/profile/update`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }

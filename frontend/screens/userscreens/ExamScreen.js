@@ -33,7 +33,7 @@ const ExamScreen = ({ navigation }) => {
         const fetchData = async () => {
             if (apiBaseUrl) {
                 try {
-                    const response = await axios.get(`${apiBaseUrl}/question?type=${randomType}`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/question?type=${randomType}`, {
                         headers: {
                             'Content-Type': 'application/json',
                         },
@@ -87,7 +87,7 @@ const ExamScreen = ({ navigation }) => {
             return acc;
         }, {});
         try {
-            const response = await axios.post(`${apiBaseUrl}/question?testId=${testId}`,JSON.stringify(results), {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/question?testId=${testId}`,JSON.stringify(results), {
                 headers: {
                     'Content-Type': 'application/json',
                 },

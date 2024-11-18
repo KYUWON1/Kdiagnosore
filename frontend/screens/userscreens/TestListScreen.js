@@ -31,7 +31,7 @@ const TestListScreen = ({navigation}) => {
         const fetchChatData = async () => {
             if (apiBaseUrl) {
                 try {
-                    const response = await axios.get(`${apiBaseUrl}/test/getlist`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/test/list`, {
                         headers: { 'Content-Type': 'application/json' },
                     });
                     if (response.status === 200) {

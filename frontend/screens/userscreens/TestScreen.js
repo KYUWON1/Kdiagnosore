@@ -51,7 +51,7 @@ const TestScreen = ({ navigation }) => {
             if (apiBaseUrl) {
                 try {
                     console.log(date);
-                    const response = await axios.get(`${apiBaseUrl}/test/getlist/${date}`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/test/list/${date}`, {
                         headers: { 'Content-Type': 'application/json' },
                     });
                     console.log(response);
@@ -118,7 +118,7 @@ const TestScreen = ({ navigation }) => {
         try {
             // 모든 답변을 순회하며 개별적으로 API 호출
             const promises = Object.entries(answers).map(([testId, answer]) => {
-                return axios.post(`${apiBaseUrl}/test/answer`, {
+                return axios.post(`${apiBaseUrl}/api/v1/test/answer`, {
                     testId: testId,
                     answer: answer
                 }, {

@@ -28,7 +28,7 @@ const DiaryListScreen = ({ navigation }) => {
         const fetchDiaryData = async () => {
             if (apiBaseUrl) {
                 try {
-                    const response = await axios.get(`${apiBaseUrl}/diary`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/diary/list`, {
                         headers: {
                             'Content-Type': 'application/json',
                         },

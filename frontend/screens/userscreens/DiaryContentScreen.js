@@ -35,7 +35,7 @@ const DiaryContentScreen = ({ route, navigation }) => {
                     return;
                 }
                 try {
-                    const response = await axios.get(`${apiBaseUrl}/diary/${date}`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/diary/list/${date}`, {
                         headers: {
                             'Content-Type': 'application/json',
                         },

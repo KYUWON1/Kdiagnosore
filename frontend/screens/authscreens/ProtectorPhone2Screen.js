@@ -48,7 +48,7 @@ const ProtectorPhone2Screen = ({ route, navigation }) => {
         };
 
         try {
-            const response = await axios.post(`${apiBaseUrl}/join/protector`, JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/join/protectorr`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -74,7 +74,7 @@ const ProtectorPhone2Screen = ({ route, navigation }) => {
 
     const sendSMS = async () => {
         try {
-            const response = await axios.post(`${apiBaseUrl}/check/sendSMS`, {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/sms/send`, {
                 phoneNumber: PhoneNum,
             }, {
                 headers: {

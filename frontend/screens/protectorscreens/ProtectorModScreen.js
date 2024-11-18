@@ -27,7 +27,7 @@ const ProtectorModScreen = ({navigation}) => {
 
     const requestVerification = async () => {
         try {
-            const response = await axios.post(`${apiBaseUrl}/user/profile/update/phoneNumber/request`,
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/profile/update/phoneNumber/request`,
                 JSON.stringify({ protectorNumber: ProtectorNum }),
                 {
                     headers: {
@@ -46,7 +46,7 @@ const ProtectorModScreen = ({navigation}) => {
 
     const verifyAndChangeProtectorNumber = async () => {
         try {
-            const response = await axios.post(`${apiBaseUrl}/user/profile/update/phoneNumber/verify`,
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/profile/update/phoneNumber/verify`,
                 JSON.stringify({ protectorNumber: ProtectorNum, certNum: VerifyNum }),
                 {
                     headers: {

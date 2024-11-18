@@ -148,7 +148,7 @@ const ChatScreen = ({navigation}) => {
             
             if (apiBaseUrl && date) {
                 try {
-                    const checkchat = await axios.get(`${apiBaseUrl}/chat/getlist`, {
+                    const checkchat = await axios.get(`${apiBaseUrl}/api/v1/chat/list`, {
                         headers: { 
                             'Content-Type': 'application/json'
                         },
@@ -156,7 +156,7 @@ const ChatScreen = ({navigation}) => {
                     const filteredData = checkchat.data.filter(chat => chat.date === date);
                     if (checkchat.status === 200 && filteredData.length > 0) {
                         try{
-                            const response = await axios.get(`${apiBaseUrl}/chat/getlist/${date}`, {
+                            const response = await axios.get(`${apiBaseUrl}/api/v1/chat/list/${date}`, {
                                 headers: { 
                                     'Content-Type': 'application/json'
                                 },
@@ -228,7 +228,7 @@ const ChatScreen = ({navigation}) => {
         const userMessage = messages[0].text;
 
         try {
-            const response = await axios.post(`${apiBaseUrl}/chat/question`, { message: userMessage }, {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/chat`, { message: userMessage }, {
                 headers: {
                     'Content-Type': 'application/json',
                 }

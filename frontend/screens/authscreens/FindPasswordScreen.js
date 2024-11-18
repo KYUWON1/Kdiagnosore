@@ -31,7 +31,7 @@ const FindPasswordScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await axios.post(`${apiBaseUrl}/getPassword/reset`, {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/password/reset`, {
                 password: Password,
                 passwordCheck: ConfirmPassword
             }, {

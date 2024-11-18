@@ -29,7 +29,7 @@ const ExamDateScreen = ({ route, navigation }) => {
             if (apiBaseUrl && selectdate) {
                 try {
                     const date = encodeURIComponent(selectdate);
-                    const response = await axios.get(`${apiBaseUrl}/question/result/${date}`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/question/list/${date}`, {
                         headers: {
                             'Content-Type': 'application/json',
                         },

@@ -28,7 +28,7 @@ const UserPhoneScreen = ({ route, navigation }) => {
 
     const sendSMS = async () => {
         try {
-            const response = await axios.post(`${apiBaseUrl}/check/sendSMS`, {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/sms/send`, {
                 phoneNumber: PhoneNum,
             }, {
                 headers: {
@@ -50,7 +50,7 @@ const UserPhoneScreen = ({ route, navigation }) => {
 
     const verifyCode = async () => {
         try {
-            const response = await axios.post(`${apiBaseUrl}/check/verify`, {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/sms/verify`, {
                 phoneNumber:PhoneNum,
                 certNum: VerifyNum,
             }, {

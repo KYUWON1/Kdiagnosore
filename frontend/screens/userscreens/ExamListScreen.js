@@ -33,7 +33,7 @@ const ExamListScreen = ({ navigation }) => {
             const fetchData = async () => {
                 if (apiBaseUrl) {
                     try {
-                        const response = await axios.get(`${apiBaseUrl}/question/result`, {
+                        const response = await axios.get(`${apiBaseUrl}/api/v1/question/list`, {
                             headers: {
                                 'Content-Type': 'application/json',
                             },
@@ -41,7 +41,7 @@ const ExamListScreen = ({ navigation }) => {
                         if (response.status === 200) {
                             setTestData(response.data);
                             try {
-                                const response1 = await axios.get(`${apiBaseUrl}/question/status`, {
+                                const response1 = await axios.get(`${apiBaseUrl}/api/v1/question/status`, {
                                     headers: {
                                         'Content-Type': 'application/json',
                                     },
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
     },
     disabledButton: {
         backgroundColor: '#A9A9A9', // 비활성화 상태에서의 배경색
+        opacity: 0.3 // 여기 중복 선언 수정
     },
     disabledButtonText: {
         color: '#fff', // 비활성화 상태에서의 텍스트 색상
@@ -189,9 +190,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
         color: '#B6B6B6',
-    },
-    disabledButton: {
-        opacity: 0.3, // 비활성화 상태에서의 투명도
     },
     datetext: {
         width: 100,

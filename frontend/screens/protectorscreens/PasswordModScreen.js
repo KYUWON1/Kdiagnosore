@@ -33,7 +33,7 @@ const PasswordModScreen = ({ navigation }) => {
         };
 
         try {
-            const response = await axios.post(`${apiBaseUrl}/user/profile/update/password`, JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/profile/update/password`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }

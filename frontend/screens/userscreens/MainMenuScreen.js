@@ -28,7 +28,7 @@ const MainMenuScreen = ({ navigation }) => {
         const fetchData = async () => {
             if (apiBaseUrl) {
                 try {
-                    const response = await axios.get(`${apiBaseUrl}/user/profile`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/user/profile`, {
                         headers: { 'Content-Type': 'application/json' },
                     });
                     if (response.status === 200) {

@@ -8,6 +8,9 @@
       }
     },
     "owner": "shimkyuwon",
-    "slug": "k-diagnosore"
+    "slug": "k-diagnosore",
+    "plugins": [
+      "expo-build-properties"
+    ]
   }
 }

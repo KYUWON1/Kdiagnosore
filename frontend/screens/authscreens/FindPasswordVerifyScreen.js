@@ -28,7 +28,7 @@ const FindPasswordVerifyScreen = ({ navigation }) => {
 
     const passwordrequest = async () => {
         try {
-            const response = await axios.post(`${apiBaseUrl}/getPassword/request`, {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/password/request`, {
                 userId: UserId,
                 phoneNumber: PhoneNum
             }, {
@@ -53,7 +53,7 @@ const FindPasswordVerifyScreen = ({ navigation }) => {
 
     const passwordverify = async () => {
         try {
-            const response = await axios.post(`${apiBaseUrl}/getPassword/verify`, {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/password/verify`, {
                 certNum: VerifyNum
             }, {
                 headers: {

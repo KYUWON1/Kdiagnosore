@@ -38,7 +38,7 @@ const DiaryScreen = ({ navigation }) => {
         const fetchDiaryContent = async () => {
             if (!apiBaseUrl || !todayDateForServer) return;
             try {
-                const response = await axios.get(`${apiBaseUrl}/diary/${todayDateForServer}`, {
+                const response = await axios.get(`${apiBaseUrl}/api/v1/diary/list/${todayDateForServer}`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -78,7 +78,7 @@ const DiaryScreen = ({ navigation }) => {
             if (isExistingDiary) {
                 // 다이어리 업데이트
                 const response = await axios.patch(
-                    `${apiBaseUrl}/diary/${todayDateForServer}`,
+                    `${apiBaseUrl}/api/v1/diary/${todayDateForServer}`,
                     { content: diaryText },
                     {
                         headers: {
@@ -93,7 +93,7 @@ const DiaryScreen = ({ navigation }) => {
             } else {
                 // 다이어리 생성
                 const response = await axios.post(
-                    `${apiBaseUrl}/diary`,
+                    `${apiBaseUrl}/api/v1/diary`,
                     { content: diaryText, date: todayDateForServer },
                     {
                         headers: {

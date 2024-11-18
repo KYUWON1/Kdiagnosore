@@ -30,7 +30,7 @@ const ExamListScreen = ({ navigation }) => {
         const fetchData = async () => {
             if (apiBaseUrl) {
                 try {
-                    const response = await axios.get(`${apiBaseUrl}/question/result`, {
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/question`, {
                         headers: {
                             'Content-Type': 'application/json',
                         },

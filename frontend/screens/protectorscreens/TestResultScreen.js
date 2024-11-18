@@ -76,7 +76,7 @@ const TestResultScreen = ({ navigation, route }) => {
             if (apiBaseUrl && selectdate) {
                 try {
                     const date = encodeURIComponent(selectdate);
-                    const response = await axios.get(`${apiBaseUrl}/test/getlist/${date}`, { 
+                    const response = await axios.get(`${apiBaseUrl}/api/v1/test/list/${date}`, {
                         headers: { 
                             'Content-Type': 'application/json'
                         },

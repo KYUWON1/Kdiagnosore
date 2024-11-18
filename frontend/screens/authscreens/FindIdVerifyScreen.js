@@ -28,7 +28,7 @@ const FindIdVerifyScreen = ({ navigation }) => {
                 email: Email,
                 phoneNumber: PhoneNum
             };
-            const response = await axios.post(`${apiBaseUrl}/getId/request`, JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/id/request`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -56,7 +56,7 @@ const FindIdVerifyScreen = ({ navigation }) => {
                 email: Email,
                 certNum: VerifyNum
             };
-            const response = await axios.post(`${apiBaseUrl}/getId/verify`, JSON.stringify(data), {
+            const response = await axios.post(`${apiBaseUrl}/api/v1/user/id/verify`, JSON.stringify(data), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
